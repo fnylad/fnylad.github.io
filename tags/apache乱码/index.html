@@ -37,6 +37,16 @@
 
 
 
+   <style>
+    body{
+       background-image: url(https://cdn.jsdelivr.net/gh/Tokisaki-Galaxy/res/site/medias/background.jpg);
+       background-repeat:no-repeat;
+       background-size: 100% 100%;
+       background-attachment:fixed;
+    }
+</style>
+
+
 
 <body>
     <header class="navbar-fixed">
@@ -264,14 +274,12 @@
                     var typed = new Typed("#subtitle", {
                         strings: [ 
                             
-                                "从来没有真正的绝境, 只有心灵的迷途",
-                            
-                                "Never really desperate, only the lost of the soul",
+                                "温故而知新",
                             
                         ],
                         startDelay: 300,
                         typeSpeed: 100,
-                        loop: true,
+                        loop: false,
                         backSpeed: 50,
                         showCursor: true
                     });
@@ -284,9 +292,7 @@
 
 
 <script>
-    // 每天切换 banner 图.  Switch banner image every day.
-    var bannerUrl = "/medias/banner/" + new Date().getDay() + '.jpg';
-    $('.bg-cover').css('background-image', 'url(' + bannerUrl + ')');
+    $('.bg-cover').css('background-image', 'url(/medias/banner/0.jpg)');
 </script>
 
 
@@ -306,19 +312,10 @@
             <div class="tag-chips">
                 
                 
-                <a href="/tags/apache%E4%B9%B1%E7%A0%81/" title="apache乱码: 1">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-active "
-                            data-tagname="apache乱码" style="background-color: #F9EBEA;">apache乱码
-                        <span class="tag-length">1</span>
-                    </span>
-                </a>
-                
-                
                 <a href="/tags/%E6%96%B0%E7%94%9F%E8%B5%9B/" title="新生赛: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            data-tagname="新生赛" style="background-color: #F5EEF8;">新生赛
+                            data-tagname="新生赛" style="background-color: #F9EBEA;">新生赛
                         <span class="tag-length">1</span>
                     </span>
                 </a>
@@ -327,16 +324,16 @@
                 <a href="/tags/jwt/" title="jwt: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            data-tagname="jwt" style="background-color: #D5F5E3;">jwt
+                            data-tagname="jwt" style="background-color: #F5EEF8;">jwt
                         <span class="tag-length">1</span>
                     </span>
                 </a>
                 
                 
-                <a href="/tags/ssrf/" title="ssrf: 1">
+                <a href="/tags/apache%E4%B9%B1%E7%A0%81/" title="apache乱码: 1">
                     <span class="chip center-align waves-effect waves-light
-                             chip-default "
-                            data-tagname="ssrf" style="background-color: #E8F8F5;">ssrf
+                             chip-active "
+                            data-tagname="apache乱码" style="background-color: #D5F5E3;">apache乱码
                         <span class="tag-length">1</span>
                     </span>
                 </a>
@@ -345,7 +342,16 @@
                 <a href="/tags/node-js/" title="node.js: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            data-tagname="node.js" style="background-color: #FEF9E7;">node.js
+                            data-tagname="node.js" style="background-color: #E8F8F5;">node.js
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/ssrf/" title="ssrf: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="ssrf" style="background-color: #FEF9E7;">ssrf
                         <span class="tag-length">1</span>
                     </span>
                 </a>
@@ -369,19 +375,19 @@
                 </a>
                 
                 
-                <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" title="文件上传: 1">
+                <a href="/tags/xxe/" title="xxe: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            data-tagname="文件上传" style="background-color: #D7BDE2;">文件上传
+                            data-tagname="xxe" style="background-color: #D7BDE2;">xxe
                         <span class="tag-length">1</span>
                     </span>
                 </a>
                 
                 
-                <a href="/tags/xxe/" title="xxe: 1">
+                <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" title="文件上传: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            data-tagname="xxe" style="background-color: #A3E4D7;">xxe
+                            data-tagname="文件上传" style="background-color: #A3E4D7;">文件上传
                         <span class="tag-length">1</span>
                     </span>
                 </a>
@@ -405,37 +411,10 @@
                 </a>
                 
                 
-                <a href="/tags/ubantu%E9%98%B2%E7%81%AB%E5%A2%99-%E5%87%BA%E7%BD%91%E4%B9%8B%E7%B1%BB%E7%9A%84%E9%97%AE%E9%A2%98/" title="ubantu防火墙 出网之类的问题: 1">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-default "
-                            data-tagname="ubantu防火墙 出网之类的问题" style="background-color: #F9E79F;">ubantu防火墙 出网之类的问题
-                        <span class="tag-length">1</span>
-                    </span>
-                </a>
-                
-                
-                <a href="/tags/windows%E8%87%AA%E5%B8%A6%E6%9D%80%E9%A9%AC/" title="windows自带杀马: 1">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-default "
-                            data-tagname="windows自带杀马" style="background-color: #D5F5E3;">windows自带杀马
-                        <span class="tag-length">1</span>
-                    </span>
-                </a>
-                
-                
-                <a href="/tags/%E5%9B%BE%E7%89%87%E9%9A%90%E5%86%99/" title="图片隐写: 1">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-default "
-                            data-tagname="图片隐写" style="background-color: #85C1E9;">图片隐写
-                        <span class="tag-length">1</span>
-                    </span>
-                </a>
-                
-                
                 <a href="/tags/Typora/" title="Typora: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            data-tagname="Typora" style="background-color: #F8F9F9;">Typora
+                            data-tagname="Typora" style="background-color: #F9E79F;">Typora
                         <span class="tag-length">1</span>
                     </span>
                 </a>
@@ -450,10 +429,37 @@
                 </a>
                 
                 
+                <a href="/tags/ubantu%E9%98%B2%E7%81%AB%E5%A2%99-%E5%87%BA%E7%BD%91%E4%B9%8B%E7%B1%BB%E7%9A%84%E9%97%AE%E9%A2%98/" title="ubantu防火墙 出网之类的问题: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="ubantu防火墙 出网之类的问题" style="background-color: #D7BDE2;">ubantu防火墙 出网之类的问题
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/windows%E8%87%AA%E5%B8%A6%E6%9D%80%E9%A9%AC/" title="windows自带杀马: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="windows自带杀马" style="background-color: #D5F5E3;">windows自带杀马
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
                 <a href="/tags/NSSCTF%E6%96%87%E4%BB%B6%E6%9F%A5%E7%9C%8B%E5%99%A8/" title="NSSCTF文件查看器: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
                             data-tagname="NSSCTF文件查看器" style="background-color: #A3E4D7;">NSSCTF文件查看器
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/%E5%9B%BE%E7%89%87%E9%9A%90%E5%86%99/" title="图片隐写: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="图片隐写" style="background-color: #85C1E9;">图片隐写
                         <span class="tag-length">1</span>
                     </span>
                 </a>
@@ -507,6 +513,56 @@
 
 
     <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="2991386599"
+                   fixed='true'
+                   autoplay='true'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='false'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="/libs/aplayer/Meting.min.js"></script>
+
     
 
     <div class="container row center-align"
