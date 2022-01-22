@@ -6,7 +6,7 @@
   <link href="http://54wa1234.github.io/atom.xml" rel="self"/>
   
   <link href="http://54wa1234.github.io/"/>
-  <updated>2022-01-22T10:21:19.714Z</updated>
+  <updated>2022-01-22T11:29:30.968Z</updated>
   <id>http://54wa1234.github.io/</id>
   
   <author>
@@ -15,6 +15,348 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>apache乱码问题</title>
+    <link href="http://54wa1234.github.io/2022/01/22/apache-luan-ma-wen-ti/"/>
+    <id>http://54wa1234.github.io/2022/01/22/apache-luan-ma-wen-ti/</id>
+    <published>2022-01-22T11:24:34.000Z</published>
+    <updated>2022-01-22T11:29:30.968Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;服务器端：&quot;&gt;&lt;a href=&quot;#服务器端：&quot; class=&quot;headerlink&quot; title=&quot;服务器端：&quot;&gt;&lt;/a&gt;服务器端：&lt;/h2&gt;&lt;p&gt;修改httpd.conf&lt;br&gt;查找：&lt;br&gt;AddDefaultCharset</summary>
+        
+      
+    
+    
+    
+    <category term="apache" scheme="http://54wa1234.github.io/categories/apache/"/>
+    
+    
+    <category term="apache乱码" scheme="http://54wa1234.github.io/tags/apache%E4%B9%B1%E7%A0%81/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>文件查看器</title>
+    <link href="http://54wa1234.github.io/2022/01/22/wen-jian-cha-kan-qi/"/>
+    <id>http://54wa1234.github.io/2022/01/22/wen-jian-cha-kan-qi/</id>
+    <published>2022-01-22T11:07:23.000Z</published>
+    <updated>2022-01-22T12:14:25.819Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;用dirsearch扫 发现&lt;a href=&quot;http://www.zip下载源码/&quot;&gt;www.zip下载源码&lt;/a&gt; &lt;/p&gt;
+&lt;p&gt;开审&lt;/p&gt;
+&lt;p&gt;审一圈发现&lt;/p&gt;
+&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="NSSCTF" scheme="http://54wa1234.github.io/categories/NSSCTF/"/>
+    
+    
+    <category term="NSSCTF文件查看器" scheme="http://54wa1234.github.io/tags/NSSCTF%E6%96%87%E4%BB%B6%E6%9F%A5%E7%9C%8B%E5%99%A8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>NSSCTF新生赛</title>
+    <link href="http://54wa1234.github.io/2022/01/22/nssctf-xin-sheng-sai/"/>
+    <id>http://54wa1234.github.io/2022/01/22/nssctf-xin-sheng-sai/</id>
+    <published>2022-01-22T11:07:11.000Z</published>
+    <updated>2022-01-22T12:04:10.050Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;[TOC]&lt;/p&gt;
+&lt;h2 id=&quot;gift-F12&quot;&gt;&lt;a href=&quot;#gift-F12&quot; class=&quot;headerlink&quot; title=&quot;gift_F12&quot;&gt;&lt;/a&gt;gift_F12&lt;/h2&gt;&lt;p&gt;简单的信息收集 按F12 crtl+f</summary>
+        
+      
+    
+    
+    
+    <category term="NSSCTF" scheme="http://54wa1234.github.io/categories/NSSCTF/"/>
+    
+    
+    <category term="新生赛" scheme="http://54wa1234.github.io/tags/%E6%96%B0%E7%94%9F%E8%B5%9B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>图片隐写</title>
+    <link href="http://54wa1234.github.io/2022/01/22/tu-pian-yin-xie-zong-jie/"/>
+    <id>http://54wa1234.github.io/2022/01/22/tu-pian-yin-xie-zong-jie/</id>
+    <published>2022-01-22T11:06:45.000Z</published>
+    <updated>2022-01-22T12:11:54.211Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;一-目前遇到的图片隐写术&quot;&gt;&lt;a href=&quot;#一-目前遇到的图片隐写术&quot; class=&quot;headerlink&quot; title=&quot;一.目前遇到的图片隐写术&quot;&gt;&lt;/a&gt;一.目前遇到的图片隐写术&lt;/h2&gt;&lt;h2 id=&quot;1-附加式的图片隐写&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="misc" scheme="http://54wa1234.github.io/categories/misc/"/>
+    
+    
+    <category term="图片隐写" scheme="http://54wa1234.github.io/tags/%E5%9B%BE%E7%89%87%E9%9A%90%E5%86%99/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>文件上传</title>
+    <link href="http://54wa1234.github.io/2022/01/22/ctfshow-wen-jian-shang-chuan/"/>
+    <id>http://54wa1234.github.io/2022/01/22/ctfshow-wen-jian-shang-chuan/</id>
+    <published>2022-01-22T11:06:23.000Z</published>
+    <updated>2022-01-22T12:01:02.237Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;文件上传&quot;&gt;&lt;a href=&quot;#文件上传&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="ctfshow" scheme="http://54wa1234.github.io/categories/ctfshow/"/>
+    
+    
+    <category term="文件上传" scheme="http://54wa1234.github.io/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>文件包含</title>
+    <link href="http://54wa1234.github.io/2022/01/22/ctfshow-wen-jian-bao-han/"/>
+    <id>http://54wa1234.github.io/2022/01/22/ctfshow-wen-jian-bao-han/</id>
+    <published>2022-01-22T11:06:11.000Z</published>
+    <updated>2022-01-22T12:00:02.106Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;[TOC]&lt;/p&gt;
+&lt;h2 id=&quot;文件包含&quot;&gt;&lt;a href=&quot;#文件包含&quot; class=&quot;headerlink&quot; title=&quot;文件包含&quot;&gt;&lt;/a&gt;文件包含&lt;/h2&gt;&lt;p&gt;1.&lt;/p&gt;
+&lt;pre class=&quot;line-numbers</summary>
+        
+      
+    
+    
+    
+    <category term="ctfshow" scheme="http://54wa1234.github.io/categories/ctfshow/"/>
+    
+    
+    <category term="文件包含" scheme="http://54wa1234.github.io/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>jwt</title>
+    <link href="http://54wa1234.github.io/2022/01/22/ctfshow-jwt/"/>
+    <id>http://54wa1234.github.io/2022/01/22/ctfshow-jwt/</id>
+    <published>2022-01-22T11:05:21.000Z</published>
+    <updated>2022-01-22T11:37:44.990Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;[TOC]&lt;/p&gt;
+&lt;h2 id=&quot;jwt&quot;&gt;&lt;a href=&quot;#jwt&quot; class=&quot;headerlink&quot; title=&quot;jwt&quot;&gt;&lt;/a&gt;jwt&lt;/h2&gt;&lt;p&gt;jwt(JSON Web</summary>
+        
+      
+    
+    
+    
+    <category term="ctfshow" scheme="http://54wa1234.github.io/categories/ctfshow/"/>
+    
+    
+    <category term="jwt" scheme="http://54wa1234.github.io/tags/jwt/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ssrf</title>
+    <link href="http://54wa1234.github.io/2022/01/22/ctfshow-ssrf/"/>
+    <id>http://54wa1234.github.io/2022/01/22/ctfshow-ssrf/</id>
+    <published>2022-01-22T11:05:08.000Z</published>
+    <updated>2022-01-22T11:45:13.283Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;[TOC]&lt;/p&gt;
+&lt;p&gt;SSRF(Server-Side Request Forgery:服务器端请求伪造) 是一种由攻击者构造形成由服务端发起请求的一个安全漏洞。一般情况下，SSRF攻击的目标是从外网无法访问的内部系统。&lt;/p&gt;
+&lt;h2 id=&quot;351&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="ctfshow" scheme="http://54wa1234.github.io/categories/ctfshow/"/>
+    
+    
+    <category term="ssrf" scheme="http://54wa1234.github.io/tags/ssrf/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ssti</title>
+    <link href="http://54wa1234.github.io/2022/01/22/ctfshow-ssti/"/>
+    <id>http://54wa1234.github.io/2022/01/22/ctfshow-ssti/</id>
+    <published>2022-01-22T11:05:00.000Z</published>
+    <updated>2022-01-22T11:46:43.448Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;ssti浅叙&quot;&gt;&lt;a href=&quot;#ssti浅叙&quot; class=&quot;headerlink&quot; title=&quot;ssti浅叙&quot;&gt;&lt;/a&gt;ssti浅叙&lt;/h2&gt;&lt;p&gt;  &lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="ctfshow" scheme="http://54wa1234.github.io/categories/ctfshow/"/>
+    
+    
+    <category term="ssti" scheme="http://54wa1234.github.io/tags/ssti/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>xxe</title>
+    <link href="http://54wa1234.github.io/2022/01/22/ctfshow-xxe/"/>
+    <id>http://54wa1234.github.io/2022/01/22/ctfshow-xxe/</id>
+    <published>2022-01-22T11:04:47.000Z</published>
+    <updated>2022-01-22T11:57:42.955Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;[TOC]&lt;/p&gt;
+&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="ctfshow" scheme="http://54wa1234.github.io/categories/ctfshow/"/>
+    
+    
+    <category term="xxe" scheme="http://54wa1234.github.io/tags/xxe/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>xss</title>
+    <link href="http://54wa1234.github.io/2022/01/22/ctfshow-xss/"/>
+    <id>http://54wa1234.github.io/2022/01/22/ctfshow-xss/</id>
+    <published>2022-01-22T11:04:39.000Z</published>
+    <updated>2022-01-22T11:54:56.403Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;[TOC]&lt;/p&gt;
+&lt;p&gt;在自己的vps上搞&lt;/p&gt;
+&lt;p&gt;集成环境 安装小皮面板或者宝塔面板&lt;/p&gt;
+&lt;h2 id=&quot;316&quot;&gt;&lt;a href=&quot;#316&quot; class=&quot;headerlink&quot; title=&quot;316&quot;&gt;&lt;/a&gt;316&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="ctfshow" scheme="http://54wa1234.github.io/categories/ctfshow/"/>
+    
+    
+    <category term="xss" scheme="http://54wa1234.github.io/tags/xss/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>node.js</title>
+    <link href="http://54wa1234.github.io/2022/01/22/ctfshow-node.js/"/>
+    <id>http://54wa1234.github.io/2022/01/22/ctfshow-node.js/</id>
+    <published>2022-01-22T11:03:57.000Z</published>
+    <updated>2022-01-22T11:42:54.166Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;[TOC]&lt;/p&gt;
+&lt;h2 id=&quot;334&quot;&gt;&lt;a href=&quot;#334&quot; class=&quot;headerlink&quot; title=&quot;334&quot;&gt;&lt;/a&gt;334&lt;/h2&gt;&lt;p&gt;use.js 有用户名和密码,但login.js发现&lt;/p&gt;
+&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="ctfshow" scheme="http://54wa1234.github.io/categories/ctfshow/"/>
+    
+    
+    <category term="node.js" scheme="http://54wa1234.github.io/tags/node-js/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>关闭Windows Defender实时保护，暂时关闭和永久关闭方法.md</title>
+    <link href="http://54wa1234.github.io/2022/01/22/guan-bi-windows-defender-shi-shi-bao-hu-zan-shi-guan-bi-he-yong-jiu-guan-bi-fang-fa-md/"/>
+    <id>http://54wa1234.github.io/2022/01/22/guan-bi-windows-defender-shi-shi-bao-hu-zan-shi-guan-bi-he-yong-jiu-guan-bi-fang-fa-md/</id>
+    <published>2022-01-22T11:03:23.000Z</published>
+    <updated>2022-01-22T12:11:07.390Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;关闭Windows-Defender实时保护，暂时关闭和永久关闭方法&quot;&gt;&lt;a href=&quot;#关闭Windows-Defender实时保护，暂时关闭和永久关闭方法&quot; class=&quot;headerlink&quot; title=&quot;关闭Windows</summary>
+        
+      
+    
+    
+    
+    <category term="关防护" scheme="http://54wa1234.github.io/categories/%E5%85%B3%E9%98%B2%E6%8A%A4/"/>
+    
+    
+    <category term="ubantu防火墙 出网之类的问题" scheme="http://54wa1234.github.io/tags/ubantu%E9%98%B2%E7%81%AB%E5%A2%99-%E5%87%BA%E7%BD%91%E4%B9%8B%E7%B1%BB%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+    
+    <category term="windows自带杀马" scheme="http://54wa1234.github.io/tags/windows%E8%87%AA%E5%B8%A6%E6%9D%80%E9%A9%AC/"/>
+    
+  </entry>
   
   <entry>
     <title>typora-vue-theme主题介绍</title>
@@ -45,10 +387,10 @@
   
   <entry>
     <title>终极考核</title>
-    <link href="http://54wa1234.github.io/2022/01/20/zhong-ji-kao-he/"/>
-    <id>http://54wa1234.github.io/2022/01/20/zhong-ji-kao-he/</id>
+    <link href="http://54wa1234.github.io/2022/01/20/ctfshow-zhong-ji-kao-he/"/>
+    <id>http://54wa1234.github.io/2022/01/20/ctfshow-zhong-ji-kao-he/</id>
     <published>2022-01-20T09:26:25.000Z</published>
-    <updated>2022-01-20T09:41:40.467Z</updated>
+    <updated>2022-01-22T12:01:31.421Z</updated>
     
     
       
@@ -63,27 +405,10 @@
     
     
     
-    
-  </entry>
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="http://54wa1234.github.io/2022/01/20/hello-world/"/>
-    <id>http://54wa1234.github.io/2022/01/20/hello-world/</id>
-    <published>2022-01-20T04:41:43.154Z</published>
-    <updated>2022-01-20T04:41:43.154Z</updated>
+    <category term="ctfshow" scheme="http://54wa1234.github.io/categories/ctfshow/"/>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt;</summary>
-        
-      
-    
-    
-    
+    <category term="终极考核" scheme="http://54wa1234.github.io/tags/%E7%BB%88%E6%9E%81%E8%80%83%E6%A0%B8/"/>
     
   </entry>
   
