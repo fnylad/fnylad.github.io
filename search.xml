@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>ctfshow-信息收集</title>
+      <link href="/2022/01/23/ctfshow-xin-xi-shou-ji/"/>
+      <url>/2022/01/23/ctfshow-xin-xi-shou-ji/</url>
+      
+        <content type="html"><![CDATA[<p>[TOC]</p><h2 id="web-1"><a href="#web-1" class="headerlink" title="web 1"></a>web 1</h2><p>F12 右键查看网页源代码可得</p><h2 id="web-2"><a href="#web-2" class="headerlink" title="web 2"></a>web 2</h2><p>ctrl+u 查看网页源代码可得  或者抓包获取网页源代码</p><h2 id="web-3"><a href="#web-3" class="headerlink" title="web 3"></a>web 3</h2><p>flag就隐藏在请求头信息中 </p><p>可以F12 -&gt;Network -&gt;Headers  或者直接抓包</p><h2 id="web-4"><a href="#web-4" class="headerlink" title="web 4"></a>web 4</h2><p>访问/robots.txt  得到flag在其中的目录中</p><h2 id="web-5"><a href="#web-5" class="headerlink" title="web 5"></a>web 5</h2><p>phps文件就是php的源代码文件，通常用于提供给用户（访问者）查看php代码，因为用户无法直接通过Web浏览器看到php文件的内容，所以需要用phps文件代替</p><p>访问 index.phps</p><h2 id="web-6"><a href="#web-6" class="headerlink" title="web 6"></a>web 6</h2><p>访问<a href="http://www.zip/">www.zip</a>   也是fuzz经常测试的</p><h2 id="web-7"><a href="#web-7" class="headerlink" title="web 7"></a>web 7</h2><p>版本控制，对站点自动部署  有 git hg  svn</p><p>根据提示 .git/</p><h2 id="web-8"><a href="#web-8" class="headerlink" title="web 8"></a>web 8</h2><p>根据提示 .svn/</p><h2 id="web-9"><a href="#web-9" class="headerlink" title="web 9"></a>web 9</h2><p>在vim编辑文本时会创建一个临时文件，如果程序正常退出，临时文件自动删除，如果意外退出就会保留，当vim异常退出后，因为未处理缓存文件，导致可以通过缓存文件恢复原始文件内容</p><p>以 index.php 为例 第一次产生的缓存文件名为 index.php.swp<br>第二次意外退出后，文件名为index.php.swo<br>第三次产生的缓存文件则为 index.php.swn</p><h2 id="web-10"><a href="#web-10" class="headerlink" title="web 10"></a>web 10</h2><p>cookie 中</p><h2 id="web-11"><a href="#web-11" class="headerlink" title="web 11"></a>web 11</h2><p>对ctfshow域名进行dns查询，查看TXT记录</p><p>阿里云查询链接 <a href="https://zijian.aliyun.com/">https://zijian.aliyun.com/</a></p><h2 id="web-12"><a href="#web-12" class="headerlink" title="web 12"></a>web 12</h2><p>根据题目提示，我们访问robots.txt，获取到后台地址</p><p>用户名为 admin 密码为底下Help line Number</p><h2 id="web-13"><a href="#web-13" class="headerlink" title="web 13"></a>web 13</h2><p>根据题目提示 技术文档 在页面下面发现 document 下载发现里面存在后台地址和用户名密码登录成功获 得flag</p><h2 id="web-14"><a href="#web-14" class="headerlink" title="web 14"></a>web 14</h2><p>打开网站，根据提示访问<code>http://4696e930-9cb3-47fd-a00b-c671f82fe4a4.chall.ctf.show/editor/</code></p><p>看到一个编辑器，在flash的上传中，发现有个文件空间</p><p>找了找，flag在var/www/html/nothinghere/fl000g.txt中，于是构造url访问</p><pre class="line-numbers language-none"><code class="language-none">http://4696e930-9cb3-47fd-a00b-c671f82fe4a4.chall.ctf.show/nothinghere/fl000g.txt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="web-15"><a href="#web-15" class="headerlink" title="web 15"></a>web 15</h2><p>根据提示 访问 /admin到后台 忘记密码 密保为所在城市 又在页面留下了qq邮箱，通过qq加好友然后可以得知所在城市 修改密码   用户名为admin</p><h2 id="web-16"><a href="#web-16" class="headerlink" title="web 16"></a>web 16</h2><p>考察PHP探针php探针是用来探测空间、服务器运行状况和PHP信息用的，探针可以实时查看服务器硬盘资源、内存占用、网卡 流量、系统负载、服务器时间等信息。 url后缀名添加/tz.php 版本是雅黑PHP探针，然后查看phpinfo搜索flag</p><h2 id="web-17"><a href="#web-17" class="headerlink" title="web 17"></a>web 17</h2><p>根据提示</p><p>/backup.sql</p><h2 id="web-18"><a href="#web-18" class="headerlink" title="web 18"></a>web 18</h2><p>查看js文件，查看flag的条件，去通过uncode解码(你赢了，去幺幺零点皮爱吃皮看看)   访问110.php</p><h2 id="web-19"><a href="#web-19" class="headerlink" title="web 19"></a>web 19</h2><p>前端查看源代码，post提交用户名密码<br>post: username=admin&amp;pazzword=a599ac85a73384ee3219fa684296eaa62667238d608efa81837030bd1ce1bf04</p><h2 id="web-20"><a href="#web-20" class="headerlink" title="web 20"></a>web 20</h2><p>根据题目提示，是mdb文件泄露</p><p> mdb文件是早期asp+access构架的数据库文件</p><p>于是我们访问/db/db.mdb，</p><pre class="line-numbers language-none"><code class="language-none">http://5c070a5e-3a51-4904-a668-4385dfa7e714.chall.ctf.show/db/db.mdb<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>下载db.mdb文件后，用记事本打开搜索flag</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> ctfshow </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 信息收集 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>apache乱码问题</title>
       <link href="/2022/01/22/apache-luan-ma-wen-ti/"/>
       <url>/2022/01/22/apache-luan-ma-wen-ti/</url>

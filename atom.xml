@@ -6,7 +6,7 @@
   <link href="http://54wa1234.github.io/atom.xml" rel="self"/>
   
   <link href="http://54wa1234.github.io/"/>
-  <updated>2022-01-22T11:29:30.968Z</updated>
+  <updated>2022-01-23T09:51:26.795Z</updated>
   <id>http://54wa1234.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ctfshow-信息收集</title>
+    <link href="http://54wa1234.github.io/2022/01/23/ctfshow-xin-xi-shou-ji/"/>
+    <id>http://54wa1234.github.io/2022/01/23/ctfshow-xin-xi-shou-ji/</id>
+    <published>2022-01-23T07:14:41.000Z</published>
+    <updated>2022-01-23T09:51:26.795Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;[TOC]&lt;/p&gt;
+&lt;h2 id=&quot;web-1&quot;&gt;&lt;a href=&quot;#web-1&quot; class=&quot;headerlink&quot; title=&quot;web 1&quot;&gt;&lt;/a&gt;web 1&lt;/h2&gt;&lt;p&gt;F12 右键查看网页源代码可得&lt;/p&gt;
+&lt;h2 id=&quot;web-2&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="ctfshow" scheme="http://54wa1234.github.io/categories/ctfshow/"/>
+    
+    
+    <category term="信息收集" scheme="http://54wa1234.github.io/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"/>
+    
+  </entry>
   
   <entry>
     <title>apache乱码问题</title>
@@ -125,7 +152,7 @@
     <link href="http://54wa1234.github.io/2022/01/22/ctfshow-wen-jian-shang-chuan/"/>
     <id>http://54wa1234.github.io/2022/01/22/ctfshow-wen-jian-shang-chuan/</id>
     <published>2022-01-22T11:06:23.000Z</published>
-    <updated>2022-01-22T12:01:02.237Z</updated>
+    <updated>2022-01-23T09:44:48.091Z</updated>
     
     
       
