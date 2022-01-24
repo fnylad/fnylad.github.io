@@ -6,7 +6,7 @@
   <link href="http://54wa1234.github.io/atom.xml" rel="self"/>
   
   <link href="http://54wa1234.github.io/"/>
-  <updated>2022-01-23T09:51:26.795Z</updated>
+  <updated>2022-01-24T12:14:46.970Z</updated>
   <id>http://54wa1234.github.io/</id>
   
   <author>
@@ -17,11 +17,37 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>ctfshow-爆破</title>
+    <link href="http://54wa1234.github.io/2022/01/24/ctfshow-bao-po/"/>
+    <id>http://54wa1234.github.io/2022/01/24/ctfshow-bao-po/</id>
+    <published>2022-01-24T12:04:06.000Z</published>
+    <updated>2022-01-24T12:14:46.970Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;web-21&quot;&gt;&lt;a href=&quot;#web-21&quot; class=&quot;headerlink&quot; title=&quot;web 21&quot;&gt;&lt;/a&gt;web 21&lt;/h2&gt;&lt;p&gt;burp 抓包&lt;/p&gt;
+&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="ctfshow" scheme="http://54wa1234.github.io/categories/ctfshow/"/>
+    
+    
+    <category term="爆破" scheme="http://54wa1234.github.io/tags/%E7%88%86%E7%A0%B4/"/>
+    
+  </entry>
+  
+  <entry>
     <title>ctfshow-信息收集</title>
     <link href="http://54wa1234.github.io/2022/01/23/ctfshow-xin-xi-shou-ji/"/>
     <id>http://54wa1234.github.io/2022/01/23/ctfshow-xin-xi-shou-ji/</id>
     <published>2022-01-23T07:14:41.000Z</published>
-    <updated>2022-01-23T09:51:26.795Z</updated>
+    <updated>2022-01-24T02:24:20.832Z</updated>
     
     
       
