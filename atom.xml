@@ -6,7 +6,7 @@
   <link href="http://54wa1234.github.io/atom.xml" rel="self"/>
   
   <link href="http://54wa1234.github.io/"/>
-  <updated>2022-02-13T14:44:43.026Z</updated>
+  <updated>2022-02-21T14:37:23.773Z</updated>
   <id>http://54wa1234.github.io/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ctfshow-xss</title>
+    <link href="http://54wa1234.github.io/2022/02/19/ctfshow-xss/"/>
+    <id>http://54wa1234.github.io/2022/02/19/ctfshow-xss/</id>
+    <published>2022-02-19T06:31:07.000Z</published>
+    <updated>2022-02-21T14:37:23.773Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;[TOC]&lt;/p&gt;
+&lt;p&gt;在自己的vps上搞&lt;/p&gt;
+&lt;p&gt;集成环境 安装小皮面板或者宝塔面板&lt;/p&gt;
+&lt;h2 id=&quot;316&quot;&gt;&lt;a href=&quot;#316&quot; class=&quot;headerlink&quot; title=&quot;316&quot;&gt;&lt;/a&gt;316&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="ctfshow" scheme="http://54wa1234.github.io/categories/ctfshow/"/>
+    
+    
+    <category term="xss" scheme="http://54wa1234.github.io/tags/xss/"/>
+    
+  </entry>
   
   <entry>
     <title>ctfshow-网络迷踪</title>
@@ -377,27 +405,6 @@
     
     
     <category term="xxe" scheme="http://54wa1234.github.io/tags/xxe/"/>
-    
-  </entry>
-  
-  <entry>
-    <title></title>
-    <link href="http://54wa1234.github.io/2022/01/22/ctfshow-xss/"/>
-    <id>http://54wa1234.github.io/2022/01/22/ctfshow-xss/</id>
-    <published>2022-01-22T11:04:39.794Z</published>
-    <updated>2022-02-19T01:33:09.319Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;title: xss&lt;br&gt;date: 2022-01-22 19:04:39&lt;br&gt;author: 吹&lt;br&gt;img: false&lt;br&gt;top: false&lt;br&gt;hide: false&lt;br&gt;cover: false&lt;br&gt;coverImg:</summary>
-        
-      
-    
-    
-    
     
   </entry>
   
