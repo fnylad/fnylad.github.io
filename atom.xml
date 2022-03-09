@@ -6,7 +6,7 @@
   <link href="http://54wa1234.github.io/atom.xml" rel="self"/>
   
   <link href="http://54wa1234.github.io/"/>
-  <updated>2022-03-07T03:32:31.081Z</updated>
+  <updated>2022-03-08T07:43:51.397Z</updated>
   <id>http://54wa1234.github.io/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>session安全</title>
+    <link href="http://54wa1234.github.io/2022/03/08/session-an-quan/"/>
+    <id>http://54wa1234.github.io/2022/03/08/session-an-quan/</id>
+    <published>2022-03-08T07:31:21.000Z</published>
+    <updated>2022-03-08T07:43:51.397Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;[TOC]&lt;/p&gt;
+&lt;p&gt;在Web中，session是认证用户身份的凭证，它具备如下几个特点：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;用户不可以任意篡改&lt;/li&gt;
+&lt;li&gt;A用户的session无法被B用户获取&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;也就是说，session的设计目的是为了做用户</summary>
+        
+      
+    
+    
+    
+    <category term="session" scheme="http://54wa1234.github.io/categories/session/"/>
+    
+    
+    <category term="session" scheme="http://54wa1234.github.io/tags/session/"/>
+    
+  </entry>
   
   <entry>
     <title>ssti库</title>
@@ -335,7 +366,7 @@
     <link href="http://54wa1234.github.io/2022/01/22/ctfshow-wen-jian-bao-han/"/>
     <id>http://54wa1234.github.io/2022/01/22/ctfshow-wen-jian-bao-han/</id>
     <published>2022-01-22T11:06:11.000Z</published>
-    <updated>2022-02-13T03:26:19.293Z</updated>
+    <updated>2022-03-09T13:55:05.770Z</updated>
     
     
       
@@ -512,33 +543,6 @@
     <category term="ubantu防火墙 出网之类的问题" scheme="http://54wa1234.github.io/tags/ubantu%E9%98%B2%E7%81%AB%E5%A2%99-%E5%87%BA%E7%BD%91%E4%B9%8B%E7%B1%BB%E7%9A%84%E9%97%AE%E9%A2%98/"/>
     
     <category term="windows自带杀马" scheme="http://54wa1234.github.io/tags/windows%E8%87%AA%E5%B8%A6%E6%9D%80%E9%A9%AC/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>终极考核</title>
-    <link href="http://54wa1234.github.io/2022/01/20/ctfshow-zhong-ji-kao-he/"/>
-    <id>http://54wa1234.github.io/2022/01/20/ctfshow-zhong-ji-kao-he/</id>
-    <published>2022-01-20T09:26:25.000Z</published>
-    <updated>2022-02-13T03:26:39.694Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;[TOC]&lt;/p&gt;
-&lt;p&gt;注：  目录序号 是我做题得到的答案序号&lt;/p&gt;
-&lt;h2 id=&quot;640&quot;&gt;&lt;a href=&quot;#640&quot; class=&quot;headerlink&quot; title=&quot;640&quot;&gt;&lt;/a&gt;640&lt;/h2&gt;&lt;pre class=&quot;line-numbers</summary>
-        
-      
-    
-    
-    
-    <category term="ctfshow" scheme="http://54wa1234.github.io/categories/ctfshow/"/>
-    
-    
-    <category term="终极考核" scheme="http://54wa1234.github.io/tags/%E7%BB%88%E6%9E%81%E8%80%83%E6%A0%B8/"/>
     
   </entry>
   

