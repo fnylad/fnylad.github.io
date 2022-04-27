@@ -6,7 +6,7 @@
   <link href="http://54wa1234.github.io/atom.xml" rel="self"/>
   
   <link href="http://54wa1234.github.io/"/>
-  <updated>2022-03-27T13:35:54.199Z</updated>
+  <updated>2022-04-27T02:37:31.212Z</updated>
   <id>http://54wa1234.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>doker学习</title>
+    <link href="http://54wa1234.github.io/2022/04/27/doker-xue-xi/"/>
+    <id>http://54wa1234.github.io/2022/04/27/doker-xue-xi/</id>
+    <published>2022-04-27T02:27:58.000Z</published>
+    <updated>2022-04-27T02:37:31.212Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;docker概述&quot;&gt;&lt;a href=&quot;#docker概述&quot; class=&quot;headerlink&quot; title=&quot;docker概述&quot;&gt;&lt;/a&gt;docker概述&lt;/h2&gt;&lt;p&gt; 需求：项目带上环境(镜像) &lt;/p&gt;
+&lt;p&gt; 核心思想</summary>
+        
+      
+    
+    
+    
+    <category term="docker" scheme="http://54wa1234.github.io/categories/docker/"/>
+    
+    
+    <category term="docker" scheme="http://54wa1234.github.io/tags/docker/"/>
+    
+  </entry>
   
   <entry>
     <title>无数字字母rce</title>
@@ -515,33 +541,6 @@
     
     
     <category term="xxe" scheme="http://54wa1234.github.io/tags/xxe/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>node.js</title>
-    <link href="http://54wa1234.github.io/2022/01/22/ctfshow-node.js/"/>
-    <id>http://54wa1234.github.io/2022/01/22/ctfshow-node.js/</id>
-    <published>2022-01-22T11:03:57.000Z</published>
-    <updated>2022-02-13T03:25:05.834Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;[TOC]&lt;/p&gt;
-&lt;h2 id=&quot;334&quot;&gt;&lt;a href=&quot;#334&quot; class=&quot;headerlink&quot; title=&quot;334&quot;&gt;&lt;/a&gt;334&lt;/h2&gt;&lt;p&gt;use.js 有用户名和密码,但login.js发现&lt;/p&gt;
-&lt;p&gt;&lt;img</summary>
-        
-      
-    
-    
-    
-    <category term="ctfshow" scheme="http://54wa1234.github.io/categories/ctfshow/"/>
-    
-    
-    <category term="node.js" scheme="http://54wa1234.github.io/tags/node-js/"/>
     
   </entry>
   
