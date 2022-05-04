@@ -412,14 +412,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-04-27
+                    2022-05-04
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    724
+                    1.2k
                 </div>
                 
 
@@ -528,6 +528,82 @@ curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo gpg --de
 
 <p>6、使用docker verison 看是否安装成功</p>
 <pre class="line-numbers language-none"><code class="language-none">docker verison<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>7.配置镜像加速器</p>
+<ul>
+<li>阿里云的 (<a target="_blank" rel="noopener" href="https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors">容器加速服务</a>) </li>
+</ul>
+<p>您可以通过修改daemon配置文件/etc/docker/daemon.json来使用加速器</p>
+<pre class="line-numbers language-none"><code class="language-none">$ vim /etc/docker/daemon.json
+# 加入以下代码
+{
+  "registry-mirrors": ["https://sdk2e04a.mirror.aliyuncs.com"]
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li>(<a target="_blank" rel="noopener" href="https://www.daocloud.io/mirror#accelerator-doc">道客</a>) </li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">http://f1361db2.m.daocloud.io<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="kail"><a href="#kail" class="headerlink" title="kail"></a>kail</h3><p>1.更新apt源满足下载要求</p>
+ <pre class="line-numbers language-none"><code class="language-none">cd /etc/apt/sources.list.d
+vim docker.list(一般没有，创建docker.list)
+写入下面其中一个的源
+#阿里云
+deb http://mirrors.aliyun.com/kali kali-rolling main non-free contrib
+deb-src http://mirrors.aliyun.com/kali kali-rolling main non-free contrib
+ 
+#清华大学
+#deb http://mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main contrib non-free
+#deb-src https://mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main contrib non-free
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>2.进行系统或工具的更新</p>
+<pre class="line-numbers language-none"><code class="language-none">#注：当出现正在设定软件包界面时，直接按tab+enter进行确认
+apt-get update &amp;&amp; apt-get upgrade &amp;&amp; apt-get dist-upgrade
+
+#礼貌性清除更新缓存
+apt-get clean<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>3.安装docker 和docker-compose</p>
+<pre class="line-numbers language-none"><code class="language-none">apt-get install docker docker-compose<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>4.启动docker并检验是否安装成功</p>
+<pre class="line-numbers language-none"><code class="language-none">systemctl start docker
+
+docker version 出来了就是成功了
+
+还有docker-compose verison(不是最新版) 看第6点<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>5.配置阿里云镜像加速</p>
+<pre class="line-numbers language-none"><code class="language-none">
+#镜像加速器网址写入/etc/docker/daemon.json文件(可能不存在)中
+vim /etc/docker/daemon.json
+ 
+#新建daemon.jsp文件
+touch /etc/docker/daemon.json
+ 
+#写入内容
+{
+	"registry-mirrors": ["https://sdk2e04a.mirror.aliyuncs.com"]
+}
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>6.docker-compose  </p>
+<p>/usr/bin下面的都是系统预装的可执行程序，会随着系统升级而改变。</p>
+<p>/usr/local/bin目录是给用户放置自己的可执行程序的地方，推荐放在这里，不会被系统升级而覆盖同名文件。 </p>
+<p>其实我别的操作系统的是安装在/usr/local/bin中</p>
+<pre class="line-numbers language-none"><code class="language-none">#首先查看docker-compose在哪
+1.whereis docker-compose
+2.改成相应目录下载 (我是直接先卸载了再搞，如果没卸载直接执行我估计应该是覆盖吧 没试。)
+curl -L https://get.daocloud.io/docker/compose/releases/download/v2.4.1/docker-compose-`uname -s`-`uname -m` &gt; /usr/bin/docker-compose
+3.赋予执行权限
+chmod +x /usr/bin/docker-compose
+4.卸载
+sudo rm /usr/bin/docker-compose
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
 
 <h4 id="卸载docker"><a href="#卸载docker" class="headerlink" title="卸载docker"></a>卸载docker</h4><pre class="line-numbers language-none"><code class="language-none">sudo apt-get purge docker-ce docker-ce-cli containerd.io docker-compose-plugin<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
@@ -1069,7 +1145,7 @@ curl -L https://get.daocloud.io/docker/compose/releases/download/v2.4.1/docker-c
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">19.2k</span>
+                        class="white-color">19.7k</span>
             
             
             
