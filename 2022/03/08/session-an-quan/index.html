@@ -412,7 +412,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-03-08
+                    2022-06-10
                 </div>
                 
 
@@ -455,7 +455,7 @@
 <p>然而，并不是所有语言都有默认的session存储机制，也不是任何情况下我们都可以向服务器写入文件。所以，很多Web框架都会另辟蹊径，比如Django默认将session存储在数据库中，而对于flask这里并不包含数据库操作的框架，就只能将session存储在cookie中。</p>
 <p>因为cookie实际上是存储在客户端（浏览器）中的，所以称之为“客户端session”。</p>
 <h2 id="flask-session-加解密"><a href="#flask-session-加解密" class="headerlink" title="flask session 加解密"></a>flask session 加解密</h2><p>p牛博客的</p>
-<p><img src="C:/Users/86181/AppData/Roaming/Typora/typora-user-images/image-20220308153724179.png" alt="image-20220308153724179"></p>
+<p><img src="/2022/03/08/session-an-quan/image-20220308153724179.png" alt="image-20220308153724179"></p>
 <p>flask是一个客户端session，所以看目标为flask的站点的时候，我习惯性地去解密其session。p牛的代码解密session：</p>
 <pre class="line-numbers language-none"><code class="language-none">#!/usr/bin/env python3
 import sys
@@ -491,7 +491,7 @@ def decryption(payload):
 if __name__ == '__main__':
     print(decryption(sys.argv[1].encode()))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p><img src="C:/Users/86181/AppData/Roaming/Typora/typora-user-images/image-20220308153840342.png" alt="image-20220308153840342"></p>
+<p><img src="/2022/03/08/session-an-quan/image-20220308153840342.png" alt="image-20220308153840342"></p>
 <h3 id="如果知道secret-key的情况下，是可以伪造签名的。"><a href="#如果知道secret-key的情况下，是可以伪造签名的。" class="headerlink" title="如果知道secret_key的情况下，是可以伪造签名的。"></a>如果知道secret_key的情况下，是可以伪造签名的。</h3><p>加解密代码：</p>
 <pre class="line-numbers language-none"><code class="language-none">""" Flask Session Cookie Decoder/Encoder """
 __author__ = 'Wilson Sumanang, Alexandre ZANNI'
@@ -656,7 +656,7 @@ if __name__ == "__main__":
 解密:python flask_session_manager.py decode -c -s  # -c是flask cookie里的session值 -s参数是SECRET_KEY
 加密:python flask_session_manager.py encode -s -t # -s参数是SECRET_KEY -t参数是session的参照格式，也就是session解密后的格式<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p><img src="C:/Users/86181/AppData/Roaming/Typora/typora-user-images/image-20220308154210934.png" alt="image-20220308154210934"></p>
+<p><img src="/2022/03/08/session-an-quan/image-20220308154210934.png" alt="image-20220308154210934"></p>
 
                 
             </div>
