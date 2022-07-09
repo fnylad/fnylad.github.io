@@ -6,7 +6,7 @@
   <link href="http://54wa1234.github.io/atom.xml" rel="self"/>
   
   <link href="http://54wa1234.github.io/"/>
-  <updated>2022-05-04T14:14:09.953Z</updated>
+  <updated>2022-07-09T11:11:07.059Z</updated>
   <id>http://54wa1234.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>红日靶场</title>
+    <link href="http://54wa1234.github.io/2022/07/09/hong-ri-ba-chang/"/>
+    <id>http://54wa1234.github.io/2022/07/09/hong-ri-ba-chang/</id>
+    <published>2022-07-09T11:04:40.000Z</published>
+    <updated>2022-07-09T11:11:07.059Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;[TOC]&lt;/p&gt;
+&lt;h2 id=&quot;红日靶场-1&quot;&gt;&lt;a href=&quot;#红日靶场-1&quot; class=&quot;headerlink&quot; title=&quot;红日靶场 1&quot;&gt;&lt;/a&gt;红日靶场 1&lt;/h2&gt;&lt;h3 id=&quot;cs渗透神器&quot;&gt;&lt;a href=&quot;#cs渗透神器&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="红日靶场" scheme="http://54wa1234.github.io/categories/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA/"/>
+    
+    
+    <category term="内网渗透入门之红日靶场" scheme="http://54wa1234.github.io/tags/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%85%A5%E9%97%A8%E4%B9%8B%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA/"/>
+    
+  </entry>
   
   <entry>
     <title>doker学习</title>
@@ -515,32 +541,6 @@
     
     
     <category term="ssti" scheme="http://54wa1234.github.io/tags/ssti/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>xxe</title>
-    <link href="http://54wa1234.github.io/2022/01/22/ctfshow-xxe/"/>
-    <id>http://54wa1234.github.io/2022/01/22/ctfshow-xxe/</id>
-    <published>2022-01-22T11:04:47.000Z</published>
-    <updated>2022-04-16T12:26:23.787Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;[TOC]&lt;/p&gt;
-&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;&lt;a</summary>
-        
-      
-    
-    
-    
-    <category term="ctfshow" scheme="http://54wa1234.github.io/categories/ctfshow/"/>
-    
-    
-    <category term="xxe" scheme="http://54wa1234.github.io/tags/xxe/"/>
     
   </entry>
   
