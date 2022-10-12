@@ -6,7 +6,7 @@
   <link href="http://54wa1234.github.io/atom.xml" rel="self"/>
   
   <link href="http://54wa1234.github.io/"/>
-  <updated>2022-10-12T02:40:22.072Z</updated>
+  <updated>2022-07-09T11:14:46.228Z</updated>
   <id>http://54wa1234.github.io/</id>
   
   <author>
@@ -15,30 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title></title>
-    <link href="http://54wa1234.github.io/2022/10/12/java-an-quan-xue-xi/"/>
-    <id>http://54wa1234.github.io/2022/10/12/java-an-quan-xue-xi/</id>
-    <published>2022-10-12T02:27:51.210Z</published>
-    <updated>2022-10-12T02:40:22.072Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;pre class=&quot;line-numbers language-none&quot;&gt;&lt;code class=&quot;language-none&quot;&gt;title: java安全学习
-date: 2022-08-22 19:05:21
-author: 吹
-img:</summary>
-        
-      
-    
-    
-    
-    
-  </entry>
   
   <entry>
     <title>红日靶场</title>
@@ -123,7 +99,7 @@ img:</summary>
     <link href="http://54wa1234.github.io/2022/03/08/session-an-quan/"/>
     <id>http://54wa1234.github.io/2022/03/08/session-an-quan/</id>
     <published>2022-03-08T07:31:21.000Z</published>
-    <updated>2022-06-10T13:14:54.099Z</updated>
+    <updated>2022-10-12T02:42:52.380Z</updated>
     
     
       
@@ -146,6 +122,32 @@ img:</summary>
     
     
     <category term="session" scheme="http://54wa1234.github.io/tags/session/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>java安全学习</title>
+    <link href="http://54wa1234.github.io/2022/03/08/java-an-quan-xue-xi/"/>
+    <id>http://54wa1234.github.io/2022/03/08/java-an-quan-xue-xi/</id>
+    <published>2022-03-08T07:31:21.000Z</published>
+    <updated>2022-10-12T02:46:52.365Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;[TOC]&lt;/p&gt;
+&lt;h2 id=&quot;序列化与反序列化&quot;&gt;&lt;a href=&quot;#序列化与反序列化&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="java" scheme="http://54wa1234.github.io/categories/java/"/>
+    
+    
+    <category term="java" scheme="http://54wa1234.github.io/tags/java/"/>
     
   </entry>
   
