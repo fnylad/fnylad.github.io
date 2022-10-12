@@ -6,7 +6,7 @@
   <link href="http://54wa1234.github.io/atom.xml" rel="self"/>
   
   <link href="http://54wa1234.github.io/"/>
-  <updated>2022-07-09T11:14:46.228Z</updated>
+  <updated>2022-10-12T02:30:05.341Z</updated>
   <id>http://54wa1234.github.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="http://54wa1234.github.io/2022/10/12/java-an-quan-xue-xi/"/>
+    <id>http://54wa1234.github.io/2022/10/12/java-an-quan-xue-xi/</id>
+    <published>2022-10-12T02:27:51.210Z</published>
+    <updated>2022-10-12T02:30:05.341Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;序列化与反序列化&quot;&gt;&lt;a href=&quot;#序列化与反序列化&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>红日靶场</title>
@@ -130,15 +151,14 @@
     <link href="http://54wa1234.github.io/2022/03/07/ssti-ku/"/>
     <id>http://54wa1234.github.io/2022/03/07/ssti-ku/</id>
     <published>2022-03-07T03:10:01.000Z</published>
-    <updated>2022-03-07T03:32:31.081Z</updated>
+    <updated>2022-09-24T15:17:46.989Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;p&gt;1.这里&amp;lt;通关人&amp;gt;没任何过滤，但有长度限制，只能25个字符以内，&amp;lt;排名&amp;gt;和&amp;lt;通关时间&amp;gt;都有严格的校验，&amp;lt;通关感言&amp;gt;有较严格的过滤，包括下划线、单双引号、request、中括号、百分号等一些关键字符&lt;/p&gt;
-&lt;p&gt;导致只通过其中</summary>
+    <summary type="html">&lt;h2 id=&quot;1-如何得到payload&quot;&gt;&lt;a href=&quot;#1-如何得到payload&quot; class=&quot;headerlink&quot; title=&quot;1.如何得到payload&quot;&gt;&lt;/a&gt;1.如何得到payload&lt;/h2&gt;&lt;pre class=&quot;line-numbers</summary>
         
       
     
@@ -516,31 +536,6 @@
     
     
     <category term="ssrf" scheme="http://54wa1234.github.io/tags/ssrf/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ssti</title>
-    <link href="http://54wa1234.github.io/2022/01/22/ctfshow-ssti/"/>
-    <id>http://54wa1234.github.io/2022/01/22/ctfshow-ssti/</id>
-    <published>2022-01-22T11:05:00.000Z</published>
-    <updated>2022-02-13T03:25:33.648Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;ssti浅叙&quot;&gt;&lt;a href=&quot;#ssti浅叙&quot; class=&quot;headerlink&quot; title=&quot;ssti浅叙&quot;&gt;&lt;/a&gt;ssti浅叙&lt;/h2&gt;&lt;p&gt;  &lt;a</summary>
-        
-      
-    
-    
-    
-    <category term="ctfshow" scheme="http://54wa1234.github.io/categories/ctfshow/"/>
-    
-    
-    <category term="ssti" scheme="http://54wa1234.github.io/tags/ssti/"/>
     
   </entry>
   
